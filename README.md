@@ -1,6 +1,6 @@
 # OETH.com
 
-This [Next.js](https://nextjs.org/) application powers the marketing pages for [Origin Dollar](https://oeth.com); the yield-generating, self custodial LSD. [Contact us on Discord](https://originprotocol.com/discord) if you're interested in contributing.
+This [Next.js](https://nextjs.org/) application powers the marketing pages for [Origin ETH](https://oeth.com); the yield-generating, self custodial LSD. [Contact us on Discord](https://originprotocol.com/discord) if you're interested in contributing.
 
 ## Getting Started
 

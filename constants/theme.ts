@@ -2,18 +2,18 @@ import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   palette: {
-    // @ts-ignore
-    Compound: {
-      main: "#00d592",
-    },
-    Aave: {
-      main: "#7a26f3",
-    },
+    //@ts-ignore
     Convex: {
       main: "#ff5a5a",
     },
-    Morpho: {
-      main: "#9bc3e9",
+    Lido: {
+      main: "#66c8ff",
+    },
+    Frax: {
+      main: "#e85bff",
+    },
+    Vault: {
+      main: "#8c66fc",
     },
   },
 });

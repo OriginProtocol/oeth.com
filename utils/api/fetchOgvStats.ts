@@ -14,14 +14,11 @@ const fetchOgvStats = async () => {
         },
       });
       if (!response.ok) {
-        console.error(response);
         return [];
       }
       return await response.json();
     })
   );
-
-  console.log();
 
   return {
     price: get(ogvStats, "[0].data.OGV[0].quote.USD.price")

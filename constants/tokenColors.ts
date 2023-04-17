@@ -1,8 +1,8 @@
 const tokenColors = {
-  usdc: "#2775ca",
-  dai: "#f4b731",
-  usdt: "#26a17b",
-  ousd: "#000000",
+  eth: "#5b7fff",
+  steth: "#e85bff",
+  reth: "#ffc298",
+  sfrxeth: "#66c8ff",
 };
 
 export default tokenColors;

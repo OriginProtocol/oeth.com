@@ -6,12 +6,26 @@ import { assetRootPath } from "../../utils";
 import { PieChart } from "react-minimal-pie-chart";
 import { formatCurrency, rounded } from "../../utils";
 import { tokenColors, strategyMapping } from "../../constants";
+import { Collateral as CollateralType, Strategies } from "../../types";
 
-const Collateral = ({ collateral, strategies }) => {
+const mockBacking = [
+  { name: "eth", total: 11981522.633824237 },
+  { name: "steth", total: 13409101.919790775 },
+  { name: "reth", total: 13264216.480711127 },
+  { name: "sfrxeth", total: 13264216.480711127 },
+];
+
+interface CollateralProps {
+  collateral: CollateralType[];
+  strategies: Strategies;
+}
+
+const Collateral = ({ collateral, strategies }: CollateralProps) => {
   const [open, setOpen] = useState(false);
-  const backingTokens = ["dai", "usdc", "usdt"];
+  const backingTokens = ["eth", "steth", "reth", "sfrxeth"];
 
-  const total = collateral?.reduce((t, s) => {
+  //@ts-ignore
+  const total: number = collateral?.reduce((t, s) => {
     return {
       total: Number(t.total) + Number(s.total),
     };
@@ -38,19 +52,20 @@ const Collateral = ({ collateral, strategies }) => {
     })
     .reduce((a, b) => Number(a) + Number(b));
 
-  const backing = collateral
-    .filter((token) => backingTokens.includes(token.name))
-    .map((token) => {
-      const extra = ousd_metastrat_3crv
-        ? (ousd_holdings[token.name.toUpperCase()] * ousd_holdings.OUSD) /
-          ousd_metastrat_3crv
-        : 0 + lusd_metastrat_3crv
-        ? (lusd_holdings[token.name.toUpperCase()] * lusd_holdings.LUSD) /
-          lusd_metastrat_3crv
-        : 0;
-      token = { ...token, total: Number(token.total) + extra };
-      return token;
-    });
+  const backing = mockBacking;
+  // const backing = collateral
+  //   .filter((token) => backingTokens.includes(token.name))
+  //   .map((token) => {
+  //     const extra = ousd_metastrat_3crv
+  //       ? (ousd_holdings[token.name.toUpperCase()] * ousd_holdings.OUSD) /
+  //         ousd_metastrat_3crv
+  //       : 0 + lusd_metastrat_3crv
+  //       ? (lusd_holdings[token.name.toUpperCase()] * lusd_holdings.LUSD) /
+  //         lusd_metastrat_3crv
+  //       : 0;
+  //     token = { ...token, total: Number(token.total) + extra };
+  //     return token;
+  //   });
 
   const chartData = backing?.map((token) => {
     return {
@@ -60,11 +75,18 @@ const Collateral = ({ collateral, strategies }) => {
     };
   });
 
+  const tokenSymbols = {
+    eth: "ETH",
+    steth: "stETH",
+    reth: "rETH",
+    sfrxeth: "sfrxETH",
+  };
+
   const tokenNames = {
-    dai: "Dai",
-    usdc: "USD Coin",
-    usdt: "Tether",
-    ousd: "Origin Dollar",
+    eth: "Ether",
+    steth: "Lido Staked ETH",
+    reth: "Rocket Pool ETH",
+    sfrxeth: "Staked Frax ETH",
   };
 
   return (
@@ -107,9 +129,7 @@ const Collateral = ({ collateral, strategies }) => {
                       >
                         <div className="relative w-12 md:w-[48px]">
                           <Image
-                            src={assetRootPath(
-                              `/images/${token.name}-logo.svg`
-                            )}
+                            src={assetRootPath(`/images/${token.name}.svg`)}
                             fill
                             sizes="(max-width: 768px) 48px, 24px"
                             alt={token.name}
@@ -127,7 +147,7 @@ const Collateral = ({ collateral, strategies }) => {
                               className="text-[14px] md:text-[20px]"
                               style={{ fontWeight: 400 }}
                             >
-                              {`(${token.name.toUpperCase()})`}
+                              {`(${tokenSymbols[token.name]})`}
                             </Typography.H7>
                           </div>
                           <div className="flex flex-row space-x-2">
@@ -161,7 +181,7 @@ const Collateral = ({ collateral, strategies }) => {
             >
               {strategies &&
                 strategiesSorted?.map((strategy, i) => {
-                  const tokens = ["dai", "usdc", "usdt", "ousd", "lusd"];
+                  const tokens = ["eth", "steth", "reth", "sfrxeth"];
                   return (
                     <div
                       className="p-4 md:p-6 rounded-[7px] bg-[#1e1f25]"
@@ -192,24 +212,10 @@ const Collateral = ({ collateral, strategies }) => {
                       </Typography.Body3>
                       <div className="grid grid-cols-2 gap-x-12 gap-y-1 md:gap-y-3 mt-2">
                         {tokens.map((token, i) => {
-                          if (
-                            token === "ousd" &&
-                            (!strategies[strategy].holdings.OUSD ||
-                              rounded(strategies[strategy].holdings.OUSD) ===
-                                "0")
-                          )
-                            return;
-                          if (
-                            token === "lusd" &&
-                            (!strategies[strategy].holdings.LUSD ||
-                              rounded(strategies[strategy].holdings.LUSD) ===
-                                "0")
-                          )
-                            return;
                           return (
                             <div className="flex flex-row space-x-2" key={i}>
                               <Image
-                                src={assetRootPath(`/images/${token}-logo.svg`)}
+                                src={assetRootPath(`/images/${token}.svg`)}
                                 width="28"
                                 height="28"
                                 alt={token}
@@ -220,8 +226,10 @@ const Collateral = ({ collateral, strategies }) => {
                                 </Typography.Body3>
                                 <Link
                                   href={
+                                    //@ts-ignore
                                     strategyMapping[strategy]?.token
-                                      ? `https://etherscan.io/token/${strategyMapping[strategy]?.token}?a=${strategyMapping[strategy]?.address}`
+                                      ? //@ts-ignore
+                                        `https://etherscan.io/token/${strategyMapping[strategy]?.token}?a=${strategyMapping[strategy]?.address}`
                                       : `https://etherscan.io/address/${strategyMapping[strategy]?.address}#tokentxns`
                                   }
                                   target="_blank"

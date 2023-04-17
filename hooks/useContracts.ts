@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useStoreState } from "pullstate";
 import { setupContracts } from "../utils";
 
-const Contracts = () => {
+const useContracts = () => {
   const refreshTvl = useStoreState(ContractStore, (s) => s.refreshTvl);
 
   useEffect(() => {
@@ -14,8 +14,6 @@ const Contracts = () => {
       s.contracts = contractsToExport;
     });
   }, [refreshTvl]);
-
-  return "";
 };
 
-export default Contracts;
+export default useContracts;

@@ -3,22 +3,20 @@ interface Strategy {
   name: string;
   icon_file: string;
   holdings: {
-    DAI: number;
-    USDC: number;
-    USDT: number;
+    ETH?: number;
+    stETH?: number;
+    rETH?: number;
+    sfrxETH?: number;
   };
   address: string;
 }
 
 interface Strategies {
-  aavestrat_holding: Strategy;
-  compstrat_holding: Strategy;
-  lusd_metastrat: Strategy;
-  morpho_aave_strat: Strategy;
-  morpho_strat: Strategy;
-  ousd_metastrat: Strategy;
-  threepoolstrat_holding: Strategy;
   vault_holding: Strategy;
+  lidostrat_holding: Strategy;
+  convexstrat_holding: Strategy;
+  fraxstrat_holding: Strategy;
+  [key: string]: Strategy;
 }
 
 export default Strategies;

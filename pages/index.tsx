@@ -108,8 +108,6 @@ export async function getStaticProps() {
 
   const faqData = faqRes?.data.sort((a, b) => a.id - b.id) || [];
 
-  console.log(faqRes);
-
   return {
     props: {
       audits: auditsRes.data,

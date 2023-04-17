@@ -20,7 +20,7 @@ const tokens: Token[] = [
   },
   {
     name: "ETH",
-    image: "eth-grey-back",
+    image: "eth",
     value: 2.87,
   },
 ];

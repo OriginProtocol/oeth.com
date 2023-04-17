@@ -7,8 +7,50 @@ import { ThemeProvider } from "@mui/material/styles";
 import { formatCurrency, assetRootPath } from "../../utils";
 import { theme, strategyMapping, protocolMapping } from "../../constants";
 import { groupBy } from "lodash";
+import { Strategies } from "../../types";
 
-const Allocation = ({ strategies }) => {
+const mockAllocation = {
+  vault_holding: {
+    name: "Vault",
+    address: "0xe75d77b1865ae93c7eaa3040b038d7aa7bc02f70",
+    icon_file: "ousd-icon.svg",
+    total: 0,
+    holdings: { ETH: 10000, stETH: 0, rETH: 0, sfrxETH: 0 },
+  },
+  lidostrat_holding: {
+    name: "Lido Strategy",
+    address: "0x4f6a43ad7cba042606decaca730d4ce0a57ac62e",
+    icon_file: "lido-icon.svg",
+    total: 0,
+    holdings: { stETH: 100000 },
+  },
+  convexstrat_holding: {
+    name: "Convex Strategy",
+    address: "0x7a192dd9cc4ea9bdedec9992df74f1da55e60a19",
+    icon_file: "convex.png",
+    total: 0,
+    holdings: {
+      rETH: 344997.30075483903,
+    },
+  },
+  fraxstrat_holding: {
+    name: "Frax Strategy",
+    address: "0x7a192dd9cc4ea9bdedec9992df74f1da55e60a19",
+    icon_file: "frax.png",
+    total: 0,
+    holdings: {
+      sfrxETH: 344997.30075483903,
+    },
+  },
+};
+
+interface AllocationProps {
+  strategies: Strategies;
+}
+
+const Allocation = ({ strategies }: AllocationProps) => {
+  strategies = mockAllocation;
+
   const [open, setOpen] = useState({});
   const [loaded, setLoaded] = useState(false);
 
@@ -19,29 +61,23 @@ const Allocation = ({ strategies }) => {
   // split strategies into separate yield sources by token
   const yieldSources = Object.keys(strategies)
     .flatMap((strategy) => {
-      if (strategyMapping[strategy]?.singleAsset) {
-        if (!strategies[strategy]?.holdings) return;
+      if (strategyMapping[strategy]?.vault) {
         return Object.keys(strategies[strategy]?.holdings).map((token) => {
-          if (token === "COMP") return;
-          const name = strategyMapping[strategy].name + " " + token;
-          const protocol = strategyMapping[strategy]?.protocol;
           return {
-            name: name,
-            protocol: protocol,
+            name: token,
+            protocol: strategyMapping[strategy]?.protocol,
             total: strategies[strategy]?.holdings[token],
-            icon: `/images/tokens/${(protocol === "Morpho"
-              ? name.replace("Morpho ", "")
-              : name
-            )
-              .replace(/\s+/g, "-")
-              .toLowerCase()}.svg`,
+            icon: strategyMapping[strategy]?.icons[token],
           };
         });
       }
       return {
         name: strategyMapping[strategy]?.name,
         protocol: strategyMapping[strategy]?.protocol,
-        total: strategies[strategy]?.total,
+        total: Object.keys(strategies[strategy]?.holdings).reduce(
+          (accum, key) => (accum += strategies[strategy]?.holdings[key]),
+          0
+        ),
         icon: strategyMapping[strategy]?.icon,
       };
     })
@@ -64,10 +100,7 @@ const Allocation = ({ strategies }) => {
         }).total,
       };
     })
-    .sort((a, b) => a.total - b.total)
-    .reverse();
-
-  console.log(protocolsSorted);
+    .sort((a, b) => b.total - a.total);
 
   // @ts-ignore
   const total = yieldSources?.reduce((t, s) => {
@@ -106,11 +139,7 @@ const Allocation = ({ strategies }) => {
                   <div className="flex flex-col justify-between">
                     {loaded &&
                       protocolsSorted?.map((protocol, i) => {
-                        if (
-                          protocol.name == "undefined" ||
-                          protocol.name === "Vault"
-                        )
-                          return;
+                        if (protocol.name == "undefined") return;
                         return (
                           <div
                             className="strategy rounded-xl border-2 p-[16px] md:p-8 my-[6px] md:my-[8px]"
@@ -125,17 +154,31 @@ const Allocation = ({ strategies }) => {
                           >
                             <div>
                               <div className="flex flex-row justify-between">
-                                <div className="relative w-1/3 md:w-1/3 lg:w-1/4">
-                                  <Image
-                                    src={protocolMapping[protocol.name]?.image}
-                                    fill
-                                    sizes="(max-width: 768px) 64px, 128px"
-                                    style={{
-                                      objectFit: "contain",
-                                      objectPosition: "0%",
-                                    }}
-                                    alt={protocol.name}
-                                  />
+                                <div
+                                  className={`relative ${
+                                    protocol.name !== "Vault"
+                                      ? "w-1/3 lg:w-1/4"
+                                      : "w-fit"
+                                  }`}
+                                >
+                                  {protocol.name !== "Vault" ? (
+                                    <Image
+                                      src={
+                                        protocolMapping[protocol.name]?.image
+                                      }
+                                      fill
+                                      sizes="(max-width: 768px) 64px, 128px"
+                                      style={{
+                                        objectFit: "contain",
+                                        objectPosition: "0%",
+                                      }}
+                                      alt={protocol.name}
+                                    />
+                                  ) : (
+                                    <Typography.Body>
+                                      Unallocated
+                                    </Typography.Body>
+                                  )}
                                 </div>
                                 <div>
                                   <Typography.H7

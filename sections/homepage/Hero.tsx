@@ -1,20 +1,54 @@
-import React from "react";
 import Image from "next/image";
+import { useState, MouseEvent } from "react";
 import { Typography } from "@originprotocol/origin-storybook";
 import { GradientButton, HeroInfo, Section } from "../../components";
-import { assetRootPath } from "../../utils";
+import { assetRootPath, postEmail } from "../../utils";
 import { lgSize, mdSize } from "../../constants";
 import { useViewWidth } from "../../hooks";
-import { commifyToDecimalPlaces } from "../../utils";
+import { sanitize } from "dompurify";
 import { twMerge } from "tailwind-merge";
-import { Dictionary } from "lodash";
 
 interface HeroProps {
   sectionOverrideCss?: string;
 }
 
+enum NotifStatuses {
+  DEFAULT = "(we won't spam you)",
+  SUCCESS = "Success!",
+  EMAIL_EXISTS = "Email already added",
+  INVALID_EMAIL = "Not a valid email format",
+  SERVER_ERROR = "Something went wrong. Please try again",
+}
+
 const Hero = ({ sectionOverrideCss }: HeroProps) => {
   const width = useViewWidth();
+  const [emailInput, setEmailInput] = useState<string>("hrik.bhowal@gmail.com");
+  const [notifText, setNotifText] = useState<string>(NotifStatuses.DEFAULT);
+
+  const notify = async (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+
+    try {
+      const { action } = await postEmail(sanitize(emailInput));
+
+      switch (action) {
+        case "added":
+          setNotifText(NotifStatuses.SUCCESS);
+          break;
+        case "exists":
+          setNotifText(NotifStatuses.EMAIL_EXISTS);
+          break;
+        case "invalid":
+          setNotifText(NotifStatuses.INVALID_EMAIL);
+          break;
+      }
+    } catch (err) {
+      console.error(err);
+      setNotifText(NotifStatuses.SERVER_ERROR);
+    }
+
+    setEmailInput("");
+  };
 
   return (
     <>
@@ -59,15 +93,29 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
             "relative bg-origin-bg-grey md:bg-gradient2 rounded-[100px] p-[1px] h-fit mt-6  lg:mt-8 w-full md:w-fit"
           }
         >
-          <div className="relative bg-transparent md:bg-origin-bg-black rounded-[100px] px-2 py-3 md:py-2 text-origin-white flex items-center justify-start">
+          <div className="relative bg-transparent md:bg-origin-bg-black rounded-[100px] px-2 py-3 md:py-2 text-origin-white flex items-center justify-start border-2 border-origin-bg-dgrey md:border-none">
             <input
               className="bg-transparent outline-none px-4 md:px-6 lg:px-10"
               placeholder="Enter your email"
-            ></input>
-            {width >= mdSize && <NotifyButton />}
+              onChange={(e) => setEmailInput(e.target.value)}
+              value={emailInput}
+            />
+            {width >= mdSize && <NotifyButton onClick={notify} />}
           </div>
         </div>
-        {width < mdSize && <NotifyButton />}
+        {width < mdSize && <NotifyButton onClick={notify} />}
+
+        <Typography.Body3
+          className={`text-sm mt-4 ${
+            notifText === NotifStatuses.DEFAULT
+              ? "text-table-title"
+              : notifText === NotifStatuses.SUCCESS
+              ? "text-green-400"
+              : "text-red-500"
+          }`}
+        >
+          {notifText}
+        </Typography.Body3>
 
         {/* "Trusted yield sources" and "Fully collateralized" */}
         <div className="flex flex-col md:flex-row mb-6 mt-6 md:mt-20 z-10">
@@ -102,16 +150,10 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
   );
 };
 
-const NotifyButton = () => {
+const NotifyButton = ({ onClick }: { onClick?: (...args: any[]) => void }) => {
   return (
     <GradientButton
-      onClick={() =>
-        window.open(
-          `${process.env.NEXT_PUBLIC_DAPP_URL}`,
-          "_blank",
-          "noopener noreferrer"
-        )
-      }
+      onClick={onClick}
       outerDivClassName="w-full md:w-auto mt-4 md:mt-0"
       className="bg-transparent hover:bg-transparent w-full md:w-auto lg:px-20 py-3 lg:py-5"
     >

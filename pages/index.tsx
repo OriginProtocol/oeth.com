@@ -68,17 +68,21 @@ const IndexPage = ({
 
       <Wallet />
 
-      <Apy daysToApy={daysToApy} apyData={apyHistory} />
+      {process.env.NEXT_PUBLIC_UNREADY_COMPONENTS && (
+        <>
+          <Apy daysToApy={daysToApy} apyData={apyHistory} />
 
-      <Allocation strategies={strategies} />
+          <Allocation strategies={strategies} />
 
-      <Collateral strategies={strategies} collateral={collateral} />
+          <Collateral strategies={strategies} collateral={collateral} />
 
-      <Security audits={audits} />
+          <Security audits={audits} />
 
-      <SecretSauce />
+          <SecretSauce />
 
-      <Ogv stats={stats} />
+          <Ogv stats={stats} />
+        </>
+      )}
 
       <Faq faq={faq} />
 

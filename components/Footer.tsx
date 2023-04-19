@@ -63,7 +63,7 @@ export default function Footer() {
                   Docs
                 </Typography.Body3>
               </Link>
-              <Link
+              {/* <Link
                 href={"/partners"}
                 target="_parent"
                 rel="noopener noreferrer"
@@ -72,8 +72,8 @@ export default function Footer() {
                 <Typography.Body3 className="text-[#fafbfb]">
                   Partners
                 </Typography.Body3>
-              </Link>
-              <Link
+              </Link> */}
+              {/* <Link
                 href={"/blog"}
                 target="_parent"
                 rel="noopener noreferrer"
@@ -83,7 +83,7 @@ export default function Footer() {
                 <Typography.Body3 className="text-[#fafbfb]">
                   Blog
                 </Typography.Body3>
-              </Link>
+              </Link> */}
               {/*<Link
                 href={'/faq'}
                 target="_blank"
@@ -95,7 +95,7 @@ export default function Footer() {
                   FAQ
                 </Typography.Body3>
               </Link>*/}
-              <Link
+              {/* <Link
                 href={"/ogv-dashboard"}
                 target="_parent"
                 rel="noopener noreferrer"
@@ -119,7 +119,7 @@ export default function Footer() {
                 >
                   Get OETH
                 </GradientButton>
-              </Link>
+              </Link> */}
             </div>
           </div>
           <div className="flex flex-col lg:flex-row justify-between pt-8 lg:pt-10 text-subheading">

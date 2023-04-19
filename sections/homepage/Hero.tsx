@@ -22,7 +22,7 @@ enum NotifStatuses {
 
 const Hero = ({ sectionOverrideCss }: HeroProps) => {
   const width = useViewWidth();
-  const [emailInput, setEmailInput] = useState<string>("hrik.bhowal@gmail.com");
+  const [emailInput, setEmailInput] = useState<string>("");
   const [notifText, setNotifText] = useState<string>(NotifStatuses.DEFAULT);
 
   const notify = async (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {

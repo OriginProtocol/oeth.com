@@ -2,7 +2,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { assetRootPath } from "../utils";
-import { useRouter } from "next/router";
 import { Typography } from "@originprotocol/origin-storybook";
 import GradientButton from "./GradientButton";
 

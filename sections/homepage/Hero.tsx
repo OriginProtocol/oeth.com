@@ -15,7 +15,6 @@ interface HeroProps {
 enum NotifStatuses {
   DEFAULT = "(we won't spam you)",
   SUCCESS = "Success!",
-  EMAIL_EXISTS = "Email already added",
   INVALID_EMAIL = "Not a valid email format",
   SERVER_ERROR = "Something went wrong. Please try again",
 }
@@ -29,18 +28,13 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
     e.preventDefault();
 
     try {
-      const { action } = await postEmail(sanitize(emailInput));
+      const { success, message } = await postEmail(sanitize(emailInput));
 
-      switch (action) {
-        case "added":
-          setNotifText(NotifStatuses.SUCCESS);
-          break;
-        case "exists":
-          setNotifText(NotifStatuses.EMAIL_EXISTS);
-          break;
-        case "invalid":
-          setNotifText(NotifStatuses.INVALID_EMAIL);
-          break;
+      if (success) {
+        setNotifText(NotifStatuses.SUCCESS);
+      } else {
+        console.log(message);
+        setNotifText(NotifStatuses.INVALID_EMAIL);
       }
     } catch (err) {
       console.error(err);
@@ -97,7 +91,10 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
             <input
               className="bg-transparent outline-none px-4 md:px-6 lg:px-10"
               placeholder="Enter your email"
-              onChange={(e) => setEmailInput(e.target.value)}
+              onChange={(e) => {
+                setNotifText(NotifStatuses.DEFAULT);
+                setEmailInput(e.target.value);
+              }}
               value={emailInput}
             />
             {width >= mdSize && <NotifyButton onClick={notify} />}
@@ -121,7 +118,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
         <div className="flex flex-col md:flex-row mb-6 mt-6 md:mt-20 z-10">
           <HeroInfo
             title="Trusted yield sources"
-            subtitle="(Placeholder) Blue-chips combined with boosted APYs and trading fees deliver a higher yield than just holding LSDs. "
+            subtitle="Only battle-tested, blue-chip protocols are used to generate OETH's market-leading, risk-adjusted yield."
             className="w-full md:w-1/2 bg-origin-bg-dgrey rounded-lg mr-0 md:mr-7 mb-6 md:mb-0"
           >
             <Image
@@ -134,7 +131,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
 
           <HeroInfo
             title="Fully collateralized"
-            subtitle="(Placeholder) Blue-chips combined with boosted APYs and trading fees deliver a higher yield than just holding LSDs. "
+            subtitle="OETH is always redeemable for a basket of ETH and the most trusted liquid staking derivatives."
             className="w-full md:w-1/2 bg-origin-bg-dgrey rounded-lg"
           >
             <Image

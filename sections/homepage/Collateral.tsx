@@ -97,10 +97,11 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
             className="text-[32px] md:text-[56px] leading-[36px] md:leading-[64px]"
             style={{ fontWeight: 500 }}
           >
-            Always 100% collateralized
+            Instantly redeemable
           </Typography.H6>
           <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading">
-            OUSD is backed 1:1 by the most trusted collateral in crypto.
+            OETH&apos;s on-chain reserves remain liquid and available for
+            permissionless redemption with no gatekeepers or withdrawl queue.
             Reserves are verifiable on-chain. You can redeem OUSD immediately at
             any time.
           </Typography.Body3>

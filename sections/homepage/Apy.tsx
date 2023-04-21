@@ -113,15 +113,12 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
         className="text-[32px] md:text-[56px] leading-[36px] md:leading-[64px]"
         style={{ fontWeight: 500 }}
       >
-        (Placeholder) The simplest high-yield,{" "}
-        <span className="text-gradient2 py-1">market-neutral </span>
-        ETH strategy
+        <span className="text-gradient2 py-1">Real yield </span>
+        diversified{" "}
       </Typography.H6>
       <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading">
-        (Placeholder) Grow your ETH portfolio by swapping stETH, rETH, or
-        sfrxETH to OETH. Yields are generated on-chain, distributed directly to
-        your wallet, and compounded automatically. Your funds are never risked
-        on speculative positions.
+        OETH sustainably outperforms other ETH staking strategies and limits
+        exposure to any single LSD.
       </Typography.Body3>
       {loaded && (
         <div className="max-w-[1432px] mx-auto flex flex-col mt-20 mb-10 md:mb-20 p-[16px] md:p-10 rounded-xl bg-[#141519]">

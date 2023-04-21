@@ -118,7 +118,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
         <div className="flex flex-col md:flex-row mb-6 mt-6 md:mt-20 z-10">
           <HeroInfo
             title="Trusted yield sources"
-            subtitle="(Placeholder) Blue-chips combined with boosted APYs and trading fees deliver a higher yield than just holding LSDs. "
+            subtitle="Only battle-tested, blue-chip protocols are used to generate OETH's market-leading, risk-adjusted yield."
             className="w-full md:w-1/2 bg-origin-bg-dgrey rounded-lg mr-0 md:mr-7 mb-6 md:mb-0"
           >
             <Image
@@ -131,7 +131,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
 
           <HeroInfo
             title="Fully collateralized"
-            subtitle="(Placeholder) Blue-chips combined with boosted APYs and trading fees deliver a higher yield than just holding LSDs. "
+            subtitle="OETH is always redeemable for a basket of ETH and the most trusted liquid staking derivatives."
             className="w-full md:w-1/2 bg-origin-bg-dgrey rounded-lg"
           >
             <Image

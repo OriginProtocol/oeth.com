@@ -29,7 +29,8 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
         className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading"
         style={{ fontDisplay: "swap" }}
       >
-        Rigorous processes and safeguards have been implemented to protect OUSD.
+        OETH&apos;s smart contracts are forked from OUSD, which has been
+        stress-tested for more than two years.
       </Typography.Body3>
 
       <div className="flex flex-col md:flex-row relative mb-10 md:mb-20 mt-10 md:mt-20 max-w-[1134px] mx-auto">

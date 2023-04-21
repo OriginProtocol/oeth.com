@@ -1,19 +1,18 @@
 interface PostEmailResponse {
-  email: string;
-  action: "added" | "exists" | "invalid";
+  success: boolean;
+  message: string;
 }
 
 const postEmail = async (email: string) => {
+  const formData = new FormData();
+  formData.append("email", email);
+  formData.append("source", "oeth.com");
+
   const fetchRes = await fetch(
-    `${process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT}/api/v1/subscribe`,
+    `${process.env.NEXT_PUBLIC_WEBSITE_API}/oeth-subscribe`,
     {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-      }),
+      body: formData,
     }
   );
 

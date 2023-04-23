@@ -11,7 +11,7 @@ const Wallet = () => {
 
   const bullets = [
     "Auto-compounding in your wallet",
-    "Protocol-controlled liquidity",
+    "Protocol-guaranteed liquidity",
     "Self-custodial, always liquid",
     "No staking or lock-ups",
   ];

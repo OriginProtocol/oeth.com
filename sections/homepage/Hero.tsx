@@ -68,7 +68,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
         >
           Stack
           {width < lgSize && <br />}
-          <span className="text-gradient2 font-black py-1 mx-4">more ETH</span>
+          <span className="text-gradient2 font-black py-1 mx-4">ETH</span>
           {width < lgSize && <br />}
           faster
         </Typography.H2>
@@ -82,26 +82,27 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
         <Typography.Body className="mt-6 md:mt-20">
           Be the first to know when OETH launches
         </Typography.Body>
-        <div
-          className={
-            "relative bg-origin-bg-grey md:bg-gradient2 rounded-[100px] p-[1px] h-fit mt-6  lg:mt-8 w-full md:w-fit"
-          }
-        >
-          <div className="relative bg-transparent md:bg-origin-bg-black rounded-[100px] px-2 py-3 md:py-2 text-origin-white flex items-center justify-start border-2 border-origin-bg-dgrey md:border-none">
-            <input
-              className="bg-transparent outline-none px-4 md:px-6 lg:px-10"
-              placeholder="Enter your email"
-              onChange={(e) => {
-                setNotifText(NotifStatuses.DEFAULT);
-                setEmailInput(e.target.value);
-              }}
-              value={emailInput}
-            />
-            {width >= mdSize && <NotifyButton onClick={notify} />}
+        <form>
+          <div
+            className={
+              "relative bg-origin-bg-grey md:bg-gradient2 rounded-[100px] p-[1px] h-fit mt-6  lg:mt-8 w-full md:w-fit"
+            }
+          >
+            <div className="relative bg-transparent md:bg-origin-bg-black rounded-[100px] px-2 py-3 md:py-2 text-origin-white flex items-center justify-start border-2 border-origin-bg-dgrey md:border-none">
+              <input
+                className="bg-transparent outline-none px-4 md:px-6 lg:px-10"
+                placeholder="Enter your email"
+                onChange={(e) => {
+                  setNotifText(NotifStatuses.DEFAULT);
+                  setEmailInput(e.target.value);
+                }}
+                value={emailInput}
+              />
+              {width >= mdSize && <NotifyButton onClick={notify} />}
+            </div>
           </div>
-        </div>
-        {width < mdSize && <NotifyButton onClick={notify} />}
-
+          {width < mdSize && <NotifyButton onClick={notify} />}
+        </form>
         <Typography.Body3
           className={`text-sm mt-4 ${
             notifText === NotifStatuses.DEFAULT

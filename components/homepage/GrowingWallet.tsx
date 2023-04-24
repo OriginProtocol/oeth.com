@@ -16,7 +16,7 @@ const tokens: Token[] = [
   {
     name: "OETH",
     image: "oeth",
-    value: 1_052_427,
+    value: 212.8527,
   },
   {
     name: "ETH",
@@ -39,7 +39,7 @@ const GrowingWallet = ({ className }: GrowingWalletProps) => {
     // Checks if time is divisible by 12 hours
     if (time % (3600000 * 12) !== 4 * 3600000) return;
 
-    setOethAmount((oethAmount) => oethAmount + Math.random() * 1000);
+    setOethAmount((oethAmount) => oethAmount + (Math.random() / 2 + 0.1)); // 0.1 - 0.6
   }, [time]);
 
   const price =
@@ -118,7 +118,7 @@ const GrowingWallet = ({ className }: GrowingWalletProps) => {
       </div>
 
       <Typography.H7 className="text-black font-medium font-sans text-center mt-3">
-        {commifyToDecimalPlaces(price, 2)} ETH
+        {commifyToDecimalPlaces(price, 4)} ETH
       </Typography.H7>
 
       <Image
@@ -156,7 +156,7 @@ const GrowingWallet = ({ className }: GrowingWalletProps) => {
           <Typography.Body2 className="text-black">
             {commifyToDecimalPlaces(
               token.name === "OETH" ? oethAmount : token.value,
-              2
+              4
             )}
           </Typography.Body2>
         </div>

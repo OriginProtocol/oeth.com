@@ -45,7 +45,11 @@ const OethList = ({
           </li>
         ))}
       </ul>
-      <GradientButton outerDivClassName="mt-10" className="bg-origin-bg-dgrey">
+      <GradientButton
+        onClick={() => window.open(process.env.NEXT_PUBLIC_DOCS_URL, "_blank")}
+        outerDivClassName="mt-10"
+        className="bg-origin-bg-dgrey"
+      >
         Learn More
       </GradientButton>
     </div>

@@ -41,19 +41,20 @@ const LineChart = ({ chartData, isMobile }) => {
           },
           scales: {
             x: {
+              border: {
+                color: "#8493a6",
+              },
               grid: {
                 display: false,
                 // @ts-ignore
                 borderColor: "#8493a6",
                 borderWidth: 2,
-                padding: -100,
               },
               ticks: {
                 color: "#b5beca",
                 autoSkip: false,
                 maxRotation: 90,
                 minRotation: 0,
-                padding: 20,
                 callback: function (val, index) {
                   return (
                     isMobile ? (index + 22) % 28 === 0 : (index + 8) % 14 === 0
@@ -64,13 +65,23 @@ const LineChart = ({ chartData, isMobile }) => {
               },
             },
             y: {
+              border: {
+                display: false,
+              },
+              grid: {
+                display: false,
+              },
               beginAtZero: true,
               position: "right",
               ticks: {
+                maxTicksLimit: 6,
                 color: "#b5beca",
                 callback: function (val) {
-                  return val === 0 ? null : this.getLabelForValue(Number(val));
+                  return val === 0
+                    ? null
+                    : this.getLabelForValue(Number(val)) + "%";
                 },
+                crossAlign: "far",
               },
             },
           },

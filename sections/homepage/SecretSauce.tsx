@@ -45,27 +45,12 @@ function SecretSauce() {
 
   return (
     <Section className="bg-origin-bg-dgrey" innerDivClassName="max-w-[820px]">
-      <Typography.H3 className="pt-14 md:pt-[120px] mb-4 md:mb-20 w-full text-center">
+      <Typography.H3 className="px-2 sm:px-0 pt-14 md:pt-[120px] mb-4 md:mb-20 w-full text-left md:text-center">
         Why is OETH&apos;s APY so much higher?
       </Typography.H3>
 
-      <div className="w-full flex my-20">
-        {lsds.map((lsd, i) => (
-          <SecretSauceToken
-            key={i}
-            img={lsd.img}
-            protocolName={lsd.name}
-            symbol={lsd.symbol}
-            apy={lsd.apy}
-            className={`mr-[1px] flex-1 ${
-              i === 0 && "rounded-l-lg gradient3"
-            } ${i === lsds.length - 1 && "rounded-r-lg"}`}
-          />
-        ))}
-      </div>
-
-      <div className="relative h-fit">
-        <p className="font-sansInter font-normal text-base md:text-xl xl:text-lg inline mr-2">
+      <div className="relative h-fit px-2 sm:px-0">
+        <p className="font-sansInter font-normal text-sm md:text-xl xl:text-lg inline mr-2">
           Multiple factors contribute to OUSD outperforming its underlying
           strategies, but there&apos;s one big one. While 100% of the collateral
           is used to generate yield, only some of the OUSD in circulation is
@@ -100,36 +85,56 @@ function SecretSauce() {
           imgSrc={`/images/arrow-${open ? "up" : "down"}-g2.svg`}
           text={`${!open ? "Read more" : "Less"}`}
         />
-        <div
-          className={`relative mt-10 md:mt-20 mx-auto max-w-[85vw] ${
-            width < lgSize ? "w-[455px]" : "w-[820px]"
-          }`}
-        >
-          <Image
-            src={
-              width < lgSize
-                ? assetRootPath("/images/secret-sauce-mobile.png")
-                : assetRootPath("/images/secret-sauce.png")
-            }
-            width="1536"
-            height="1232"
-            className="w-full"
-            alt="Secret Sauce"
-          />
-        </div>
       </div>
-      <div className="w-full flex justify-center mt-10 d:mt-20">
+
+      <div className="w-full flex my-10 md:my-20">
+        {lsds.map((lsd, i) => (
+          <SecretSauceToken
+            key={i}
+            img={lsd.img}
+            protocolName={lsd.name}
+            symbol={lsd.symbol}
+            apy={lsd.apy}
+            bold={i === 0 ? true : false}
+            className={`mr-[1px] flex-1 ${
+              i === 0 && "rounded-l-lg gradient3"
+            } ${i === lsds.length - 1 && "rounded-r-lg"}`}
+          />
+        ))}
+      </div>
+
+      <div
+        className={`relative mt-10 md:mt-20 mx-auto max-w-[85vw] ${
+          width < lgSize ? "w-[455px]" : "w-[820px]"
+        }`}
+      >
+        <Image
+          src={
+            width < lgSize
+              ? assetRootPath("/images/secret-sauce-mobile.png")
+              : assetRootPath("/images/secret-sauce.png")
+          }
+          width="1536"
+          height="1232"
+          className="w-full"
+          alt="Secret Sauce"
+        />
+      </div>
+
+      <div className="w-full flex justify-center mt-10 d:mt-20 px-4 md:px-0">
         <GradientButton
           outerDivClassName="w-full md:w-fit mb-14 md:mb-[120px]"
           className="bg-transparent hover:bg-transparent text-center w-full"
+          onClick={() =>
+            window.open(
+              "https://docs.ousd.com/core-concepts/elastic-supply/rebasing-and-smart-contracts",
+              "_blank"
+            )
+          }
         >
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://docs.ousd.com/core-concepts/elastic-supply/rebasing-and-smart-contracts"
-          >
-            <Typography.H7 className="px-20 py-2">Learn more</Typography.H7>
-          </a>
+          <Typography.H7 className="px-20 py-2 font-normal">
+            Learn more
+          </Typography.H7>
         </GradientButton>
       </div>
     </Section>

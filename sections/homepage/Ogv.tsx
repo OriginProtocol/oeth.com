@@ -7,6 +7,7 @@ import { assetRootPath } from "../../utils";
 import { formatCurrency } from "../../utils/math";
 import { Huobi, Uniswap, Kucoin, Curve } from "../../utils";
 import { OgvStats } from "../../types";
+import { GradientButton } from "../../components";
 
 interface OgvProps {
   stats: OgvStats;
@@ -36,10 +37,9 @@ const Ogv = ({ stats }: OgvProps) => {
                 >
                   Governed by OGV stakers
                 </Typography.H2>
-                <Typography.Body3 className="mt-[16px] leading-[28px] lg:text-left">
-                  {
-                    "OUSD's future is shaped by voters who lock their OGV and participate in decentralized governance."
-                  }
+                <Typography.Body3 className="mt-[16px] leading-[28px] lg:text-left text-sm md:text-base">
+                  OETH's future is shaped by voters who lock their OGV and
+                  participate in decentralized governance.
                 </Typography.Body3>
                 <div className="mt-8 block lg:hidden">
                   <Image
@@ -138,7 +138,7 @@ const Ogv = ({ stats }: OgvProps) => {
                 <Link
                   href="/ogv-dashboard"
                   target="_parent"
-                  className="bg-black bttn mb-10 lg:hidden"
+                  className="bg-black bttn !m-0 mb-10 lg:hidden w-full md:w-fit"
                 >
                   <Typography.H7 className="font-normal">
                     View dashboard
@@ -190,7 +190,7 @@ const Ogv = ({ stats }: OgvProps) => {
                   href="https://app.uniswap.org/#/swap?outputCurrency=0x9c354503C38481a7A7a51629142963F98eCC12D0&chain=mainnet"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bttn bg-black block lg:hidden text-center"
+                  className="bttn bg-black block lg:hidden text-center w-full md:w-fit"
                 >
                   <Typography.H7 className="font-normal">Buy OGV</Typography.H7>
                 </Link>
@@ -198,7 +198,7 @@ const Ogv = ({ stats }: OgvProps) => {
             </div>
           </div>
           <div>
-            <div className="overflow-hidden max-w-screen-2xl mx-auto px-8 md:px-[134px] pb-[52px] text-center">
+            <div className="overflow-hidden max-w-screen-2xl mx-auto px-4 md:px-[134px] pb-[52px] text-center">
               <div className="bg-origin-bg-blackt2 py-10 rounded-lg flex flex-col items-center px-4">
                 <Typography.H2
                   className="text-[32px] md:text-[56px] leading-[36px] md:leading-[64px]"
@@ -209,21 +209,22 @@ const Ogv = ({ stats }: OgvProps) => {
                 <Typography.H2 className="mt-3 md:mt-1 text-[32px] md:text-[56px] leading-[36px] md:leading-[64px] text-gradient1 font-bold text-gradient1">
                   To Earn OGV
                 </Typography.H2>
-                <Typography.Body3 className="mt-[16px] mb-[60px] font-normal text-[#fafbfb]">
+                <Typography.Body3 className="mt-[16px] mb-10 md:mb-[60px] font-normal text-[#fafbfb]">
                   Fees and voting rights accrue to OGV stakers. Control the
                   future of OUSD <br className="hidden lg:block" />
                   and profit from its growth.
                 </Typography.Body3>
-                <Link
-                  href="https://governance.ousd.com/stake"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-black rounded-full"
+                <GradientButton
+                  outerDivClassName="w-full md:w-fit md:mx-auto bg-white hover:bg-white hover:opacity-90"
+                  className="bg-white py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+                  onClick={() =>
+                    window.open("https://governance.ousd.com/stake", "_blank")
+                  }
                 >
-                  <Typography.H7 className="font-normal bg-white px-20 py-5 rounded-full">
+                  <Typography.H7 className="font-normal text-black rounded-full">
                     Earn rewards
                   </Typography.H7>
-                </Link>
+                </GradientButton>
               </div>
             </div>
           </div>
@@ -232,7 +233,7 @@ const Ogv = ({ stats }: OgvProps) => {
           src={assetRootPath(`/images/splines21.png`)}
           width="1073"
           height="1058"
-          className="absolute w-3/5 left-0 bottom-0 -z-10"
+          className="absolute w-full md:w-3/5 left-0 bottom-0 -z-10"
           alt="splines"
         />
       </section>

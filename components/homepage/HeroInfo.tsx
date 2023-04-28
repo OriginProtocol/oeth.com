@@ -15,9 +15,11 @@ const HeroInfo = ({
   children,
 }: PropsWithChildren<HeroInfoProps>) => {
   return (
-    <div className={twMerge("p-10 text-center", className)}>
-      <Typography.H7 className="text-white">{title}</Typography.H7>
-      <Typography.Body3 className="text-sm mt-4 text-subheading">
+    <div className={twMerge("p-6 md:p-10 text-center", className)}>
+      <Typography.H7 className="text-xl md:text-2xl text-white">
+        {title}
+      </Typography.H7>
+      <Typography.Body3 className="text-xs md:text-sm mt-4 text-subheading">
         {subtitle}
       </Typography.Body3>
       <div className="mt-6">{children}</div>

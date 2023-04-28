@@ -5,29 +5,42 @@ import { Typography } from "@originprotocol/origin-storybook";
 import LinearProgress from "@mui/material/LinearProgress";
 import { ThemeProvider } from "@mui/material/styles";
 import { formatCurrency, assetRootPath } from "../../utils";
-import { theme, strategyMapping, protocolMapping } from "../../constants";
+import {
+  theme,
+  strategyMapping,
+  protocolMapping,
+  smSize,
+} from "../../constants";
 import { groupBy } from "lodash";
 import { Strategies } from "../../types";
+import { GradientButton } from "../../components";
+import { useViewWidth } from "../../hooks";
 
 const mockAllocation = {
   vault_holding: {
     name: "Vault",
     address: "0xe75d77b1865ae93c7eaa3040b038d7aa7bc02f70",
-    icon_file: "ousd-icon.svg",
     total: 0,
     holdings: { ETH: 10000, stETH: 0, rETH: 0, sfrxETH: 0 },
   },
   lidostrat_holding: {
     name: "Lido Strategy",
     address: "0x4f6a43ad7cba042606decaca730d4ce0a57ac62e",
-    icon_file: "lido-icon.svg",
     total: 0,
     holdings: { stETH: 100000 },
+  },
+  rocketpoolstrat_holding: {
+    name: "Rocket Pool Strategy",
+    address: "0x7a192dd9cc4ea9bdedec9992df74f1da55e60a19",
+    icon_file: "rocketpool-icon.svg",
+    total: 0,
+    holdings: {
+      rETH: 144997.30075483903,
+    },
   },
   convexstrat_holding: {
     name: "Convex Strategy",
     address: "0x7a192dd9cc4ea9bdedec9992df74f1da55e60a19",
-    icon_file: "convex.png",
     total: 0,
     holdings: {
       rETH: 344997.30075483903,
@@ -53,6 +66,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
 
   const [open, setOpen] = useState({});
   const [loaded, setLoaded] = useState(false);
+  const width = useViewWidth();
 
   useEffect(() => {
     setLoaded(true);
@@ -117,12 +131,11 @@ const Allocation = ({ strategies }: AllocationProps) => {
           >
             Fully transparent on the Ethereum blockchain
           </Typography.H6>
-          <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading">
-            Funds are deployed to automated, on-chain, blue-chip stablecoin
-            strategies. There are no gatekeepers or centralized money managers
-            and governance is entirely decentralized.
+          <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading text-sm md:text-base">
+            Yield is generated from a short list of conservative strategies and
+            verifiable on-chain.
           </Typography.Body3>
-          <div className="allocation max-w-[1432px] mx-auto mt-20 mb-10 md:mb-20 rounded-xl divide-black divide-y-2">
+          <div className="allocation max-w-[1432px] mx-auto mt-10 md:mt-20 mb-10 md:mb-20 rounded-xl divide-black divide-y-[1px] md:divide-y-2">
             <Typography.H7 className="font-bold px-4 py-[22px] md:p-10">
               Current yield sources & allocations
             </Typography.H7>
@@ -235,11 +248,16 @@ const Allocation = ({ strategies }: AllocationProps) => {
                                         key={i}
                                       >
                                         <div className="flex flex-row">
-                                          <div className="relative w-6">
+                                          <div
+                                            className={`relative ${
+                                              strategy?.protocol === "Convex"
+                                                ? "w-12"
+                                                : "w-6"
+                                            }`}
+                                          >
                                             <Image
                                               src={strategy?.icon}
                                               fill
-                                              sizes="(max-width: 768px) 20px, 24px"
                                               alt={strategy.name}
                                             />
                                           </div>
@@ -281,16 +299,16 @@ const Allocation = ({ strategies }: AllocationProps) => {
               </div>
             </div>
           </div>
-          <Link
-            href="https://docs.ousd.com/core-concepts/yield-generation"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bttn gradient3"
-          >
-            <Typography.H7 className="font-normal">
-              See how yield is generated
-            </Typography.H7>
-          </Link>
+          <div className="px-4 md:px-0">
+            <GradientButton
+              outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
+              className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+            >
+              <Typography.H7 className="font-normal">
+                See how yield is generated
+              </Typography.H7>
+            </GradientButton>
+          </div>
         </div>
       </section>
       <style jsx>{`

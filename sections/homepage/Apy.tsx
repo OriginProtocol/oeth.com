@@ -1,19 +1,19 @@
 import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
 import { Chart as ChartJS } from "chart.js/auto";
-import { LineChart } from "../../components";
+import { GradientButton, LineChart } from "../../components";
 import { Typography } from "@originprotocol/origin-storybook";
 import { formatCurrency } from "../../utils/math";
-import { apyDayOptions } from "../../constants";
-import { CategoryScale } from "chart.js";
+import { apyDayOptions, mdSize } from "../../constants";
+import { CategoryScale, ChartData } from "chart.js";
 import { Section } from "../../components";
 import { ApyHistory } from "../../types";
 import { twMerge } from "tailwind-merge";
 import { Dictionary } from "lodash";
 import { useApyHistoryQuery } from "../../queries";
+import { useViewWidth } from "../../hooks";
 
 ChartJS.register(CategoryScale);
-
 interface ApyProps {
   daysToApy: Dictionary<number>;
   apyData: ApyHistory;
@@ -39,7 +39,9 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
     [apyHistoryQuery.isSuccess, apyHistoryQuery.data]
   );
 
-  const [chartData, setChartData] = useState();
+  const viewWidth = useViewWidth();
+
+  const [chartData, setChartData] = useState<ChartData<"line">>();
   const dataReversed =
     apyHistory && apyHistory[`apy${apyDays}`]
       ? apyHistory[`apy${apyDays}`]
@@ -93,7 +95,7 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
               }
               return getGradient(ctx, chartArea);
             },
-            borderWidth: 5,
+            borderWidth: viewWidth < mdSize ? 2 : 5,
             tension: 0,
             borderJoinStyle: "round",
             pointRadius: 0,
@@ -116,15 +118,15 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
         <span className="text-gradient2 py-1">Real yield </span>
         diversified{" "}
       </Typography.H6>
-      <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading">
+      <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading text-sm md:text-base">
         OETH sustainably outperforms other ETH staking strategies and limits
         exposure to any single LSD.
       </Typography.Body3>
       {loaded && (
-        <div className="max-w-[1432px] mx-auto flex flex-col mt-20 mb-10 md:mb-20 p-[16px] md:p-10 rounded-xl bg-[#141519]">
+        <div className="max-w-[1432px] mx-auto flex flex-col mt-10 md:mt-20 mb-10 md:mb-20 p-[16px] py-[32px] md:p-10 rounded-xl bg-origin-bg-black">
           <div className="flex flex-col lg:flex-row justify-between">
             <div className="mt-[0px] md:mt-[16px]">
-              <Typography.H2 className="font-bold xl:inline lg:text-left">
+              <Typography.H2 className="font-bold xl:inline lg:text-left text-6xl">
                 {formatCurrency(
                   // @ts-ignore
                   daysToApy[apyDays] * 100,
@@ -142,23 +144,23 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
                   return (
                     <div
                       className={`${
-                        apyDays === days ? "gradient2" : "bg-[#1e1f25]"
+                        apyDays === days ? "gradient2" : "bg-origin-bg-grey"
                       } w-[90px] sm:w-[135px] p-px rounded-lg text-center cursor-pointer hover:opacity-90`}
                       key={days}
                       onClick={() => {
                         setApyDays(days);
                       }}
                     >
-                      <div className="bg-[#1e1f25] w-full h-full rounded-lg">
+                      <div className="bg-origin-bg-grey w-full rounded-lg">
                         <div
-                          className={`w-full h-full py-[14px] rounded-lg ${
+                          className={`w-full py-[13px] rounded-lg ${
                             apyDays === days ? "gradient4" : "text-subheading"
                           }`}
                         >
                           <Typography.Body3
-                            className={`${
+                            className={`text-xs ${
                               apyDays === days
-                                ? "text-[#fafbfb] font-medium"
+                                ? "text-origin-white font-medium"
                                 : "text-subheading"
                             }`}
                           >{`${days}-day`}</Typography.Body3>
@@ -171,19 +173,25 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
             </div>
           </div>
           {chartData && (
-            <div className="mt-12 -mr-[16px] -ml-[16px] md:ml-[0px]">
+            <div className="mt-12 md:ml-[0px]">
               <LineChart chartData={chartData} />
             </div>
           )}
         </div>
       )}
-      <Link
-        href={`${process.env.NEXT_PUBLIC_DAPP_URL}`}
-        target="_blank"
-        className="bttn gradient3"
-      >
-        <Typography.H7 className="font-normal">Start earning now</Typography.H7>
-      </Link>
+      <div className="px-4 md:px-0">
+        <GradientButton
+          outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
+          className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+          onClick={() =>
+            window.open(process.env.NEXT_PUBLIC_DAPP_URL, "_blank")
+          }
+        >
+          <Typography.H7 className="font-normal">
+            Start earning now
+          </Typography.H7>
+        </GradientButton>
+      </div>
     </Section>
   );
 };

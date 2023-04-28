@@ -7,6 +7,7 @@ import { PieChart } from "react-minimal-pie-chart";
 import { formatCurrency, rounded } from "../../utils";
 import { tokenColors, strategyMapping } from "../../constants";
 import { Collateral as CollateralType, Strategies } from "../../types";
+import { GradientButton } from "../../components";
 
 const mockBacking = [
   { name: "eth", total: 11981522.633824237 },
@@ -91,7 +92,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
 
   return (
     <>
-      <section className="bg-[#1e1f25]">
+      <section className="bg-origin-bg-grey">
         <div className="px-[16px] md:px-[64px] lg:px-[134px] py-14 md:py-[120px] text-center">
           <Typography.H6
             className="text-[32px] md:text-[56px] leading-[36px] md:leading-[64px]"
@@ -99,16 +100,21 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
           >
             Instantly redeemable
           </Typography.H6>
-          <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading">
+          <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading text-sm md:text-base">
             OETH&apos;s on-chain reserves remain liquid and available for
             permissionless redemption with no gatekeepers or withdrawl queue.
             Reserves are verifiable on-chain. You can redeem OUSD immediately at
             any time.
           </Typography.Body3>
-          <div className="max-w-[1432px] mx-auto mt-20 mb-10 md:mb-20 py-6 xl:py-20 rounded-xl bg-[#141519]">
+          <div className="max-w-[1432px] mx-auto mt-10 md:mt-20 mb-10 md:mb-20 py-6 xl:py-20 rounded-xl bg-origin-bg-black">
             <div className="flex flex-col md:flex-row justify-between px-6 xl:px-[132px]">
-              <div className="relative w-full sm:w-1/2 mx-auto my-auto rounded-full p-4 bg-[#1e1f25]">
-                <PieChart data={chartData} lineWidth={6} startAngle={270} />
+              <div className="relative w-full sm:w-1/2 mx-auto my-auto rounded-full p-4 bg-origin-bg-grey">
+                <PieChart
+                  data={chartData}
+                  lineWidth={6}
+                  startAngle={270}
+                  paddingAngle={2}
+                />
                 <div className="absolute left-1/2 bottom-1/2 -translate-x-1/2 translate-y-[16px] md:translate-y-[20px]">
                   <Typography.H6 className="text-[16px] md:text-[24px] leading-[32px]">
                     Total
@@ -125,27 +131,29 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                     if (token.name === "ousd") return;
                     return (
                       <div
-                        className="flex flex-row md:my-0 px-4 py-[13.5px] md:p-6 rounded-[8px] bg-[#1e1f25] w-full md:max-w-[351px] space-x-3 md:space-x-[22px]"
+                        className="flex flex-row md:my-0 px-4 py-[13.5px] md:p-6 rounded-[8px] bg-origin-bg-grey w-full md:max-w-[351px] space-x-3 md:space-x-[22px]"
                         key={i}
                       >
                         <div className="relative w-12 md:w-[48px]">
                           <Image
-                            src={assetRootPath(`/images/${token.name}.svg`)}
+                            src={assetRootPath(
+                              `/images/${token.name}-outline.svg`
+                            )}
                             fill
                             sizes="(max-width: 768px) 48px, 24px"
                             alt={token.name}
                           />
                         </div>
                         <div>
-                          <div className="flex flex-row space-x-2">
+                          <div className="">
                             <Typography.H7
-                              className="text-[14px] md:text-[20px]"
+                              className="text-[14px] md:text-[20px] inline mr-1"
                               style={{ fontWeight: 700 }}
                             >
                               {`${tokenNames[token.name]}`}
                             </Typography.H7>
                             <Typography.H7
-                              className="text-[14px] md:text-[20px]"
+                              className="text-[14px] md:text-[20px] inline text-table-title"
                               style={{ fontWeight: 400 }}
                             >
                               {`(${tokenSymbols[token.name]})`}
@@ -185,7 +193,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                   const tokens = ["eth", "steth", "reth", "sfrxeth"];
                   return (
                     <div
-                      className="p-4 md:p-6 rounded-[7px] bg-[#1e1f25]"
+                      className="p-4 md:p-6 rounded-[7px] bg-origin-bg-grey"
                       key={i}
                     >
                       <Link
@@ -263,39 +271,44 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                 })}
             </div>
             <div
-              className="flex flex-row justify-between items-center w-min mt-6 md:mt-20 mx-auto px-6 py-1.5 rounded-full whitespace-nowrap gradient3 space-x-2 cursor-pointer hover:opacity-90"
+              className="w-min mt-6 md:mt-20 mx-auto p-0.5 rounded-full whitespace-nowrap gradient3 cursor-pointer hover:opacity-90"
               onClick={(e) => {
                 e.preventDefault();
                 setOpen(!open);
               }}
             >
-              <Typography.Body3
-                className="text-[16px] leading-[28px]"
-                style={{ fontWeight: 500 }}
-              >
-                {open ? "Hide contracts" : "View contracts"}
-              </Typography.Body3>
-              <div className="w-3.5">
-                <Image
-                  src={assetRootPath(`/images/caret-white.svg`)}
-                  width="14"
-                  height="8"
-                  className={`${open ? "rotate-180" : ""}`}
-                  alt="arrow"
-                />
+              <div className="rounded-full flex flex-row justify-between items-center space-x-2 bg-origin-bg-black px-6 py-1">
+                <Typography.Body3
+                  className="text-[16px] leading-[28px]"
+                  style={{ fontWeight: 500 }}
+                >
+                  {open ? "Hide contracts" : "View contracts"}
+                </Typography.Body3>
+                <div className="w-3.5">
+                  <Image
+                    src={assetRootPath(`/images/caret-white.svg`)}
+                    width="14"
+                    height="8"
+                    className={`${open ? "rotate-180" : ""}`}
+                    alt="arrow"
+                  />
+                </div>
               </div>
             </div>
           </div>
-          <Link
-            href="https://docs.ousd.com/how-it-works"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bttn gradient3"
-          >
-            <Typography.H7 className="font-normal">
-              See how it works
-            </Typography.H7>
-          </Link>
+          <div className="px-4 md:px-0">
+            <GradientButton
+              outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
+              className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+              onClick={() =>
+                window.open("https://docs.ousd.com/how-it-works", "_blank")
+              }
+            >
+              <Typography.H7 className="font-normal">
+                See how it works
+              </Typography.H7>
+            </GradientButton>
+          </div>
         </div>
       </section>
     </>

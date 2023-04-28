@@ -15,7 +15,7 @@ const Faq = ({ faq }) => {
             <div className="max-w-[1432px] mx-auto pt-[56px] md:pt-[120px]">
               <Typography.H2
                 as="h1"
-                className="text-[40px] text-center leading-[40px] md:text-[64px] md:leading-[72px]"
+                className="text-[32px] text-center leading-[40px] md:text-[56px] md:leading-[72px]"
                 style={{ fontWeight: 500 }}
               >
                 Frequently Asked Questions
@@ -28,7 +28,7 @@ const Faq = ({ faq }) => {
                 {faq?.map((q, i) => {
                   return (
                     <div
-                      className="max-w-[959px] rounded-xl bg-origin-bg-black text-[#fafbfb] mx-auto"
+                      className="max-w-[959px] rounded-xl bg-origin-bg-black text-origin-white mx-auto"
                       key={i}
                     >
                       <div
@@ -41,17 +41,14 @@ const Faq = ({ faq }) => {
                         }}
                         className="flex p-[16px] md:p-8 flex-row justify-between cursor-pointer"
                       >
-                        <Typography.H7
-                          className="text-base md:text-xl"
-                          style={{ fontWeight: 700 }}
-                        >
+                        <Typography.H7 className="text-base md:text-xl font-medium">
                           {q.attributes.question}
                         </Typography.H7>
                         <Image
                           src={assetRootPath(`/images/caret.svg`)}
                           width="23"
                           height="14"
-                          className={`shrink-0 w-4 md:w-6 ml-[16px] md:ml-8 mb-2 inline ${
+                          className={`shrink-0 w-4 md:w-6 ml-[16px] md:ml-8 inline ${
                             open[i] ? "rotate-180" : ""
                           }`}
                           alt="caret"
@@ -59,7 +56,7 @@ const Faq = ({ faq }) => {
                       </div>
                       <div className={`${open[i] ? "" : "hidden"}`}>
                         <div
-                          className="mx-[16px] md:mx-8 pb-[16px] md:pb-8 mr-12 md:mr-24"
+                          className="text-sm md:text-base mx-[16px] md:mx-8 pb-[16px] md:pb-8 mr-12 md:mr-24"
                           dangerouslySetInnerHTML={{
                             __html: q.attributes.answer,
                           }}
@@ -81,9 +78,10 @@ const Faq = ({ faq }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {"Discord"}
+                      <span className="w-fit bg-gradient-to-r from-gradient2-from to-gradient2-to bg-[length:100%_2px] bg-no-repeat bg-bottom rounded-lg pb-2">
+                        {"Discord"}
+                      </span>
                     </Link>
-                    <div className="h-1 w-[72px] md:w-[116px] mr-0 ml-auto mt-[4px] bg-gradient-to-r from-[#8c66fc] to-[#0274f1] rounded-full"></div>
                   </Typography.H5>
                 </div>
               </div>

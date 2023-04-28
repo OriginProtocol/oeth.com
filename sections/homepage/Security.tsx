@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Typography } from "@originprotocol/origin-storybook";
 import { assetRootPath } from "../../utils";
 import { Audit } from "../../types";
-import { Section } from "../../components";
+import { GradientButton, Section } from "../../components";
 import { twMerge } from "tailwind-merge";
 import { SecurityFeature } from "../../components";
 
@@ -26,7 +26,7 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
         Security first
       </Typography.H6>
       <Typography.Body3
-        className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading"
+        className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading text-sm md:text-base"
         style={{ fontDisplay: "swap" }}
       >
         OETH&apos;s smart contracts are forked from OUSD, which has been
@@ -49,7 +49,7 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
                   rel="noopener noreferrer"
                   key={i}
                 >
-                  <div className="relative rounded-full w-[140px] h-[140px] md:w-[200px] md:h-[200px] lg:w-[130px] lg:h-[130px] xl:w-[170px] xl:h-[170px] 2xl:w-[200px] 2xl:h-[200px] bg-[#141519]">
+                  <div className="relative rounded-full w-[140px] h-[140px] md:w-[200px] md:h-[200px] lg:w-[130px] lg:h-[130px] xl:w-[170px] xl:h-[170px] 2xl:w-[200px] 2xl:h-[200px] bg-origin-bg-black">
                     <div className="h-[56px] md:h-[80px] lg:h-[56px] 2xl:h-[80px] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                       <Image
                         src={assetRootPath(
@@ -103,16 +103,25 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
           </div>
         </SecurityFeature>
       </div>
-      <Link
-        href="https://docs.ousd.com/security-and-risks/audits"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bttn gradient3"
-      >
-        <Typography.H7 className="font-normal" style={{ fontDisplay: "swap" }}>
-          Review audits
-        </Typography.H7>
-      </Link>
+      <div className="px-4 md:px-0">
+        <GradientButton
+          outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
+          className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+          onClick={() =>
+            window.open(
+              "https://docs.ousd.com/security-and-risks/audits",
+              "_blank"
+            )
+          }
+        >
+          <Typography.H7
+            className="font-normal"
+            style={{ fontDisplay: "swap" }}
+          >
+            Review audits
+          </Typography.H7>
+        </GradientButton>
+      </div>
     </Section>
   );
 };

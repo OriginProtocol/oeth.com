@@ -9,6 +9,7 @@ interface SecretSauceTokenProps {
   protocolName: string;
   symbol: string;
   apy: number;
+  bold: boolean;
   className?: string;
 }
 
@@ -17,12 +18,13 @@ const SecretSauceToken = ({
   protocolName,
   symbol,
   apy,
+  bold,
   className,
 }: SecretSauceTokenProps) => {
   return (
     <div
       className={twMerge(
-        "bg-origin-bg-grey flex flex-col items-center py-6 text-white",
+        "bg-origin-bg-grey flex flex-col items-center py-4 md:py-6 text-white",
         className
       )}
     >
@@ -33,12 +35,16 @@ const SecretSauceToken = ({
         alt={protocolName + " " + symbol}
       />
 
-      <Typography.Body3 className="text-sm font-bold mt-1">
+      <Typography.Body3 className="text-xs md:text-sm font-bold mt-1">
         {protocolName}
       </Typography.Body3>
       <Typography.Body3 className="text-xs">{symbol}</Typography.Body3>
-      <Typography.Body className="mt-1">{apy}%</Typography.Body>
-      <Typography.Body3 className="text-xs">APY</Typography.Body3>
+      <Typography.Body className={`${bold && "font-bold"} mt-1`}>
+        {apy}%
+      </Typography.Body>
+      <Typography.Body3 className={`${bold && "font-bold"} text-xs`}>
+        APY
+      </Typography.Body3>
     </div>
   );
 };

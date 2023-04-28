@@ -1,7 +1,6 @@
 interface Strategy {
   total: number;
   name: string;
-  icon_file: string;
   holdings: {
     ETH?: number;
     stETH?: number;
@@ -14,6 +13,7 @@ interface Strategy {
 interface Strategies {
   vault_holding: Strategy;
   lidostrat_holding: Strategy;
+  rocketpoolstrat_holding: Strategy;
   convexstrat_holding: Strategy;
   fraxstrat_holding: Strategy;
   [key: string]: Strategy;

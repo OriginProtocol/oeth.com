@@ -9,6 +9,9 @@ const theme = createTheme({
     Lido: {
       main: "#66c8ff",
     },
+    RocketPool: {
+      main: "#e4ae89",
+    },
     Frax: {
       main: "#e85bff",
     },

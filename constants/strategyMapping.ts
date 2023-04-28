@@ -20,23 +20,29 @@ const strategyMapping: {
       sfrxETH: "/images/sfrxeth.svg",
     },
   },
+  rocketpoolstrat_holding: {
+    protocol: "RocketPool",
+    name: "Rocket Pool Ether (rETH)",
+    address: "0x5e3646A1Db86993f73E6b74A57D8640B69F7e259",
+    icon: "/images/rocketpool-icon.svg",
+  },
   lidostrat_holding: {
     protocol: "Lido",
     name: "Lido staked Ether (stETH)",
     address: "0x5e3646A1Db86993f73E6b74A57D8640B69F7e259",
-    icon: "/images/lido-strategy.svg",
+    icon: "/images/lido-icon.svg",
   },
   convexstrat_holding: {
     protocol: "Convex",
     name: "Convex ETH + Rocket Pool Ether (rETH)",
     address: "0x5e3646A1Db86993f73E6b74A57D8640B69F7e259",
-    icon: "/images/convex-strategy.svg",
+    icon: "/images/convex-reth.svg",
   },
   fraxstrat_holding: {
     protocol: "Frax",
     name: "Frax staked Ether (sfrxETH)",
     address: "0x5e3646A1Db86993f73E6b74A57D8640B69F7e259",
-    icon: "/images/frax-strategy.svg",
+    icon: "/images/frax-icon.svg",
   },
 };
 

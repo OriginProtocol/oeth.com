@@ -29,7 +29,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="lg:mr-10 flex items-center"
               >
-                <Typography.Body3 className="text-[#fafbfb]">
+                <Typography.Body3 className="text-origin-white">
                   Discord
                 </Typography.Body3>
               </Link>
@@ -39,7 +39,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="mr-10 mt-[20px] lg:mt-0 flex items-center"
               >
-                <Typography.Body3 className="text-[#fafbfb]">
+                <Typography.Body3 className="text-origin-white">
                   GitHub
                 </Typography.Body3>
               </Link>
@@ -49,7 +49,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="lg:mr-10 mt-[20px] lg:mt-0 flex items-center"
               >
-                <Typography.Body3 className="text-[#fafbfb]">
+                <Typography.Body3 className="text-origin-white">
                   Governance
                 </Typography.Body3>
               </Link>
@@ -59,7 +59,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="lg:mr-10 mt-[20px] lg:mt-0 flex items-center"
               >
-                <Typography.Body3 className="text-[#fafbfb]">
+                <Typography.Body3 className="text-origin-white">
                   Docs
                 </Typography.Body3>
               </Link>
@@ -69,7 +69,7 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="lg:mr-10 mt-[20px] lg:mt-0 flex items-center"
               >
-                <Typography.Body3 className="text-[#fafbfb]">
+                <Typography.Body3 className="text-origin-white">
                   Partners
                 </Typography.Body3>
               </Link> */}
@@ -80,7 +80,7 @@ export default function Footer() {
                 prefetch={false}
                 className="lg:mr-10 mt-[20px] lg:mt-0 flex items-center"
               >
-                <Typography.Body3 className="text-[#fafbfb]">
+                <Typography.Body3 className="text-origin-white">
                   Blog
                 </Typography.Body3>
               </Link> */}
@@ -91,7 +91,7 @@ export default function Footer() {
                 prefetch={false}
                 className="lg:mr-10 mt-[20px] lg:mt-0 flex items-center"
               >
-                <Typography.Body3 className="text-[#fafbfb]">
+                <Typography.Body3 className="text-origin-white">
                   FAQ
                 </Typography.Body3>
               </Link>*/}
@@ -102,7 +102,7 @@ export default function Footer() {
                 prefetch={false}
                 className="mr-10 mt-[20px] lg:mt-0 flex items-center"
               >
-                <Typography.Body3 className="text-[#fafbfb]">
+                <Typography.Body3 className="text-origin-white">
                   OGV
                 </Typography.Body3>
               </Link>

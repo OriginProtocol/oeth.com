@@ -64,17 +64,13 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
         <Typography.H2
           as="div"
           className="font-sansSailec text-[40px] md:text-[64px] leading-[40px] md:leading-[72px] text-center"
-          style={{ fontWeight: 500 }}
+          style={{ fontWeight: 700 }}
         >
-          Stack
-          {width < lgSize && <br />}
-          <span className="text-gradient2 font-black py-1 mx-4">ETH</span>
-          {width < lgSize && <br />}
-          faster
+          Stack ETH faster
         </Typography.H2>
         <Typography.Body
           as="h1"
-          className="mt-6 leading-[28px] text-subheading"
+          className="mt-6 leading-[28px] text-origin-white"
         >
           Ethereum Liquid Staking made simple.
         </Typography.Body>
@@ -82,7 +78,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
         <Typography.Body className="mt-6 md:mt-20">
           Be the first to know when OETH launches
         </Typography.Body>
-        <form>
+        <form className="w-full md:w-fit">
           <div
             className={
               "relative bg-origin-bg-grey md:bg-gradient2 rounded-[100px] p-[1px] h-fit mt-6  lg:mt-8 w-full md:w-fit"
@@ -126,7 +122,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
               src={assetRootPath("/images/yield-sources.svg")}
               width="700"
               height="100"
-              alt="lido curve frax balancer"
+              alt="lido frax curve rocketpool convex"
             />
           </HeroInfo>
 

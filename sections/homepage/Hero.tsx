@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { useState, MouseEvent } from "react";
 import { Typography } from "@originprotocol/origin-storybook";
-import { GradientButton, HeroInfo, Section } from "../../components";
+import { GradientButton, HeroInfo, Section, HeroData } from "../../components";
 import { assetRootPath, postEmail } from "../../utils";
-import { lgSize, mdSize } from "../../constants";
+import { mdSize } from "../../constants";
 import { useViewWidth } from "../../hooks";
 import { sanitize } from "dompurify";
 import { twMerge } from "tailwind-merge";
@@ -75,41 +75,65 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
           Ethereum Liquid Staking made simple.
         </Typography.Body>
 
-        <Typography.Body className="mt-6 md:mt-20">
-          Be the first to know when OETH launches
-        </Typography.Body>
-        <form className="w-full md:w-fit">
-          <div
-            className={
-              "relative bg-origin-bg-grey md:bg-gradient2 rounded-[100px] p-[1px] h-fit mt-6  lg:mt-8 w-full md:w-fit"
-            }
-          >
-            <div className="relative bg-transparent md:bg-origin-bg-black rounded-[100px] px-2 py-3 md:py-2 text-origin-white flex items-center justify-start border-2 border-origin-bg-dgrey md:border-none">
-              <input
-                className="bg-transparent outline-none px-4 md:px-6 lg:px-10"
-                placeholder="Enter your email"
-                onChange={(e) => {
-                  setNotifText(NotifStatuses.DEFAULT);
-                  setEmailInput(e.target.value);
-                }}
-                value={emailInput}
+        {process.env.NEXT_PUBLIC_LINK_DAPP ? (
+          <>
+            <GradientButton
+              onClick={() =>
+                window.open(process.env.NEXT_PUBLIC_DAPP_URL, "_blank")
+              }
+              outerDivClassName="mt-10 md:mt-20 w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
+              className="w-full bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+            >
+              Get OETH
+            </GradientButton>
+            <div className="flex mt-10 md:mt-20">
+              <HeroData
+                className="border-r-0 rounded-l-lg"
+                title="APY"
+                value="12.57%"
               />
-              {width >= mdSize && <NotifyButton onClick={notify} />}
+              <HeroData className="rounded-r-lg" title="TVL" value="247.02m" />
             </div>
-          </div>
-          {width < mdSize && <NotifyButton onClick={notify} />}
-        </form>
-        <Typography.Body3
-          className={`text-sm mt-4 ${
-            notifText === NotifStatuses.DEFAULT
-              ? "text-table-title"
-              : notifText === NotifStatuses.SUCCESS
-              ? "text-green-400"
-              : "text-red-500"
-          }`}
-        >
-          {notifText}
-        </Typography.Body3>
+          </>
+        ) : (
+          <>
+            <Typography.Body className="mt-6 md:mt-20">
+              Be the first to know when OETH launches
+            </Typography.Body>
+            <form>
+              <div
+                className={
+                  "relative bg-origin-bg-grey md:bg-gradient2 rounded-[100px] p-[1px] h-fit mt-6  lg:mt-8 w-full md:w-fit"
+                }
+              >
+                <div className="relative bg-transparent md:bg-origin-bg-black rounded-[100px] px-2 py-3 md:py-2 text-origin-white flex items-center justify-start border-2 border-origin-bg-dgrey md:border-none">
+                  <input
+                    className="bg-transparent outline-none px-4 md:px-6 lg:px-10"
+                    placeholder="Enter your email"
+                    onChange={(e) => {
+                      setNotifText(NotifStatuses.DEFAULT);
+                      setEmailInput(e.target.value);
+                    }}
+                    value={emailInput}
+                  />
+                  {width >= mdSize && <NotifyButton onClick={notify} />}
+                </div>
+              </div>
+              {width < mdSize && <NotifyButton onClick={notify} />}
+            </form>
+            <Typography.Body3
+              className={`text-sm mt-4 ${
+                notifText === NotifStatuses.DEFAULT
+                  ? "text-table-title"
+                  : notifText === NotifStatuses.SUCCESS
+                  ? "text-green-400"
+                  : "text-red-500"
+              }`}
+            >
+              {notifText}
+            </Typography.Body3>{" "}
+          </>
+        )}
 
         {/* "Trusted yield sources" and "Fully collateralized" */}
         <div className="flex flex-col md:flex-row mb-6 mt-6 md:mt-20 z-10">

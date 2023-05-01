@@ -31,6 +31,7 @@ import {
 import { Footer } from "../components";
 import { zipObject } from "lodash";
 import { apyDayOptions } from "../constants";
+import Head from "next/head";
 
 interface IndexPageProps {
   audits: Audit[];
@@ -58,6 +59,10 @@ const IndexPage = ({
 
   return (
     <>
+      <Head>
+        <title>Origin Ether (OETH)</title>
+      </Head>
+
       <Header
         webProperty="oeth"
         mappedLinks={navLinks}

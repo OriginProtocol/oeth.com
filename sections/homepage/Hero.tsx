@@ -63,7 +63,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
 
         <Typography.H2
           as="div"
-          className="font-sansSailec text-[40px] md:text-[64px] leading-[40px] md:leading-[72px] text-center"
+          className="font-sansSailec text-[56px] md:text-[64px] leading-[64px] md:leading-[72px] text-center"
           style={{ fontWeight: 700 }}
         >
           Stack ETH faster

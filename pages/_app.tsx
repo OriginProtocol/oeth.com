@@ -31,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router.events]);
 
   return (
-      <>
+    <>
       <Head>
         <link rel="shortcut icon" href={assetRootPath("/images/oeth.svg")} />
       </Head>

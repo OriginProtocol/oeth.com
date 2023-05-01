@@ -7,7 +7,7 @@ import { assetRootPath } from "../../utils";
 import { formatCurrency } from "../../utils/math";
 import { Huobi, Uniswap, Kucoin, Curve } from "../../utils";
 import { OgvStats } from "../../types";
-import { GradientButton } from "../../components";
+import { GradientButton, Section } from "../../components";
 
 interface OgvProps {
   stats: OgvStats;
@@ -147,13 +147,13 @@ const Ogv = ({ stats }: OgvProps) => {
                 <Typography.Body3 className="mt-8 text-center text-white opacity-75">
                   OGV is listed on top exchanges
                 </Typography.Body3>
-                <div className="w-full flex flex-col justify-between items-center mt-0 md:mt-3 mb-8 lg:mx-0">
-                  <div className="flex justify-between">
+                <div className="w-3/4 md:w-full 2xl:w-5/6 flex flex-col justify-between items-center mt-2 md:mt-3 mb-8 mx-auto">
+                  <div className="flex items-center justify-between w-full">
                     <Link
                       href="https://curve.fi/#/ethereum/pools/factory-crypto-205/swap"
                       target="_blank"
                       rel="nofollow noreferrer"
-                      className=""
+                      className="w-1/2 flex justify-center"
                     >
                       <Curve />
                     </Link>
@@ -161,17 +161,17 @@ const Ogv = ({ stats }: OgvProps) => {
                       href="https://app.uniswap.org/#/swap?outputCurrency=0x9c354503C38481a7A7a51629142963F98eCC12D0&chain=mainnet"
                       target="_blank"
                       rel="nofollow noreferrer"
-                      className="ml-[10px]"
+                      className="w-1/2 flex justify-center"
                     >
                       <Uniswap />
                     </Link>
                   </div>
-                  <div className="flex items-center">
+                  <div className="flex items-center justify-between w-full mt-2 md:mt-0">
                     <Link
                       href="https://www.huobi.com/en-in/exchange/ogv_usdt"
                       target="_blank"
                       rel="nofollow noreferrer"
-                      className=""
+                      className="w-1/2 flex justify-center"
                     >
                       <Huobi />
                     </Link>
@@ -180,7 +180,7 @@ const Ogv = ({ stats }: OgvProps) => {
                       href="https://www.kucoin.com/trade/OGV-USDT"
                       target="_blank"
                       rel="nofollow noreferrer"
-                      className="mt-[8px]"
+                      className="mt-[8px] w-1/2 flex justify-center"
                     >
                       <Kucoin />
                     </Link>

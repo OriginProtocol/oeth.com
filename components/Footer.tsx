@@ -106,20 +106,24 @@ export default function Footer() {
                   OGV
                 </Typography.Body3>
               </Link>
-              <br className="block lg:hidden" />
-              <Link
-                href={`${process.env.NEXT_PUBLIC_DAPP_URL}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-[20px] lg:mt-0 rounded-full"
-              >
-                <GradientButton
-                  outerDivClassName="w-full lg:w-fit"
-                  className="bg-transparent whitespace-nowrap w-full lg:w-fit"
-                >
-                  Get OETH
-                </GradientButton>
-              </Link> */}
+              */}
+              {process.env.NEXT_PUBLIC_LINK_DAPP && (
+                <>
+                  <br className="block lg:hidden" />
+                  <GradientButton
+                    outerDivClassName="w-full lg:w-fit"
+                    className="bg-origin-bg-black whitespace-nowrap w-full lg:w-fit"
+                    onClick={() =>
+                      window.open(
+                        `${process.env.NEXT_PUBLIC_DAPP_URL}`,
+                        "_blank"
+                      )
+                    }
+                  >
+                    Get OETH
+                  </GradientButton>
+                </>
+              )}
             </div>
           </div>
           <div className="flex flex-col lg:flex-row justify-between pt-8 lg:pt-10 text-subheading">

@@ -78,10 +78,9 @@ const Faq = ({ faq }) => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <span className="w-fit bg-gradient-to-r from-gradient2-from to-gradient2-to bg-[length:100%_2px] bg-no-repeat bg-bottom rounded-lg pb-2">
-                        {"Discord"}
-                      </span>
+                      {"Discord"}
                     </Link>
+                    <div className="h-1 w-[72px] md:w-[116px] mr-0 ml-auto mt-[4px] bg-gradient-to-r from-gradient2-from to-gradient2-to rounded-full"></div>
                   </Typography.H5>
                 </div>
               </div>

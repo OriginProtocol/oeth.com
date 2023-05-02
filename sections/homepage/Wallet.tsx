@@ -29,7 +29,7 @@ const Wallet = () => {
         </div>
         {width < smSize && (
           <Image
-            src={assetRootPath("/images/splines35.svg")}
+            src={assetRootPath("/images/splines35.png")}
             width={500}
             height={500}
             alt="splines35"

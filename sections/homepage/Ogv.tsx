@@ -144,7 +144,7 @@ const Ogv = ({ stats }: OgvProps) => {
                     View dashboard
                   </Typography.H7>
                 </Link>
-                <Typography.Body3 className="mt-8 text-center text-white opacity-75">
+                <Typography.Body3 className="mt-8 text-center text-origin-white opacity-75">
                   OGV is listed on top exchanges
                 </Typography.Body3>
                 <div className="w-3/4 md:w-full 2xl:w-5/6 flex flex-col justify-between items-center mt-2 md:mt-3 mb-8 mx-auto">
@@ -190,7 +190,7 @@ const Ogv = ({ stats }: OgvProps) => {
                   href="https://app.uniswap.org/#/swap?outputCurrency=0x9c354503C38481a7A7a51629142963F98eCC12D0&chain=mainnet"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bttn bg-black block lg:hidden text-center w-full md:w-fit"
+                  className="bttn bg-black block lg:hidden text-center w-full md:w-fit !ml-0"
                 >
                   <Typography.H7 className="font-normal">Buy OGV</Typography.H7>
                 </Link>

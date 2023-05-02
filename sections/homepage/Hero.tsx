@@ -100,7 +100,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
             <Typography.Body className="mt-6 md:mt-20">
               Be the first to know when OETH launches
             </Typography.Body>
-            <form>
+            <form className="w-full md:w-auto">
               <div
                 className={
                   "relative bg-origin-bg-grey md:bg-gradient2 rounded-[100px] p-[1px] h-fit mt-6  lg:mt-8 w-full md:w-fit"

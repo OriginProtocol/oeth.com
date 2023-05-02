@@ -118,7 +118,7 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
         <span className="text-gradient2 py-1">Real yield </span>
         diversified{" "}
       </Typography.H6>
-      <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading text-sm md:text-base">
+      <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto !leading-[23px] md:!leading-[28px] text-subheading text-sm md:text-base">
         OETH sustainably outperforms other ETH staking strategies and limits
         exposure to any single LSD.
       </Typography.Body3>

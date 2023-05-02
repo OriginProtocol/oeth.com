@@ -100,7 +100,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
           >
             Instantly redeemable
           </Typography.H6>
-          <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading text-sm md:text-base">
+          <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto !leading-[23px] md:!leading-[28px] text-subheading text-sm md:text-base">
             OETH&apos;s on-chain reserves remain liquid and available for
             permissionless redemption with no gatekeepers or withdrawl queue.
             Reserves are verifiable on-chain. You can redeem OUSD immediately at

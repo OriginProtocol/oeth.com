@@ -26,7 +26,7 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
         Security first
       </Typography.H6>
       <Typography.Body3
-        className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading text-sm md:text-base"
+        className="md:max-w-[943px] mt-[16px] mx-auto !leading-[23px] md:!leading-[28px] text-subheading text-sm md:text-base"
         style={{ fontDisplay: "swap" }}
       >
         OETH&apos;s smart contracts are forked from OUSD, which has been

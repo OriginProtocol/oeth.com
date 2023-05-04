@@ -19,7 +19,7 @@ const HeroInfo = ({
       <Typography.H7 className="text-xl md:text-2xl text-white">
         {title}
       </Typography.H7>
-      <Typography.Body3 className="text-xs md:text-sm mt-4 text-subheading">
+      <Typography.Body3 className="text-xs md:text-sm mt-4 text-subheading leading-[20px] md:leading-[23px]">
         {subtitle}
       </Typography.Body3>
       <div className="mt-6">{children}</div>

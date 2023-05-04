@@ -24,7 +24,7 @@ const strategyMapping: {
     protocol: "RocketPool",
     name: "Rocket Pool Ether (rETH)",
     address: "0x5e3646A1Db86993f73E6b74A57D8640B69F7e259",
-    icon: "/images/rocketpool-icon.svg",
+    icon: "/images/rocketpool-icon.png",
   },
   lidostrat_holding: {
     protocol: "Lido",

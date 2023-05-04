@@ -32,7 +32,7 @@ const mockAllocation = {
   rocketpoolstrat_holding: {
     name: "Rocket Pool Strategy",
     address: "0x7a192dd9cc4ea9bdedec9992df74f1da55e60a19",
-    icon_file: "rocketpool-icon.svg",
+    icon_file: "rocketpool-icon.png",
     total: 0,
     holdings: {
       rETH: 144997.30075483903,
@@ -131,7 +131,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
           >
             Fully transparent on the Ethereum blockchain
           </Typography.H6>
-          <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto leading-[28px] text-subheading text-sm md:text-base">
+          <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto !leading-[23px] md:!leading-[28px] text-subheading text-sm md:text-base">
             Yield is generated from a short list of conservative strategies and
             verifiable on-chain.
           </Typography.Body3>

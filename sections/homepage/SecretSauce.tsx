@@ -82,8 +82,9 @@ function SecretSauce() {
         )}
         <OpenButton
           onClick={() => setOpen((b) => !b)}
-          imgSrc={`/images/arrow-${open ? "up" : "down"}-g2.svg`}
+          imgSrc={`/images/caret.svg`}
           text={`${!open ? "Read more" : "Less"}`}
+          open={open}
         />
       </div>
 
@@ -145,9 +146,10 @@ interface OpenButtonProps {
   onClick: () => void;
   imgSrc: string;
   text: string;
+  open: boolean;
 }
 
-const OpenButton = ({ onClick, imgSrc, text }: OpenButtonProps) => {
+const OpenButton = ({ onClick, imgSrc, text, open }: OpenButtonProps) => {
   return (
     <span
       className="text-left w-fit cursor-pointer whitespace-nowrap"
@@ -161,7 +163,7 @@ const OpenButton = ({ onClick, imgSrc, text }: OpenButtonProps) => {
         width={12}
         height={12}
         alt=""
-        className="inline ml-2"
+        className={`inline ml-2 ${open ? "rotate-180" : ""}`}
       />
     </span>
   );

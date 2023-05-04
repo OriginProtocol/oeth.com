@@ -5,7 +5,9 @@ import { useRouter } from "next/router";
 import { AppProps } from "next/app";
 import Script from "next/script";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { GTM_ID, pageview, event } from "../utils/gtm";
+import Head from "next/head";
+import { assetRootPath } from "../utils";
+import { GTM_ID, pageview } from "../utils/gtm";
 
 const defaultQueryFn = async ({ queryKey }) => {
   return await fetch(queryKey).then((res) => res.json());
@@ -29,9 +31,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router.events]);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* @ts-ignore */}
       <>
+        <Head>
+          <link rel="shortcut icon" href={assetRootPath("/images/oeth.svg")} />
+        </Head>
         <Script
           id="gtag-base"
           strategy="afterInteractive"
@@ -45,9 +48,11 @@ function MyApp({ Component, pageProps }: AppProps) {
             `,
           }}
         />
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          {/* @ts-ignore */}
+          <Component {...pageProps} />
+        </QueryClientProvider>
       </>
-    </QueryClientProvider>
   );
 }
 

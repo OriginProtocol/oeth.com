@@ -1,8 +1,8 @@
 const tokenColors = {
-  eth: "#5b7fff",
-  steth: "#e85bff",
+  weth: "#d0246a",
+  steth: "#66c8ff",
   reth: "#ffc298",
-  sfrxeth: "#66c8ff",
+  frxeth: "#e85bff",
 };
 
 export default tokenColors;

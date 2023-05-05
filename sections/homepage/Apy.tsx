@@ -29,7 +29,7 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
         Number(localStorage.getItem("last_user_selected_apy"))
       )
       ? Number(localStorage.getItem("last_user_selected_apy"))
-      : 30
+      : 7
   );
 
   const apyHistoryQuery = useApyHistoryQuery(apyData);
@@ -135,7 +135,7 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
               </Typography.H2>
               <Typography.H7 className="text-sm font-normal md:text-2xl text-subheading mt-[4px] xl:mt-0 xl:inline lg:text-left opacity-70">{`Trailing ${apyDays}-day APY`}</Typography.H7>
             </div>
-            <div className="flex flex-col w-[286px] sm:w-[425px] mt-6 lg:mt-0 mx-[auto] lg:mx-0">
+            <div className="flex flex-col mt-6 lg:mt-0 mx-[auto] lg:mx-0">
               <Typography.Body3 className="text-sm md:text-base text-subheading">
                 Moving average
               </Typography.Body3>
@@ -145,7 +145,7 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
                     <div
                       className={`${
                         apyDays === days ? "gradient2" : "bg-origin-bg-grey"
-                      } w-[90px] sm:w-[135px] p-px rounded-lg text-center cursor-pointer hover:opacity-90`}
+                      } w-[90px] sm:w-[135px] p-px rounded-lg text-center cursor-pointer mr-2 hover:opacity-90`}
                       key={days}
                       onClick={() => {
                         setApyDays(days);

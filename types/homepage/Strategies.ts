@@ -3,19 +3,20 @@ interface Strategy {
   name: string;
   holdings: {
     ETH?: number;
-    stETH?: number;
-    rETH?: number;
-    sfrxETH?: number;
+    WETH?: number;
+    RETH?: number;
+    FRXETH?: number;
+    STETH?: number;
   };
   address: string;
 }
 
 interface Strategies {
-  vault_holding: Strategy;
-  lidostrat_holding: Strategy;
-  rocketpoolstrat_holding: Strategy;
+  oeth_vault_holding: Strategy;
+  st_eth_strat: Strategy;
+  r_eth_strat: Strategy;
+  frax_eth_strat: Strategy;
   convexstrat_holding: Strategy;
-  fraxstrat_holding: Strategy;
   [key: string]: Strategy;
 }
 

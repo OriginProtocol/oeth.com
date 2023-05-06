@@ -127,6 +127,7 @@ function SecretSauce() {
         <GradientButton
           outerDivClassName="w-full md:w-fit mb-14 md:mb-[120px]"
           className="bg-transparent hover:bg-transparent text-center w-full"
+          elementId="btn-sauce-docs"
           onClick={() =>
             window.open(
               "https://docs.ousd.com/core-concepts/elastic-supply/rebasing-and-smart-contracts",
@@ -155,6 +156,7 @@ const OpenButton = ({ onClick, imgSrc, text, open }: OpenButtonProps) => {
     <span
       className="text-left w-fit cursor-pointer whitespace-nowrap"
       onClick={onClick}
+      id="btn-sauce-read"
     >
       <Typography.Body2 className="text-gradient2 inline font-bold">
         {text}
@@ -165,6 +167,7 @@ const OpenButton = ({ onClick, imgSrc, text, open }: OpenButtonProps) => {
         height={12}
         alt=""
         className={`inline ml-2 ${open ? "rotate-180" : ""}`}
+        id="btn-sauce-read-img"
       />
     </span>
   );

@@ -308,7 +308,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                 window.open("https://docs.ousd.com/how-it-works", "_blank")
               }
             >
-              <Typography.H7>
+              <Typography.H7 className="font-normal">
                 See how it works
               </Typography.H7>
             </GradientButton>

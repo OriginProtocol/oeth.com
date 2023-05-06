@@ -276,7 +276,10 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                 setOpen(!open);
               }}
             >
-              <div className="rounded-full flex flex-row justify-between items-center space-x-2 bg-origin-bg-black px-6 py-1">
+              <div
+                className="rounded-full flex flex-row justify-between items-center space-x-2 bg-origin-bg-black px-6 py-1"
+                id="btn-collateral-read"
+              >
                 <Typography.Body3
                   className="text-[16px] leading-[28px]"
                   style={{ fontWeight: 500 }}
@@ -289,6 +292,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                     width="14"
                     height="8"
                     className={`${open ? "rotate-180" : ""}`}
+                    id="btn-collateral-read-img"
                     alt="arrow"
                   />
                 </div>
@@ -299,6 +303,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
             <GradientButton
               outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
               className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+              elementId="btn-collateral-docs"
               onClick={() =>
                 window.open("https://docs.ousd.com/how-it-works", "_blank")
               }

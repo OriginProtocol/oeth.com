@@ -219,6 +219,7 @@ const Ogv = ({ stats }: OgvProps) => {
                 <GradientButton
                   outerDivClassName="w-full md:w-fit md:mx-auto bg-white hover:bg-white hover:opacity-90"
                   className="bg-white py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+                  elementId="btn-ogv-earn"
                   onClick={() =>
                     window.open("https://governance.ousd.com/stake", "_blank")
                   }

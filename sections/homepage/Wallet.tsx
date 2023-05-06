@@ -63,6 +63,7 @@ const OethList = ({
         onClick={() => window.open(process.env.NEXT_PUBLIC_DOCS_URL, "_blank")}
         outerDivClassName="mt-10 w-full md:w-fit"
         className="bg-origin-bg-dgrey w-full md:w-fit"
+        elementId="btn-wallet-docs"
       >
         Learn More
       </GradientButton>

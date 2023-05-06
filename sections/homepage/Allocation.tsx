@@ -304,6 +304,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
             <GradientButton
               outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
               className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+              elementId="btn-allocation-docs"
             >
               <Typography.H7 className="font-normal">
                 See how yield is generated

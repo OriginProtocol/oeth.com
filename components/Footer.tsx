@@ -28,6 +28,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="lg:mr-10 flex items-center"
+                id="menu-f-discord"
               >
                 <Typography.Body3 className="text-origin-white">
                   Discord
@@ -38,6 +39,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mr-10 mt-[20px] lg:mt-0 flex items-center"
+                id="menu-f-github"
               >
                 <Typography.Body3 className="text-origin-white">
                   GitHub
@@ -48,6 +50,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="lg:mr-10 mt-[20px] lg:mt-0 flex items-center"
+                id="menu-f-governance"
               >
                 <Typography.Body3 className="text-origin-white">
                   Governance
@@ -58,6 +61,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="lg:mr-10 mt-[20px] lg:mt-0 flex items-center"
+                id="menu-f-docs"
               >
                 <Typography.Body3 className="text-origin-white">
                   Docs
@@ -113,6 +117,7 @@ export default function Footer() {
                   <GradientButton
                     outerDivClassName="w-full lg:w-fit"
                     className="bg-origin-bg-black whitespace-nowrap w-full lg:w-fit"
+                    elementId="btn-f-buy"
                     onClick={() =>
                       window.open(
                         `${process.env.NEXT_PUBLIC_DAPP_URL}`,

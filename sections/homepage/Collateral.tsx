@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Typography } from "@originprotocol/origin-storybook";
-import { assetRootPath } from "../../utils";
+import { assetRootPath, camelifyLsd } from "../../utils";
 import { PieChart } from "react-minimal-pie-chart";
 import { formatCurrency, rounded } from "../../utils";
 import { tokenColors, strategyMapping } from "../../constants";
@@ -23,7 +23,7 @@ interface CollateralProps {
 
 const Collateral = ({ collateral, strategies }: CollateralProps) => {
   const [open, setOpen] = useState(false);
-  const backingTokens = ["eth", "steth", "reth", "sfrxeth"];
+  const backingTokens = ["weth", "steth", "reth", "frxeth", "oeth"];
 
   //@ts-ignore
   const total: number = collateral?.reduce((t, s) => {
@@ -38,56 +38,47 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
       .sort((a, b) => strategies[a].total - strategies[b].total)
       .reverse();
 
-  // asset totals that are not displayed get distributed to the backing stable totals proportional to 3pool balance
-  const ousd_holdings = strategies.ousd_metastrat.holdings;
-  const ousd_metastrat_3crv = backingTokens
-    .map((t) => {
-      return ousd_holdings[t.toUpperCase()];
-    })
-    .reduce((a, b) => Number(a) + Number(b));
+  // // asset totals that are not displayed get distributed to the backing stable totals proportional to 3pool balance
+  // // const ousd_holdings = strategies.ousd_metastrat.holdings;
+  // const ousd_metastrat_3crv = backingTokens
+  //   .map((t) => {
+  //     return ousd_holdings[t.toUpperCase()];
+  //   })
+  //   .reduce((a, b) => Number(a) + Number(b));
 
-  const lusd_holdings = strategies.lusd_metastrat.holdings;
-  const lusd_metastrat_3crv = backingTokens
-    .map((t) => {
-      return lusd_holdings[t.toUpperCase()];
-    })
-    .reduce((a, b) => Number(a) + Number(b));
+  // const lusd_holdings = strategies.lusd_metastrat.holdings;
+  // const lusd_metastrat_3crv = backingTokens
+  //   .map((t) => {
+  //     return lusd_holdings[t.toUpperCase()];
+  //   })
+  //   .reduce((a, b) => Number(a) + Number(b));
 
-  const backing = mockBacking;
-  // const backing = collateral
-  //   .filter((token) => backingTokens.includes(token.name))
-  //   .map((token) => {
-  //     const extra = ousd_metastrat_3crv
-  //       ? (ousd_holdings[token.name.toUpperCase()] * ousd_holdings.OUSD) /
-  //         ousd_metastrat_3crv
-  //       : 0 + lusd_metastrat_3crv
-  //       ? (lusd_holdings[token.name.toUpperCase()] * lusd_holdings.LUSD) /
-  //         lusd_metastrat_3crv
-  //       : 0;
-  //     token = { ...token, total: Number(token.total) + extra };
-  //     return token;
-  //   });
+  const backing = collateral.filter((token) =>
+    backingTokens.includes(token.name)
+  );
 
-  const chartData = backing?.map((token) => {
-    return {
-      title: token?.name.toUpperCase(),
-      value: total ? (Number(token?.total) / total) * 100 : 0,
-      color: tokenColors[token?.name] || "#ff0000",
-    };
-  });
+  const chartData = backing
+    ?.filter((e) => e.name !== "oeth")
+    .map((token) => {
+      return {
+        title: token?.name.toUpperCase(),
+        value: total ? (Number(token?.total) / total) * 100 : 0,
+        color: tokenColors[token?.name] || "#ff0000",
+      };
+    });
 
   const tokenSymbols = {
-    eth: "ETH",
+    weth: "WETH",
     steth: "stETH",
     reth: "rETH",
-    sfrxeth: "sfrxETH",
+    frxeth: "frxETH",
   };
 
   const tokenNames = {
-    eth: "Ether",
+    weth: "Wrapped Ether",
     steth: "Lido Staked ETH",
     reth: "Rocket Pool ETH",
-    sfrxeth: "Staked Frax ETH",
+    frxeth: "Frax ETH",
   };
 
   return (
@@ -102,9 +93,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
           </Typography.H6>
           <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto !leading-[23px] md:!leading-[28px] text-subheading text-sm md:text-base">
             OETH&apos;s on-chain reserves remain liquid and available for
-            permissionless redemption with no gatekeepers or withdrawl queue.
-            Reserves are verifiable on-chain. You can redeem OUSD immediately at
-            any time.
+            permissionless redemption with no gatekeepers or withdrawal queue.
           </Typography.Body3>
           <div className="max-w-[1432px] mx-auto mt-10 md:mt-20 mb-10 md:mb-20 py-6 xl:py-20 rounded-xl bg-origin-bg-black">
             <div className="flex flex-col md:flex-row justify-between px-6 xl:px-[132px]">
@@ -119,16 +108,16 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                   <Typography.H6 className="text-[16px] md:text-[24px] leading-[32px]">
                     Total
                   </Typography.H6>
-                  <Typography.H6 className="md:mt-3 text-[24px] md:text-[40px] leading-[32px] md:leading-[40px]">{`$${formatCurrency(
+                  <Typography.H6 className="md:mt-3 text-[24px] md:text-[40px] leading-[32px] md:leading-[40px]">{`Ξ ${formatCurrency(
                     total,
-                    0
+                    2
                   )}`}</Typography.H6>
                 </div>
               </div>
               <div className="md:w-1/2 md:ml-10 xl:ml-32 mt-6 md:my-auto pl-0 md:py-10 text-left">
                 <div className="flex flex-col justify-between space-y-2">
                   {backing?.map((token, i) => {
-                    if (token.name === "ousd") return;
+                    if (token.name === "oeth") return;
                     return (
                       <div
                         className="flex flex-row md:my-0 px-4 py-[13.5px] md:p-6 rounded-[8px] bg-origin-bg-grey w-full md:max-w-[351px] space-x-3 md:space-x-[22px]"
@@ -164,8 +153,14 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                               className="text-[12px] md:text-[16px]"
                               style={{ fontWeight: 700 }}
                             >
+                              {console.log(
+                                "total",
+                                token.name,
+                                token.total,
+                                total
+                              )}
                               {`${formatCurrency(
-                                (token.total / total) * 100,
+                                (Number(token.total) / total) * 100,
                                 2
                               )}%`}
                             </Typography.Body>
@@ -173,7 +168,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                               className="text-[12px] md:text-[16px] text-subheading"
                               style={{ fontWeight: 400 }}
                             >
-                              {`$${formatCurrency(token.total, 0)}`}
+                              {`Ξ${formatCurrency(token.total, 2)}`}
                             </Typography.Body>
                           </div>
                         </div>
@@ -190,7 +185,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
             >
               {strategies &&
                 strategiesSorted?.map((strategy, i) => {
-                  const tokens = ["eth", "steth", "reth", "sfrxeth"];
+                  const tokens = strategyMapping[strategy]?.tokens;
                   return (
                     <div
                       className="p-4 md:p-6 rounded-[7px] bg-origin-bg-grey"
@@ -206,7 +201,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                           className="text-[16px] leading-[28px]"
                           style={{ fontWeight: 500 }}
                         >
-                          {strategyMapping[strategy]?.name}
+                          {strategyMapping[strategy]?.short_name}
                         </Typography.Body>
                         <Image
                           src={assetRootPath("/images/link.svg")}
@@ -224,14 +219,18 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                           return (
                             <div className="flex flex-row space-x-2" key={i}>
                               <Image
-                                src={assetRootPath(`/images/${token}.svg`)}
+                                src={assetRootPath(
+                                  `/images/${
+                                    token === "frxeth" ? "frax" : token
+                                  }-icon.svg`
+                                )}
                                 width="28"
                                 height="28"
                                 alt={token}
                               />
                               <div className="flex flex-col">
                                 <Typography.Body3 className="text-[14px] leading-[27px]">
-                                  {token.toUpperCase()}
+                                  {camelifyLsd(token.toUpperCase())}
                                 </Typography.Body3>
                                 <Link
                                   href={
@@ -246,7 +245,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                                   className="flex flex-row space-x-1"
                                 >
                                   <Typography.Body3 className="text-[12px] leading-[19px] text-subheading">
-                                    {`$${rounded(
+                                    {`Ξ${rounded(
                                       strategies[strategy].holdings[
                                         token.toUpperCase()
                                       ],
@@ -277,7 +276,10 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                 setOpen(!open);
               }}
             >
-              <div className="rounded-full flex flex-row justify-between items-center space-x-2 bg-origin-bg-black px-6 py-1">
+              <div
+                className="rounded-full flex flex-row justify-between items-center space-x-2 bg-origin-bg-black px-6 py-1"
+                id="btn-collateral-read"
+              >
                 <Typography.Body3
                   className="text-[16px] leading-[28px]"
                   style={{ fontWeight: 500 }}
@@ -290,6 +292,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                     width="14"
                     height="8"
                     className={`${open ? "rotate-180" : ""}`}
+                    id="btn-collateral-read-img"
                     alt="arrow"
                   />
                 </div>
@@ -300,6 +303,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
             <GradientButton
               outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
               className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+              elementId="btn-collateral-docs"
               onClick={() =>
                 window.open("https://docs.ousd.com/how-it-works", "_blank")
               }

@@ -29,8 +29,8 @@ import {
   Audit,
 } from "../types";
 import { Footer } from "../components";
-import { zipObject } from "lodash";
-import { apyDayOptions } from "../constants";
+import { cloneDeep, zipObject } from "lodash";
+import { apyDayOptions, strategyMapping } from "../constants";
 import Head from "next/head";
 
 interface IndexPageProps {
@@ -73,21 +73,20 @@ const IndexPage = ({
 
       <Wallet />
 
+      <Apy daysToApy={daysToApy} apyData={apyHistory} />
+
+      <Allocation strategies={strategies} />
+
+      <Collateral strategies={strategies} collateral={collateral} />
+
       {process.env.NEXT_PUBLIC_UNREADY_COMPONENTS && (
         <>
-          <Apy daysToApy={daysToApy} apyData={apyHistory} />
-
-          <Allocation strategies={strategies} />
-
-          <Collateral strategies={strategies} collateral={collateral} />
-
           <Security audits={audits} />
-
-          <SecretSauce />
-
-          <Ogv stats={stats} />
         </>
       )}
+      <SecretSauce />
+
+      <Ogv stats={stats} />
 
       <Faq faq={faq} />
 
@@ -117,6 +116,31 @@ export async function getStaticProps() {
 
   const faqData = faqRes?.data.sort((a, b) => a.id - b.id) || [];
 
+  //Extract rETH and stETH from vault holdings
+
+  const strategies = allocation.strategies;
+
+  const holdings = cloneDeep(strategies["oeth_vault_holding"].holdings);
+  strategies.r_eth_strat = {
+    _address: strategyMapping["r_eth_strat"].address,
+    holdings: {
+      RETH: holdings["RETH"],
+    },
+    name: strategyMapping["r_eth_strat"].name,
+    total: holdings["RETH"],
+  };
+  delete strategies["oeth_vault_holding"].holdings["RETH"];
+
+  strategies.st_eth_strat = {
+    address: strategyMapping["st_eth_strat"].address,
+    holdings: {
+      STETH: holdings["STETH"],
+    },
+    name: strategyMapping["st_eth_strat"].name,
+    total: holdings["STETH"],
+  };
+  delete strategies["oeth_vault_holding"].holdings["STETH"];
+
   return {
     props: {
       audits: auditsRes.data,
@@ -124,7 +148,7 @@ export async function getStaticProps() {
       apyHistory,
       faq: faqData,
       stats: ogvStats,
-      strategies: allocation.strategies,
+      strategies,
       collateral: collateral.collateral,
       navLinks,
     },

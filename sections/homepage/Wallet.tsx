@@ -25,7 +25,7 @@ const Wallet = () => {
           className="z-10 w-fit h-fit mt-10 lg:mt-[72px] lg:mr-14 2xl:mr-[100px] 
          mx-auto sm:ml-6 lg:ml-16 px-2 pt-2 rounded-t-xl bg-gradient-to-r from-gradient1-fromt to-gradient1-tot"
         >
-          <GrowingWallet className="" />
+          <GrowingWallet className="pt-2" />
         </div>
         {width < smSize && (
           <Image
@@ -33,7 +33,7 @@ const Wallet = () => {
             width={500}
             height={500}
             alt="splines35"
-            className="absolute bottom-0"
+            className="absolute bottom-0 rounded-b-lg"
           />
         )}
         {width >= lgSize && <OethList className="mt-20" bullets={bullets} />}
@@ -63,6 +63,7 @@ const OethList = ({
         onClick={() => window.open(process.env.NEXT_PUBLIC_DOCS_URL, "_blank")}
         outerDivClassName="mt-10 w-full md:w-fit"
         className="bg-origin-bg-dgrey w-full md:w-fit"
+        elementId="btn-wallet-docs"
       >
         Learn More
       </GradientButton>

@@ -4,17 +4,11 @@ import Link from "next/link";
 import { Typography } from "@originprotocol/origin-storybook";
 import LinearProgress from "@mui/material/LinearProgress";
 import { ThemeProvider } from "@mui/material/styles";
-import { formatCurrency, assetRootPath } from "../../utils";
-import {
-  theme,
-  strategyMapping,
-  protocolMapping,
-  smSize,
-} from "../../constants";
-import { groupBy } from "lodash";
+import { formatCurrency, assetRootPath, camelifyLsd } from "../../utils";
+import { theme, strategyMapping, protocolMapping } from "../../constants";
+import { cloneDeep, groupBy } from "lodash";
 import { Strategies } from "../../types";
 import { GradientButton } from "../../components";
-import { useViewWidth } from "../../hooks";
 
 const mockAllocation = {
   vault_holding: {
@@ -62,11 +56,10 @@ interface AllocationProps {
 }
 
 const Allocation = ({ strategies }: AllocationProps) => {
-  strategies = mockAllocation;
+  // strategies = mockAllocation;
 
   const [open, setOpen] = useState({});
   const [loaded, setLoaded] = useState(false);
-  const width = useViewWidth();
 
   useEffect(() => {
     setLoaded(true);
@@ -129,7 +122,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
             className="text-[32px] md:text-[56px] leading-[36px] md:leading-[64px]"
             style={{ fontWeight: 500 }}
           >
-            Fully transparent on the Ethereum blockchain
+            Fully transparent on Ethereum
           </Typography.H6>
           <Typography.Body3 className="md:max-w-[943px] mt-[16px] mx-auto !leading-[23px] md:!leading-[28px] text-subheading text-sm md:text-base">
             Yield is generated from a short list of conservative strategies and
@@ -197,9 +190,9 @@ const Allocation = ({ strategies }: AllocationProps) => {
                                   <Typography.H7
                                     className="inline items-center text-[12px] md:text-[24px] text-subheading"
                                     style={{ fontWeight: 400 }}
-                                  >{`$${formatCurrency(
+                                  >{`Ξ ${formatCurrency(
                                     protocol.total,
-                                    0
+                                    2
                                   )}`}</Typography.H7>
                                   <Typography.H7
                                     className="inline pl-[8px] text-[12px] md:text-[24px]"
@@ -241,41 +234,49 @@ const Allocation = ({ strategies }: AllocationProps) => {
                                 }`}
                               >
                                 <div className="flex flex-col xl:flex-row mt-[22px] xl:mt-3 flex-wrap space-y-2 xl:space-y-0">
-                                  {protocol.strategies.map((strategy, i) => {
-                                    return (
-                                      <div
-                                        className="flex flex-row justify-between xl:mr-10 xl:pt-2.5"
-                                        key={i}
-                                      >
-                                        <div className="flex flex-row">
-                                          <div
-                                            className={`relative ${
-                                              strategy?.protocol === "Convex"
-                                                ? "w-12"
-                                                : "w-6"
-                                            }`}
-                                          >
-                                            <Image
-                                              src={strategy?.icon}
-                                              fill
-                                              alt={strategy.name}
-                                            />
+                                  {protocol.strategies
+                                    .filter(
+                                      (s) =>
+                                        protocol.name !== "Vault" ||
+                                        s.total !== 0
+                                    )
+                                    .map((strategy, i) => {
+                                      return (
+                                        <div
+                                          className="flex flex-row justify-between xl:mr-10 xl:pt-2.5"
+                                          key={i}
+                                        >
+                                          <div className="flex flex-row">
+                                            <div
+                                              className={`relative ${
+                                                strategy?.protocol === "Convex"
+                                                  ? "w-12"
+                                                  : "w-6"
+                                              }`}
+                                            >
+                                              <Image
+                                                src={strategy?.icon}
+                                                fill
+                                                alt={strategy.name}
+                                              />
+                                            </div>
+                                            <Typography.Body3 className="pl-[12px] pr-[16px] font-light text-[12px] md:text-[16px]">
+                                              {protocol.name === "Vault"
+                                                ? camelifyLsd(strategy.name)
+                                                : strategy.name}
+                                            </Typography.Body3>
                                           </div>
-                                          <Typography.Body3 className="pl-[12px] pr-[16px] font-light text-[12px] md:text-[16px]">
-                                            {strategy.name}
+                                          <Typography.Body3 className="text-subheading font-light text-[12px] md:text-[16px]">
+                                            {`${formatCurrency(
+                                              protocol.total
+                                                ? (strategy.total / total) * 100
+                                                : 0,
+                                              2
+                                            )}%`}
                                           </Typography.Body3>
                                         </div>
-                                        <Typography.Body3 className="text-subheading font-light text-[12px] md:text-[16px]">
-                                          {`${formatCurrency(
-                                            protocol.total
-                                              ? (strategy.total / total) * 100
-                                              : 0,
-                                            2
-                                          )}%`}
-                                        </Typography.Body3>
-                                      </div>
-                                    );
-                                  })}
+                                      );
+                                    })}
                                 </div>
                                 <Typography.Body3 className="mt-4 text-subheading text-left text-[12px] md:text-[14px] leading-[23px]">
                                   {protocolMapping[protocol.name]?.description}
@@ -303,6 +304,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
             <GradientButton
               outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
               className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+              elementId="btn-allocation-docs"
             >
               <Typography.H7 className="font-normal">
                 See how yield is generated
@@ -326,3 +328,12 @@ const Allocation = ({ strategies }: AllocationProps) => {
 };
 
 export default Allocation;
+function deepClone(holdings: {
+  ETH?: number;
+  WETH?: number;
+  RETH?: number;
+  FRXETH?: number;
+  STETH?: number;
+}) {
+  throw new Error("Function not implemented.");
+}

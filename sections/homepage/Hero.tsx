@@ -83,6 +83,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
               }
               outerDivClassName="mt-10 md:mt-20 w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
               className="w-full bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+              elementId="btn-hero-buy"
             >
               Get OETH
             </GradientButton>
@@ -174,6 +175,7 @@ const NotifyButton = ({ onClick }: { onClick?: (...args: any[]) => void }) => {
       onClick={onClick}
       outerDivClassName="w-full md:w-auto mt-4 md:mt-0"
       className="bg-transparent hover:bg-transparent w-full md:w-auto lg:px-20 py-3 lg:py-5"
+      elementId="btn-hero-notify"
     >
       <Typography.H7 className="font-normal text-center">
         Notify me

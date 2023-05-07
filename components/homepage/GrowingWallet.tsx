@@ -117,7 +117,7 @@ const GrowingWallet = ({ className }: GrowingWalletProps) => {
         </Typography.Body3>
       </div>
 
-      <Typography.H7 className="text-black font-medium font-sans text-center mt-3">
+      <Typography.H7 className="text-black text-xl font-medium font-sans text-center mt-3">
         {commifyToDecimalPlaces(price, 4)} ETH
       </Typography.H7>
 
@@ -126,7 +126,7 @@ const GrowingWallet = ({ className }: GrowingWalletProps) => {
         width={356}
         height={356}
         alt="buttons and tabs"
-        className="mt-5"
+        className="mt-3"
       />
 
       {/* Wallet tokens */}

@@ -46,14 +46,14 @@ function SecretSauce() {
   return (
     <Section className="bg-origin-bg-dgrey" innerDivClassName="max-w-[820px]">
       <Typography.H3 className="px-2 sm:px-0 pt-14 md:pt-[120px] mb-4 md:mb-20 w-full text-left md:text-center">
-        Why is OETH&apos;s APY so much higher?
+        Always the best pool
       </Typography.H3>
 
       <div className="relative h-fit px-2 sm:px-0">
         <p className="font-sansInter font-normal text-sm md:text-xl xl:text-lg inline mr-2">
-          Multiple factors contribute to OUSD outperforming its underlying
+          Multiple factors contribute to OETH outperforming its underlying
           strategies, but there&apos;s one big one. While 100% of the collateral
-          is used to generate yield, only some of the OUSD in circulation is
+          is used to generate yield, only some of the OETH in circulation is
           receiving that yield.
         </p>
         {open && (
@@ -88,7 +88,8 @@ function SecretSauce() {
         />
       </div>
 
-      <div className="w-full flex my-10 md:my-20">
+      {/* Need LSD APY data */}
+      {/* <div className="w-full flex my-10 md:my-20">
         {lsds.map((lsd, i) => (
           <SecretSauceToken
             key={i}
@@ -102,7 +103,7 @@ function SecretSauce() {
             } ${i === lsds.length - 1 && "rounded-r-lg"}`}
           />
         ))}
-      </div>
+      </div> */}
 
       <div
         className={`relative mt-10 md:mt-20 mx-auto max-w-[85vw] ${
@@ -126,6 +127,7 @@ function SecretSauce() {
         <GradientButton
           outerDivClassName="w-full md:w-fit mb-14 md:mb-[120px]"
           className="bg-transparent hover:bg-transparent text-center w-full"
+          elementId="btn-sauce-docs"
           onClick={() =>
             window.open(
               "https://docs.ousd.com/core-concepts/elastic-supply/rebasing-and-smart-contracts",
@@ -154,6 +156,7 @@ const OpenButton = ({ onClick, imgSrc, text, open }: OpenButtonProps) => {
     <span
       className="text-left w-fit cursor-pointer whitespace-nowrap"
       onClick={onClick}
+      id="btn-sauce-read"
     >
       <Typography.Body2 className="text-gradient2 inline font-bold">
         {text}
@@ -164,6 +167,7 @@ const OpenButton = ({ onClick, imgSrc, text, open }: OpenButtonProps) => {
         height={12}
         alt=""
         className={`inline ml-2 ${open ? "rotate-180" : ""}`}
+        id="btn-sauce-read-img"
       />
     </span>
   );

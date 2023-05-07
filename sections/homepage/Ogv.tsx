@@ -102,8 +102,9 @@ const Ogv = ({ stats }: OgvProps) => {
                     </Typography.H7>
                   </Link>
                   <Link
-                    href="/ogv-dashboard"
-                    target="_parent"
+                    href="https://www.ousd.com/ogv-dashboard"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="bg-black bttn rounded-full"
                   >
                     <Typography.H7 className="font-normal">
@@ -136,8 +137,9 @@ const Ogv = ({ stats }: OgvProps) => {
                   />
                 </div>
                 <Link
-                  href="/ogv-dashboard"
-                  target="_parent"
+                  href="https://www.ousd.com/ogv-dashboard"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="bg-black bttn !m-0 mb-10 lg:hidden w-full md:w-fit"
                 >
                   <Typography.H7 className="font-normal">
@@ -217,6 +219,7 @@ const Ogv = ({ stats }: OgvProps) => {
                 <GradientButton
                   outerDivClassName="w-full md:w-fit md:mx-auto bg-white hover:bg-white hover:opacity-90"
                   className="bg-white py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+                  elementId="btn-ogv-earn"
                   onClick={() =>
                     window.open("https://governance.ousd.com/stake", "_blank")
                   }

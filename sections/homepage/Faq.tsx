@@ -77,6 +77,7 @@ const Faq = ({ faq }) => {
                       href="https://originprotocol.com/discord"
                       target="_blank"
                       rel="noopener noreferrer"
+                      id="btn-faq-discord"
                     >
                       {"Discord"}
                     </Link>

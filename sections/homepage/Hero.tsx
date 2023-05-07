@@ -13,7 +13,7 @@ interface HeroProps {
 }
 
 enum NotifStatuses {
-  DEFAULT = "(we won't spam you)",
+  DEFAULT = "(no spam)",
   SUCCESS = "Success!",
   INVALID_EMAIL = "Not a valid email format",
   SERVER_ERROR = "Something went wrong. Please try again",
@@ -72,7 +72,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
           as="h1"
           className="mt-6 leading-[28px] text-origin-white"
         >
-          Ethereum Liquid Staking made simple.
+          Ethereum liquid staking made simple
         </Typography.Body>
 
         {process.env.NEXT_PUBLIC_LINK_DAPP ? (
@@ -160,7 +160,7 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
               src={assetRootPath("/images/fully-collateralized.svg")}
               width="700"
               height="700"
-              alt="rETH ETH stETH sfrxETH"
+              alt="ETH rETH frxETH stETH"
             />
           </HeroInfo>
         </div>

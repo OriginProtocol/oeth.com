@@ -12,7 +12,7 @@ const Wallet = () => {
   const bullets = [
     "Auto-compounding in your wallet",
     "Protocol-guaranteed liquidity",
-    "Self-custodial, always liquid",
+    "Self-custodial and permissionless",
     "No staking or lock-ups",
   ];
 
@@ -65,7 +65,7 @@ const OethList = ({
         className="bg-origin-bg-dgrey w-full md:w-fit"
         elementId="btn-wallet-docs"
       >
-        Learn More
+        Learn more
       </GradientButton>
     </div>
   );

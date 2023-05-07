@@ -33,7 +33,7 @@ const strategyMapping: {
   st_eth_strat: {
     protocol: "Lido",
     short_name: "Lido Ethereum Staking",
-    name: "Lido staked Ether (stETH)",
+    name: "Lido Staked Ether (stETH)",
     address: "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84",
     icon: "/images/lido-icon.svg",
     tokens: ["steth"],
@@ -49,7 +49,7 @@ const strategyMapping: {
   frax_eth_strat: {
     protocol: "Frax",
     short_name: "Frax Ethereum Staking",
-    name: "Frax staked Ether (sfrxETH)",
+    name: "Staked Frax Ether (sfrxETH)",
     address: "0xac3E018457B222d93114458476f3E3416Abbe38F",
     icon: "/images/sfrax-icon.svg",
     tokens: ["frxeth"],

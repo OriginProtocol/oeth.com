@@ -73,22 +73,31 @@ const IndexPage = ({
 
       <Wallet />
 
-      <Apy daysToApy={daysToApy} apyData={apyHistory} />
+      {process.env.NEXT_PUBLIC_UNREADY_COPY && (
+        <>
+          <Apy daysToApy={daysToApy} apyData={apyHistory} />
 
-      <Allocation strategies={strategies} />
+          <Allocation strategies={strategies} />
 
-      <Collateral strategies={strategies} collateral={collateral} />
+          <Collateral strategies={strategies} collateral={collateral} />
+        </>
+      )}
 
       {process.env.NEXT_PUBLIC_UNREADY_COMPONENTS && (
         <>
           <Security audits={audits} />
         </>
       )}
-      <SecretSauce />
 
-      <Ogv stats={stats} />
+      {process.env.UNREADY_COPY && (
+        <>
+          <SecretSauce />
 
-      <Faq faq={faq} />
+          <Ogv stats={stats} />
+
+          <Faq faq={faq} />
+        </>
+      )}
 
       <Footer />
     </>

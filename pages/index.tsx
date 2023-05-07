@@ -94,10 +94,10 @@ const IndexPage = ({
           <SecretSauce />
 
           <Ogv stats={stats} />
-
-          <Faq faq={faq} />
         </>
       )}
+
+      <Faq faq={faq} />
 
       <Footer />
     </>

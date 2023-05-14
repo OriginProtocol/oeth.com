@@ -38,21 +38,6 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
       .sort((a, b) => strategies[a].total - strategies[b].total)
       .reverse();
 
-  // // asset totals that are not displayed get distributed to the backing stable totals proportional to 3pool balance
-  // // const ousd_holdings = strategies.ousd_metastrat.holdings;
-  // const ousd_metastrat_3crv = backingTokens
-  //   .map((t) => {
-  //     return ousd_holdings[t.toUpperCase()];
-  //   })
-  //   .reduce((a, b) => Number(a) + Number(b));
-
-  // const lusd_holdings = strategies.lusd_metastrat.holdings;
-  // const lusd_metastrat_3crv = backingTokens
-  //   .map((t) => {
-  //     return lusd_holdings[t.toUpperCase()];
-  //   })
-  //   .reduce((a, b) => Number(a) + Number(b));
-
   const backing = collateral.filter((token) =>
     backingTokens.includes(token.name)
   );
@@ -153,12 +138,6 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                               className="text-[12px] md:text-[16px]"
                               style={{ fontWeight: 700 }}
                             >
-                              {console.log(
-                                "total",
-                                token.name,
-                                token.total,
-                                total
-                              )}
                               {`${formatCurrency(
                                 (Number(token.total) / total) * 100,
                                 2

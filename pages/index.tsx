@@ -89,7 +89,7 @@ const IndexPage = ({
         </>
       )}
 
-      {process.env.UNREADY_COPY && (
+      {process.env.NEXT_PUBLIC_UNREADY_COPY && (
         <>
           <SecretSauce />
 
@@ -129,7 +129,7 @@ export async function getStaticProps() {
 
   const strategies = allocation.strategies;
 
-  const holdings = cloneDeep(strategies["oeth_vault_holding"].holdings);
+  const holdings = cloneDeep(strategies["vault_holding"].holdings);
   strategies.r_eth_strat = {
     _address: strategyMapping["r_eth_strat"].address,
     holdings: {
@@ -138,7 +138,7 @@ export async function getStaticProps() {
     name: strategyMapping["r_eth_strat"].name,
     total: holdings["RETH"],
   };
-  delete strategies["oeth_vault_holding"].holdings["RETH"];
+  delete strategies["vault_holding"].holdings["RETH"];
 
   strategies.st_eth_strat = {
     address: strategyMapping["st_eth_strat"].address,
@@ -148,7 +148,7 @@ export async function getStaticProps() {
     name: strategyMapping["st_eth_strat"].name,
     total: holdings["STETH"],
   };
-  delete strategies["oeth_vault_holding"].holdings["STETH"];
+  delete strategies["vault_holding"].holdings["STETH"];
 
   return {
     props: {

@@ -28,7 +28,7 @@ const Faq = ({ faq }) => {
                 {faq?.map((q, i) => {
                   return (
                     <div
-                      className="max-w-[959px] rounded-xl bg-origin-bg-black text-origin-white mx-auto"
+                      className="max-w-[959px] rounded-xl bg-origin-bg-black text-origin-white mx-auto faq-item"
                       key={i}
                     >
                       <div

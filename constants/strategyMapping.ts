@@ -10,7 +10,7 @@ const strategyMapping: {
     tokens: string[];
   };
 } = {
-  oeth_vault_holding: {
+  vault_holding: {
     protocol: "Vault",
     short_name: "Origin Vault",
     name: "Origin Vault",

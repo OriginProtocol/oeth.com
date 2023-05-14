@@ -5,7 +5,7 @@ import { QUERY_KEYS, apyDayOptions } from "../constants";
 async function fetchApyHistory() {
   const apyHistory = await Promise.all(
     apyDayOptions.map(async (days) => {
-      const endpoint = `${process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT}/api/v1/apr/trailing_history/${days}`;
+      const endpoint = `${process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT}/api/v2/oeth/apr/trailing_history/${days}`;
       const response = await fetch(endpoint);
       if (!response.ok) {
         throw new Error(`Failed to fetch ${days}-day trailing APY history`);

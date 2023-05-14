@@ -19,6 +19,10 @@ const protocolMapping = {
     description:
       "Frax uses a two-token model to maximize yields earned from staking validators. OETH deposits frxETH to the Frax Ether staking contract and amplifies this yield further.",
   },
+  Vault: {
+    description:
+      "When OETH is minted, collateral is deposited into the Origin Vault and held until the allocate function is called. This happens automatically for larger transactions, which are less impacted by increased gas costs.",
+  },
 };
 
 export default protocolMapping;

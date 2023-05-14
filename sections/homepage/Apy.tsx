@@ -179,20 +179,22 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
           )}
         </div>
       )}
-      <div className="px-4 md:px-0">
-        <GradientButton
-          outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
-          className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
-          elementId="btn-apy-app"
-          onClick={() =>
-            window.open(process.env.NEXT_PUBLIC_DAPP_URL, "_blank")
-          }
-        >
-          <Typography.H7 className="font-normal">
-            Start earning now
-          </Typography.H7>
-        </GradientButton>
-      </div>
+      {process.env.NEXT_PUBLIC_UNREADY_COMPONENTS && (
+        <div className="px-4 md:px-0">
+          <GradientButton
+            outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
+            className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+            elementId="btn-apy-app"
+            onClick={() =>
+              window.open(process.env.NEXT_PUBLIC_DAPP_URL, "_blank")
+            }
+          >
+            <Typography.H7 className="font-normal">
+              Start earning now
+            </Typography.H7>
+          </GradientButton>
+        </div>
+      )}
     </Section>
   );
 };

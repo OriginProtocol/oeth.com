@@ -1,6 +1,6 @@
 import "@originprotocol/origin-storybook/lib/styles.css";
 import "../styles/globals.css";
-import React, { useEffect } from "react";
+import React, { createContext, useEffect } from "react";
 import { useRouter } from "next/router";
 import { AppProps } from "next/app";
 import Script from "next/script";
@@ -19,6 +19,11 @@ const queryClient = new QueryClient({
       queryFn: defaultQueryFn,
     },
   },
+});
+
+export const GlobalContext = createContext({
+  defaultSeo: {},
+  siteName: "",
 });
 
 function MyApp({ Component, pageProps }: AppProps) {

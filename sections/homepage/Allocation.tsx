@@ -305,6 +305,12 @@ const Allocation = ({ strategies }: AllocationProps) => {
               outerDivClassName="w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
               className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
               elementId="btn-allocation-docs"
+              onClick={() =>
+                window.open(
+                  " https://docs.oeth.com/core-concepts/yield-generation",
+                  "_blank"
+                )
+              }
             >
               <Typography.H7 className="font-normal">
                 See how yield is generated

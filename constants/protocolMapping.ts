@@ -2,22 +2,26 @@ const protocolMapping = {
   Convex: {
     image: "/images/convex-strategy.svg",
     description:
-      "Convex allows liquidity providers and stakers to earn greater rewards from Curve, a stablecoin-centric automated market maker (AMM). OUSD earns trading fees and protocol token incentives (both CRV and CVX). This strategy employs base pools and metapools, including the Origin Dollar factory pool, which enables OUSD to safely leverage its own deposits to multiply returns and maintain the pool's balance.",
+      "Convex allows liquidity providers and stakers to earn greater rewards from Curve, a stablecoin-centric automated market maker (AMM). OETH earns trading fees and protocol token incentives (both CRV and CVX). This strategy serves as an algorithmic market operations controller (AMO), which enables OETH to safely leverage its own deposits to multiply returns and maintain the pool's balance.",
   },
   Lido: {
     image: "/images/lido-strategy.svg",
     description:
-      "Compound is an interest rate protocol allowing lenders to earn yield on digital assets by supplying them to borrowers. Each loan is over-collateralized to ensure repayment. OUSD deploys stablecoins to three of the Compound V2 markets and earns interest approximately every 12 seconds. Additional yield is generated from protocol token incentives (COMP), which are regularly sold for USDT on Uniswap and compounded.",
+      "Lido is a liquid staking solution for Ethereum that staking ETH without locking tokens or maintaining infrastructure. OETH holds stETH to earn staking rewards for participating in the Ethereum network and adds a layer of auto-compounding.",
   },
   RocketPool: {
     image: "/images/rocketpool-strategy.png",
     description:
-      "Compound is an interest rate protocol allowing lenders to earn yield on digital assets by supplying them to borrowers. Each loan is over-collateralized to ensure repayment. OUSD deploys stablecoins to three of the Compound V2 markets and earns interest approximately every 12 seconds. Additional yield is generated from protocol token incentives (COMP), which are regularly sold for USDT on Uniswap and compounded.",
+      "Rocket Pool is a community-owned, decentralized protocol that mints rETH, an interest-earning ETH wrapper. OETH holds rETH to earn yield and normalizes the accounting by distributing additional tokens directly to users' wallets.",
   },
   Frax: {
     image: "/images/frax-strategy.svg",
     description:
-      "Aave is a liquidity protocol where users can participate as suppliers or borrowers. Each loan is over-collateralized to ensure repayment. OUSD deploys stablecoins to three of the Aave V2 markets and earns interest approximately every 12 seconds. Additional yield is generated from protocol token incentives (AAVE), which are regularly sold for USDT on Uniswap and compounded.",
+      "Frax uses a two-token model to maximize yields earned from staking validators. OETH deposits frxETH to the Frax Ether staking contract and amplifies this yield further.",
+  },
+  Vault: {
+    description:
+      "When OETH is minted, collateral is deposited into the Origin Vault and held until the allocate function is called. This happens automatically for larger transactions, which are less impacted by increased gas costs.",
   },
 };
 

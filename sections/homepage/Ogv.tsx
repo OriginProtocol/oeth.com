@@ -213,7 +213,7 @@ const Ogv = ({ stats }: OgvProps) => {
                 </Typography.H2>
                 <Typography.Body3 className="mt-[16px] mb-10 md:mb-[60px] font-normal text-[#fafbfb]">
                   Fees and voting rights accrue to OGV stakers. Control the
-                  future of OUSD <br className="hidden lg:block" />
+                  future of OETH <br className="hidden lg:block" />
                   and profit from its growth.
                 </Typography.Body3>
                 <GradientButton

@@ -1,7 +1,25 @@
+const locales = require("./locales");
 const { withSentryConfig } = require("@sentry/nextjs");
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  reactStrictMode: true,
+  swcMinify: true,
+  i18n: {
+    locales,
+    defaultLocale: "en",
+  },
+  images: {
+    loader: "default",
+    domains: [
+      "localhost",
+      "0.0.0.0",
+      "cmsmediaproduction.s3.amazonaws.com",
+      "cmsmediastaging.s3.amazonaws.com",
+      "avatars.githubusercontent.com",
+    ],
+  },
+};
 
 module.exports = withSentryConfig(
   nextConfig,

@@ -29,7 +29,7 @@ import {
   Audit,
 } from "../types";
 import { Footer } from "../components";
-import { cloneDeep, zipObject } from "lodash";
+import { cloneDeep, get, zipObject } from "lodash";
 import { apyDayOptions, strategyMapping } from "../constants";
 import Head from "next/head";
 
@@ -57,6 +57,11 @@ const IndexPage = ({
   const apyOptions = apy;
   const daysToApy = zipObject(apyDayOptions, apyOptions);
 
+  const tvl = Object.keys(strategies).reduce(
+    (acc, key) => (acc += strategies[key].total),
+    0
+  );
+
   return (
     <>
       <Head>
@@ -68,20 +73,18 @@ const IndexPage = ({
         mappedLinks={navLinks}
         background="bg-origin-bg-black"
       />
-
-      <Hero />
+      <Hero
+        apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0}
+        tvl={tvl ? tvl : 0}
+      />
 
       <Wallet />
 
-      {process.env.NEXT_PUBLIC_UNREADY_COPY && (
-        <>
-          <Apy daysToApy={daysToApy} apyData={apyHistory} />
+      <Apy daysToApy={daysToApy} apyData={apyHistory} />
 
-          <Allocation strategies={strategies} />
+      <Allocation strategies={strategies} />
 
-          <Collateral strategies={strategies} collateral={collateral} />
-        </>
-      )}
+      <Collateral strategies={strategies} collateral={collateral} />
 
       {process.env.NEXT_PUBLIC_UNREADY_COMPONENTS && (
         <>
@@ -89,13 +92,9 @@ const IndexPage = ({
         </>
       )}
 
-      {process.env.NEXT_PUBLIC_UNREADY_COPY && (
-        <>
-          <SecretSauce />
+      <SecretSauce />
 
-          <Ogv stats={stats} />
-        </>
-      )}
+      <Ogv stats={stats} />
 
       <Faq faq={faq} />
 
@@ -138,6 +137,7 @@ export async function getStaticProps() {
     name: strategyMapping["r_eth_strat"].name,
     total: holdings["RETH"],
   };
+  strategies.vault_holding.total -= holdings["RETH"];
   delete strategies["vault_holding"].holdings["RETH"];
 
   strategies.st_eth_strat = {
@@ -148,6 +148,7 @@ export async function getStaticProps() {
     name: strategyMapping["st_eth_strat"].name,
     total: holdings["STETH"],
   };
+  strategies.vault_holding.total -= holdings["STETH"];
   delete strategies["vault_holding"].holdings["STETH"];
 
   return {

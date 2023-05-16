@@ -9,6 +9,8 @@ import { sanitize } from "dompurify";
 import { twMerge } from "tailwind-merge";
 
 interface HeroProps {
+  apy: number;
+  tvl: number;
   sectionOverrideCss?: string;
 }
 
@@ -19,7 +21,7 @@ enum NotifStatuses {
   SERVER_ERROR = "Something went wrong. Please try again",
 }
 
-const Hero = ({ sectionOverrideCss }: HeroProps) => {
+const Hero = ({ apy, tvl, sectionOverrideCss }: HeroProps) => {
   const width = useViewWidth();
   const [emailInput, setEmailInput] = useState<string>("");
   const [notifText, setNotifText] = useState<string>(NotifStatuses.DEFAULT);
@@ -91,9 +93,13 @@ const Hero = ({ sectionOverrideCss }: HeroProps) => {
               <HeroData
                 className="border-r-0 rounded-l-lg"
                 title="APY"
-                value="12.57%"
+                value={`${(apy * 100).toFixed(2)}%`}
               />
-              <HeroData className="rounded-r-lg" title="TVL" value="247.02m" />
+              <HeroData
+                className="rounded-r-lg"
+                title="TVL"
+                value={`Ξ ${tvl.toFixed(2)}`}
+              />
             </div>
           </>
         ) : (

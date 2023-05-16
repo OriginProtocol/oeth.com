@@ -10,7 +10,7 @@ const protocolMapping = {
       "Lido is a liquid staking solution for Ethereum that staking ETH without locking tokens or maintaining infrastructure. OETH holds stETH to earn staking rewards for participating in the Ethereum network and adds a layer of auto-compounding.",
   },
   RocketPool: {
-    image: "/images/rocketpool-strategy.png",
+    image: "/images/rocketpool-strategy.svg",
     description:
       "Rocket Pool is a community-owned, decentralized protocol that mints rETH, an interest-earning ETH wrapper. OETH holds rETH to earn yield and normalizes the accounting by distributing additional tokens directly to users' wallets.",
   },

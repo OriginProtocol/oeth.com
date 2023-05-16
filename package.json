@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^5.12.0",
     "@originprotocol/origin-storybook": "^0.27.13",
+    "@sentry/nextjs": "^7.51.2",
     "chart.js": "^4.2.1",
     "dompurify": "^3.0.2",
     "ethers": "^5.7.2",

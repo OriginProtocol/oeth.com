@@ -59,22 +59,22 @@ function SecretSauce() {
         {open && (
           <>
             <p className="font-sansInter font-normal text-sm xl:text-base leading-7 text-subheading mt-8 block">
-              By default, OUSD does not grow when it&apos;s held by smart
+              By default, OETH does not grow when it&apos;s held by smart
               contracts. This means that the yield that would go to these smart
-              contracts becomes a bonus for all other OUSD holders. OUSD is
+              contracts becomes a bonus for all other OETH holders. OETH is
               different from most other ERC-20 tokens because your balance
               increases without receiving a transfer. Many smart contracts, such
               as AMMs, are not set up to properly account for these increases.
-              So OUSD is designed to allocate this yield to regular wallets
-              instead of letting it go to waste. Any smart contract can opt in
-              to receive yield, but the reality is that much of OUSD&apos;s
+              So OETH is designed to allocate this yield to regular wallets
+              instead of letting it go to waste. Any smart contract can opt-in
+              to receive yield, but the reality is that much of OETH&apos;s
               supply is held in AMMs where liquidity providers are motivated to
               forego their yield in exchange for other incentives. <br /> <br />
             </p>
             <p className="font-sansInter font-normal text-sm xl:text-base leading-7 text-subheading inline mr-2">
-              Additional sources of OUSD&apos;s above-market yield include exit
+              Additional sources of OETH&apos;s above-market yield include exit
               fees, smart rebalancing, and automated compounding. As the
-              protocol grows, OUSD holders enjoy greater economies of scale with
+              protocol grows, OETH holders enjoy greater economies of scale with
               the cost of funds management spread out over a larger pool of
               users.
             </p>

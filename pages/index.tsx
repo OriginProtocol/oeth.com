@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Header } from "@originprotocol/origin-storybook";
 import {
   Faq,
@@ -32,6 +33,7 @@ import { Footer } from "../components";
 import { cloneDeep, get, zipObject } from "lodash";
 import { apyDayOptions, strategyMapping } from "../constants";
 import Head from "next/head";
+import { log } from "console";
 
 interface IndexPageProps {
   audits: Audit[];
@@ -104,7 +106,7 @@ const IndexPage = ({
 };
 
 export async function getStaticProps() {
-  const apyHistory = await fetchApyHistory();
+  const apyHistoryData = await fetchApyHistory();
   const allocation = await fetchAllocation();
   const apy = await fetchApy();
   const collateral = await fetchCollateral();
@@ -116,6 +118,14 @@ export async function getStaticProps() {
         populate: "*",
       },
     },
+  });
+
+  let apyHistory = {};
+
+  Object.keys(apyHistoryData).map((key) => {
+    apyHistory[key] = apyHistoryData[key].filter((item) =>
+      moment(item.day).isAfter("2023-05-06")
+    );
   });
 
   const auditsRes = await fetchAPI("/oeth-audits");

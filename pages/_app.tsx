@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
 import { assetRootPath } from "../utils";
 import { GTM_ID, pageview } from "../utils/gtm";
+import { useContracts } from "../hooks";
 
 const defaultQueryFn = async ({ queryKey }) => {
   return await fetch(queryKey).then((res) => res.json());
@@ -28,6 +29,7 @@ export const GlobalContext = createContext({
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
+  useContracts();
   useEffect(() => {
     router.events.on("routeChangeComplete", pageview);
     return () => {

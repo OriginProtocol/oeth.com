@@ -31,7 +31,7 @@ interface IContractStore {
 
 const ContractStore = new Store<IContractStore>({
   contracts: {
-    oeth: null,
+    oethVault: null,
     ousd: null,
     vault: null,
     dripper: null,

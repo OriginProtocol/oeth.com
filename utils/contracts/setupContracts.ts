@@ -28,7 +28,7 @@ export const setupContracts = () => {
     }
   );
 
-  const oeth = getContract<Oeth_vault>(
+  const oethVault = getContract<Oeth_vault>(
     addresses.mainnet.OethVaultProxy,
     Oeth_vault__factory.createInterface(),
     provider
@@ -60,7 +60,7 @@ export const setupContracts = () => {
   );
 
   const contractsToExport = {
-    oeth,
+    oethVault,
     ousd,
     vault,
     dripper,

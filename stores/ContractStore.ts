@@ -9,7 +9,7 @@ import {
 } from "../types/contracts";
 
 interface Contracts {
-  oeth: Oeth_vault;
+  oethVault: Oeth_vault;
   ousd: Ousd;
   vault: Vault;
   dripper: Dripper;

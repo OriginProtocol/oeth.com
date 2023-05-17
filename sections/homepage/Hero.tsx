@@ -27,16 +27,19 @@ const Hero = ({ apy, sectionOverrideCss }: HeroProps) => {
   const [emailInput, setEmailInput] = useState<string>("");
   const [notifText, setNotifText] = useState<string>(NotifStatuses.DEFAULT);
   const [tvl, setTvl] = useState<number>(0);
-  const oeth = useStoreState(ContractStore, (s) => s.contracts.oeth || null);
+  const oethVault = useStoreState(
+    ContractStore,
+    (s) => s.contracts.oethVault || null
+  );
 
   useEffect(() => {
-    if (!oeth) return;
+    if (!oethVault) return;
 
     (async () => {
-      const tvl = await oeth.functions.totalValue();
+      const tvl = await oethVault.functions.totalValue();
       setTvl(Number(tvl) / 1e18);
     })();
-  }, [oeth]);
+  }, [oethVault]);
 
   const notify = async (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();

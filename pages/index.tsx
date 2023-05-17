@@ -129,8 +129,6 @@ export async function getStaticProps() {
 
   const strategies = allocation.strategies;
 
-  console.log(strategies);
-
   const holdings = cloneDeep(strategies["vault_holding"].holdings);
   strategies.r_eth_strat = {
     _address: strategyMapping["r_eth_strat"].address,

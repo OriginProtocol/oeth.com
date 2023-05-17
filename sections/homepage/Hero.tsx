@@ -7,11 +7,10 @@ import { mdSize } from "../../constants";
 import { useViewWidth } from "../../hooks";
 import { sanitize } from "dompurify";
 import { twMerge } from "tailwind-merge";
-import { ContractStore } from "../../stores";
-import { useStoreState } from "pullstate";
 
 interface HeroProps {
   apy: number;
+  tvl: number;
   sectionOverrideCss?: string;
 }
 
@@ -22,24 +21,10 @@ enum NotifStatuses {
   SERVER_ERROR = "Something went wrong. Please try again",
 }
 
-const Hero = ({ apy, sectionOverrideCss }: HeroProps) => {
+const Hero = ({ apy, tvl, sectionOverrideCss }: HeroProps) => {
   const width = useViewWidth();
   const [emailInput, setEmailInput] = useState<string>("");
   const [notifText, setNotifText] = useState<string>(NotifStatuses.DEFAULT);
-  const [tvl, setTvl] = useState<number>(0);
-  const oethVault = useStoreState(
-    ContractStore,
-    (s) => s.contracts.oethVault || null
-  );
-
-  useEffect(() => {
-    if (!oethVault) return;
-
-    (async () => {
-      const tvl = await oethVault.functions.totalValue();
-      setTvl(Number(tvl) / 1e18);
-    })();
-  }, [oethVault]);
 
   const notify = async (e: MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();

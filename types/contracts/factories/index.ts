@@ -3,6 +3,7 @@
 /* eslint-disable */
 export { Dripper__factory } from "./Dripper__factory";
 export { Erc20__factory } from "./Erc20__factory";
+export { Oeth_vault__factory } from "./Oeth_vault__factory";
 export { Ogv__factory } from "./Ogv__factory";
 export { Ousd__factory } from "./Ousd__factory";
 export { Vault__factory } from "./Vault__factory";

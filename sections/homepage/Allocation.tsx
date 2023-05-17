@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Typography } from "@originprotocol/origin-storybook";
 import LinearProgress from "@mui/material/LinearProgress";
 import { ThemeProvider } from "@mui/material/styles";
 import { formatCurrency, assetRootPath, camelifyLsd } from "../../utils";
 import { theme, strategyMapping, protocolMapping } from "../../constants";
-import { cloneDeep, groupBy } from "lodash";
+import { groupBy } from "lodash";
 import { Strategies } from "../../types";
 import { GradientButton } from "../../components";
 

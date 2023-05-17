@@ -38,6 +38,8 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
       .sort((a, b) => strategies[a].total - strategies[b].total)
       .reverse();
 
+  strategiesSorted.pop();
+
   const backing = collateral.filter((token) =>
     backingTokens.includes(token.name)
   );

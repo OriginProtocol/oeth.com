@@ -18,7 +18,7 @@ import {
 
 export const setupContracts = () => {
   const provider = new providers.StaticJsonRpcProvider(
-    process.env.NEXT_PUBLIC_ETHEREUM_RPC_PROVIDER,
+    process.env.NEXT_PUBLIC_ETHEREUM_RPC_PROVIDER || "http://127.0.0.1:8545",
     {
       chainId: parseInt(
         process.env.NEXT_PUBLIC_ETHEREUM_RPC_CHAIN_ID || "1",

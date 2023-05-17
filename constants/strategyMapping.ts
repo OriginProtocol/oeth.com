@@ -54,6 +54,14 @@ const strategyMapping: {
     icon: "/images/sfrax-icon.svg",
     tokens: ["frxeth"],
   },
+  oeth_curve_amo: {
+    protocol: "Convex",
+    short_name: "Convex OETH",
+    name: "Convex ETH + Origin Ether (OETH)",
+    address: "0x1827F9eA98E0bf96550b2FC20F7233277FcD7E63",
+    icon: "/images/convex-oeth.svg",
+    tokens: ["oeth", "weth"],
+  },
 };
 
 export default strategyMapping;

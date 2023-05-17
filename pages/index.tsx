@@ -33,7 +33,6 @@ import { Footer } from "../components";
 import { cloneDeep, get, zipObject } from "lodash";
 import { apyDayOptions, strategyMapping } from "../constants";
 import Head from "next/head";
-import { log } from "console";
 
 interface IndexPageProps {
   audits: Audit[];
@@ -59,11 +58,6 @@ const IndexPage = ({
   const apyOptions = apy;
   const daysToApy = zipObject(apyDayOptions, apyOptions);
 
-  const tvl = Object.keys(strategies).reduce(
-    (acc, key) => (acc += strategies[key].total),
-    0
-  );
-
   return (
     <>
       <Head>
@@ -75,10 +69,7 @@ const IndexPage = ({
         mappedLinks={navLinks}
         background="bg-origin-bg-black"
       />
-      <Hero
-        apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0}
-        tvl={tvl ? tvl : 0}
-      />
+      <Hero apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0} />
 
       <Wallet />
 
@@ -137,6 +128,8 @@ export async function getStaticProps() {
   //Extract rETH and stETH from vault holdings
 
   const strategies = allocation.strategies;
+
+  console.log(strategies);
 
   const holdings = cloneDeep(strategies["vault_holding"].holdings);
   strategies.r_eth_strat = {

@@ -12,6 +12,8 @@ import {
   Dripper__factory,
   Ogv__factory,
   Veogv__factory,
+  Oeth_vault,
+  Oeth_vault__factory,
 } from "../../types/contracts";
 
 export const setupContracts = () => {
@@ -26,6 +28,11 @@ export const setupContracts = () => {
     }
   );
 
+  const oeth = getContract<Oeth_vault>(
+    addresses.mainnet.OethVaultProxy,
+    Oeth_vault__factory.createInterface(),
+    provider
+  );
   const ousd = getContract<Ousd>(
     addresses.mainnet.OUSDProxy,
     Ousd__factory.createInterface(),
@@ -53,6 +60,7 @@ export const setupContracts = () => {
   );
 
   const contractsToExport = {
+    oeth,
     ousd,
     vault,
     dripper,

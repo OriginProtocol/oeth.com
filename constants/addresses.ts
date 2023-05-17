@@ -66,6 +66,7 @@ const addresses = {
     // WETH Token
     WETH: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
     // Deployed OUSD contracts
+    OethVaultProxy: "0x39254033945AA2E4809Cc2977E7087BEE48bd7Ab",
     VaultProxy: "0x277e80f3E14E7fB3fc40A9d6184088e0241034bD",
     Vault: "0xe75d77b1865ae93c7eaa3040b038d7aa7bc02f70",
     Dripper: "0x80C898ae5e56f888365E235CeB8CEa3EB726CB58",

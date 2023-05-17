@@ -1,7 +1,15 @@
 import { Store } from "pullstate";
-import { Dripper, Ogv, Ousd, Vault, Veogv } from "../types/contracts";
+import {
+  Dripper,
+  Oeth_vault,
+  Ogv,
+  Ousd,
+  Vault,
+  Veogv,
+} from "../types/contracts";
 
 interface Contracts {
+  oethVault: Oeth_vault;
   ousd: Ousd;
   vault: Vault;
   dripper: Dripper;
@@ -23,6 +31,7 @@ interface IContractStore {
 
 const ContractStore = new Store<IContractStore>({
   contracts: {
+    oethVault: null,
     ousd: null,
     vault: null,
     dripper: null,

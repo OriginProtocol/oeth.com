@@ -18,6 +18,7 @@ import {
   fetchApyHistory,
   fetchCollateral,
   fetchOgvStats,
+  setupContracts,
   transformLinks,
 } from "../utils";
 import {
@@ -33,11 +34,11 @@ import { Footer } from "../components";
 import { cloneDeep, get, zipObject } from "lodash";
 import { apyDayOptions, strategyMapping } from "../constants";
 import Head from "next/head";
-import { log } from "console";
 
 interface IndexPageProps {
   audits: Audit[];
   apy: number[];
+  tvl: number;
   apyHistory: ApyHistory;
   faq: FaqData[];
   stats: OgvStats;
@@ -49,6 +50,7 @@ interface IndexPageProps {
 const IndexPage = ({
   audits,
   apy,
+  tvl,
   apyHistory,
   faq,
   stats,
@@ -58,11 +60,6 @@ const IndexPage = ({
 }: IndexPageProps) => {
   const apyOptions = apy;
   const daysToApy = zipObject(apyDayOptions, apyOptions);
-
-  const tvl = Object.keys(strategies).reduce(
-    (acc, key) => (acc += strategies[key].total),
-    0
-  );
 
   return (
     <>
@@ -75,10 +72,7 @@ const IndexPage = ({
         mappedLinks={navLinks}
         background="bg-origin-bg-black"
       />
-      <Hero
-        apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0}
-        tvl={tvl ? tvl : 0}
-      />
+      <Hero apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0} tvl={tvl} />
 
       <Wallet />
 
@@ -121,6 +115,10 @@ export async function getStaticProps() {
   });
 
   let apyHistory = {};
+
+  const { oethVault } = setupContracts();
+  const tvlRaw = await oethVault.functions.totalValue();
+  const tvl = Number(tvlRaw) / 1e18;
 
   Object.keys(apyHistoryData).map((key) => {
     apyHistory[key] = apyHistoryData[key].filter((item) =>
@@ -165,6 +163,7 @@ export async function getStaticProps() {
     props: {
       audits: auditsRes.data,
       apy,
+      tvl,
       apyHistory,
       faq: faqData,
       stats: ogvStats,

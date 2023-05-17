@@ -12,11 +12,13 @@ import {
   Dripper__factory,
   Ogv__factory,
   Veogv__factory,
+  Oeth_vault,
+  Oeth_vault__factory,
 } from "../../types/contracts";
 
 export const setupContracts = () => {
   const provider = new providers.StaticJsonRpcProvider(
-    process.env.NEXT_PUBLIC_ETHEREUM_RPC_PROVIDER,
+    process.env.NEXT_PUBLIC_ETHEREUM_RPC_PROVIDER || "http://127.0.0.1:8545",
     {
       chainId: parseInt(
         process.env.NEXT_PUBLIC_ETHEREUM_RPC_CHAIN_ID || "1",
@@ -26,6 +28,11 @@ export const setupContracts = () => {
     }
   );
 
+  const oethVault = getContract<Oeth_vault>(
+    addresses.mainnet.OethVaultProxy,
+    Oeth_vault__factory.createInterface(),
+    provider
+  );
   const ousd = getContract<Ousd>(
     addresses.mainnet.OUSDProxy,
     Ousd__factory.createInterface(),
@@ -53,6 +60,7 @@ export const setupContracts = () => {
   );
 
   const contractsToExport = {
+    oethVault,
     ousd,
     vault,
     dripper,

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, useEffect } from "react";
 import { Typography } from "@originprotocol/origin-storybook";
 import { GradientButton, HeroInfo, Section, HeroData } from "../../components";
 import { assetRootPath, postEmail } from "../../utils";

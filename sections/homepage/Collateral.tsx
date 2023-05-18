@@ -224,11 +224,6 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                                   className="flex flex-row space-x-1"
                                 >
                                   <Typography.Body3 className="text-[12px] leading-[19px] text-subheading">
-                                    {console.log(
-                                      token,
-                                      strategy,
-                                      strategies[strategy]
-                                    )}
                                     {`Ξ${rounded(
                                       strategies[strategy].holdings[
                                         token.toUpperCase()

@@ -84,7 +84,7 @@ const Hero = ({ apy, tvl, sectionOverrideCss }: HeroProps) => {
                 window.open(process.env.NEXT_PUBLIC_DAPP_URL, "_blank")
               }
               outerDivClassName="mt-10 md:mt-20 w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
-              className="w-full bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+              className="w-full bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent text-base md:text-2xl"
               elementId="btn-hero-buy"
             >
               Get OETH

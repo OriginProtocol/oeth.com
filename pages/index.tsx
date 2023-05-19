@@ -1,6 +1,5 @@
 import moment from "moment";
-import { Header } from "@originprotocol/origin-storybook";
-import { Header as HeaderEx } from "../components";
+import { Header } from "../components";
 import {
   Faq,
   Hero,
@@ -70,11 +69,8 @@ const IndexPage = ({
         <title>Origin Ether (OETH)</title>
       </Head>
 
-      <Header
-        webProperty="oeth"
-        mappedLinks={navLinks}
-        background="bg-origin-bg-black"
-      />
+      <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
+
       <Hero
         apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0}
         tvl={tvl}

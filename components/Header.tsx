@@ -180,16 +180,16 @@ const Button = ({
         {isButton ? (
           <GradientButton
             outerDivClassName="w-full md:w-auto"
-            className="py-1 w-full md:w-auto"
+            className="py-1 w-full md:w-auto bg-transparent md:bg-origin-bg-black"
           >
             {label}
             {children}
           </GradientButton>
         ) : (
-          <>
+          <div className="text-subheading md:text-origin-white">
             {label}
             {children}
-          </>
+          </div>
         )}
       </span>
     </a>
@@ -408,8 +408,17 @@ const Header = ({
         >
           <div className="relative h-full">
             <div className="flex flex-col justify-center align-middle h-full">
-              <div className="absolute right-8 top-9">
-                <Hamburger open={open} setOpen={setOpen} />
+              <div>
+                <Image
+                  src={assetRootPath("/images/origin-ether-logo.svg")}
+                  width={181}
+                  height={24}
+                  alt="Origin Ether Logo"
+                  className="absolute left-4 top-7 w-[121px] h-[16px] md:!w-[181px] md:!h-[24px]"
+                />
+                <div className="absolute right-[22px] top-7">
+                  <Hamburger open={open} setOpen={setOpen} />
+                </div>
               </div>
               <NavLinks
                 background={background}

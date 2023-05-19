@@ -1,7 +1,6 @@
-import { Menu, Transition } from "@headlessui/react";
 import Image from "next/image";
+import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { DownCaret } from "../Icons";
 
 type Option = {
   label: string;
@@ -84,9 +83,7 @@ export const Dropdown = ({
           aria-haspopup="true"
         >
           {label}
-          <span className="self-center pl-2">
-            <DownCaret />
-          </span>
+          <span className="self-center pl-2">{/* <DownCaret /> */}</span>
         </Menu.Button>
       </div>
       {highlightText?.length > 0 && (
@@ -119,6 +116,7 @@ export const Dropdown = ({
             }
             transform md:translate-x-0 max-h-72 md:max-h-screen
             absolute z-10 mt-2 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+          //@ts-ignore
           role="menu"
           aria-orientation="vertical"
           aria-labelledby="menu-button"

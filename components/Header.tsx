@@ -1,23 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, Dispatch, SetStateAction } from "react";
+import Link from "next/link";
+import Image from "next/image";
 import { Dropdown } from "./Dropdown";
-import {
-  OriginDollarLogo,
-  OriginEtherLogo,
-  OriginLogo,
-  OriginStoryLogo,
-} from "../Icons";
 import { twMerge } from "tailwind-merge";
-import { getRelProps } from "../utils";
+import { assetRootPath } from "../utils";
+import GradientButton from "./GradientButton";
 
-export interface ButtonProps {
+const getRelProps = (nofollow?: boolean) =>
+  nofollow ? { rel: "nofollow" } : {};
+
+interface ButtonProps {
   /**
    * What type of button is this?
    */
   type?: "primary" | "secondary" | "header";
-  /**
-   * What property is this button for?
-   */
-  webProperty?: "originprotocol" | "ousd" | "oeth" | "story";
   /**
    * How large should the button be?
    */
@@ -73,9 +69,8 @@ export interface ButtonProps {
 /**
  * Primary UI component for user interaction
  */
-export const Button = ({
+const Button = ({
   type = "primary",
-  webProperty = "originprotocol",
   size = "medium",
   label,
   children,
@@ -93,67 +88,6 @@ export const Button = ({
   let background;
   let textColor;
   let hoverStyles;
-
-  switch (webProperty) {
-    case "originprotocol":
-      background =
-        type === "primary"
-          ? "bg-gradient-to-r from-origin-protocol-button-start to-origin-protocol-button-end"
-          : "";
-      textColor =
-        type === "primary"
-          ? "text-white"
-          : type === "header"
-          ? "text-slate-800"
-          : "text-black";
-      hoverStyles =
-        type === "primary" ? "hover:text-gray-100" : "hover:text-slate-600";
-      break;
-
-    case "ousd":
-      background =
-        type === "primary"
-          ? "bg-gradient-to-r from-ousd-button-start to-ousd-button-end"
-          : type === "secondary"
-          ? "bg-gradient-to-r from-ousd-button-dark-start to-ousd-button-dark-end"
-          : "";
-      textColor = "text-white";
-      hoverStyles = type === "header" ? "" : "hover:text-gray-300";
-      break;
-
-    case "oeth":
-      background =
-        type === "primary"
-          ? "bg-gradient-to-r from-oeth-button-start to-oeth-button-end"
-          : type === "secondary"
-          ? "bg-gradient-to-r from-oeth-button-dark-start to-oethx  -button-dark-end"
-          : "";
-      textColor = "text-white";
-      hoverStyles = type === "header" ? "" : "hover:text-gray-300";
-      break;
-
-    case "story":
-      background =
-        type === "primary"
-          ? "bg-gradient-to-r from-story-button-start to-story-button-end"
-          : type === "header"
-          ? ""
-          : "bg-white";
-      textColor =
-        type === "primary"
-          ? "text-white"
-          : type === "header"
-          ? "text-black"
-          : "text-story-blue";
-      hoverStyles =
-        type === "primary"
-          ? "hover:bg-gray-50 hover:text-gray-100"
-          : "hover:bg-gray-50";
-      break;
-
-    default:
-      break;
-  }
 
   let textSize;
   let padding;
@@ -216,8 +150,6 @@ export const Button = ({
     }
   };
 
-  const Component = target === "_self" && href?.startsWith("/") ? Link : "span";
-
   return (
     <a
       href={href || ""}
@@ -244,38 +176,27 @@ export const Button = ({
       onClick={handleClick}
       {...props}
     >
-      <Component href={href || ""} target={target}>
-        {webProperty === "ousd" || webProperty === "oeth" ? (
-          <div
-            className={`relative bg-gradient2 rounded-[100px] w-full md:w-fit h-fit ${
-              isButton ? "hover:opacity-90" : ""
-            }`}
+      <span>
+        {isButton ? (
+          <GradientButton
+            outerDivClassName="w-full md:w-auto"
+            className="py-1 w-full md:w-auto"
           >
-            <button
-              onClick={onClick}
-              className={twMerge(
-                `relative bg-origin-bg-black rounded-[100px] w-full md:w-auto ${
-                  isButton ? "px-4 lg:px-6 hover:bg-[#1b1a1abb]" : ""
-                } py-1 text-origin-white`,
-                bg
-              )}
-            >
-              {label}
-              {children}
-            </button>
-          </div>
+            {label}
+            {children}
+          </GradientButton>
         ) : (
           <>
             {label}
             {children}
           </>
         )}
-      </Component>
+      </span>
     </a>
   );
 };
 
-export type MappedLink<Link> = {
+type MappedLink<Link> = {
   href?: string;
   label: string;
   isButton: boolean;
@@ -287,7 +208,7 @@ export type MappedLink<Link> = {
   nofollow?: boolean;
 };
 
-export type LinkFormatted<IconFormatted> = {
+type LinkFormatted<IconFormatted> = {
   label: string;
   href: string;
   highlight?: boolean;
@@ -296,21 +217,17 @@ export type LinkFormatted<IconFormatted> = {
   nofollow?: boolean;
 };
 
-export type IconFormatted = {
+type IconFormatted = {
   alternativeText: string;
   caption: string;
   url: string;
 };
 
-export interface NavLinksProps {
+interface NavLinksProps {
   /**
    * Array of link objects the header will use to create dropdowns and buttons
    */
   mappedLinks: MappedLink<LinkFormatted<IconFormatted>>[];
-  /**
-   * webProperty that header will be used on, changes logo on left side
-   */
-  webProperty: "originprotocol" | "ousd" | "oeth" | "story";
   /**
    * Currently displayed page of navigation bar
    */
@@ -327,16 +244,13 @@ export interface NavLinksProps {
 
 const NavLinks = ({
   mappedLinks,
-  webProperty,
   active,
   isMobile,
   background,
 }: NavLinksProps) => (
   <div
     className={`flex flex-col md:!flex-row space-y-4 md:!space-y-0 ${
-      (webProperty === "ousd" || webProperty === "oeth") && isMobile
-        ? "px-8"
-        : "items-center justify-center"
+      isMobile ? "px-8" : "justify-center items-center"
     }`}
   >
     {mappedLinks.map((mappedLink) => {
@@ -358,11 +272,7 @@ const NavLinks = ({
           return (
             <div
               className={`group flex flex-col ${
-                (webProperty === "ousd" || webProperty === "oeth") && isMobile
-                  ? "-ml-4 mr-auto"
-                  : webProperty === "ousd" || webProperty === "oeth"
-                  ? "pt-2"
-                  : ""
+                isMobile ? "-ml-4 mr-auto" : "pt-2"
               }`}
               key={mappedLink.label}
             >
@@ -371,35 +281,21 @@ const NavLinks = ({
                 type="header"
                 size="nav"
                 href={mappedLink.href}
-                webProperty={webProperty}
                 target={mappedLink.target}
                 background={background}
                 className={`${
                   mappedLink.isHighlight ? "text-story-pink" : ""
-                } ${
-                  (webProperty === "ousd" || webProperty === "oeth") && isMobile
-                    ? "text-base"
-                    : isMobile
-                    ? "text-2xl"
-                    : ""
-                }`}
+                } text-base`}
                 {...relProps}
               />
-              {(webProperty === "ousd" || webProperty === "oeth") && (
-                <div
-                  className={`h-1 mx-4 mt-0.5 bg-gradient-to-r ${
-                    webProperty === "ousd" &&
-                    "group-hover:from-ousd-purple group-hover:to-ousd-blue"
-                  } ${
-                    webProperty === "oeth" &&
-                    "group-hover:from-oeth-purple group-hover:to-oeth-blue"
-                  } rounded-full ${
-                    active === mappedLink.label
-                      ? "from-ousd-purple to-ousd-blue"
-                      : ""
-                  }`}
-                ></div>
-              )}
+              <div
+                className={`h-1 mx-4 mt-0.5 bg-gradient-to-r group-hover:from-oeth-purple group-hover:to-oeth-blue
+                   rounded-full ${
+                     active === mappedLink.label
+                       ? "from-oeth-purple to-oeth-blue"
+                       : ""
+                   }`}
+              ></div>
             </div>
           );
         }
@@ -414,22 +310,15 @@ const NavLinks = ({
         if (mappedLink.isButton) {
           return (
             <Button
-              size={
-                webProperty === "ousd" || webProperty === "oeth"
-                  ? "border"
-                  : "small"
-              }
+              size={`border`}
               label={mappedLink.label}
               key={mappedLink.label}
               href={mappedLink.href}
               target={mappedLink.target}
               className={`${
-                (webProperty === "ousd" || webProperty === "oeth") && isMobile
-                  ? "absolute left-8 right-8 bottom-8 text-center"
-                  : ""
+                isMobile ? "absolute left-8 right-8 bottom-8 text-center" : ""
               }`}
               background={background}
-              webProperty={webProperty}
               isButton
               {...relProps}
             />
@@ -443,39 +332,25 @@ const NavLinks = ({
 const Hamburger = ({
   setOpen,
   open,
-  webProperty,
 }: {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpen: Dispatch<SetStateAction<boolean>>;
   open: boolean;
-  webProperty: "originprotocol" | "ousd" | "oeth" | "story";
 }) => (
   <div className="space-y-2 cursor-pointer" onClick={() => setOpen(!open)}>
     <span
-      className={`block w-8 h-0.5 ${
-        webProperty === "ousd" || webProperty === "oeth"
-          ? "bg-white"
-          : "bg-gray-600"
-      } transform transition-transform ${
+      className={`block w-8 h-0.5 bg-white transform transition-transform ${
         open ? "rotate-45 translate-y-1.5" : ""
       }`}
     ></span>
     <span
-      className={`block w-8 h-0.5 ${
-        webProperty === "ousd" || webProperty === "oeth"
-          ? "bg-white"
-          : "bg-gray-600"
-      } transform transition-transform ${
+      className={`block w-8 h-0.5 bg-white transform transition-transform ${
         open ? "-rotate-45 -translate-y-1" : ""
       }`}
     ></span>
   </div>
 );
 
-export interface HeaderProps {
-  /**
-   * webProperty that header will be used on, changes logo on left side
-   */
-  webProperty: "originprotocol" | "ousd" | "oeth" | "story";
+interface HeaderProps {
   /**
    * Array of link objects the header will use to create dropdowns and buttons
    */
@@ -492,8 +367,7 @@ export interface HeaderProps {
   background?: string;
 }
 
-export const Header = ({
-  webProperty,
+const Header = ({
   mappedLinks,
   background,
   active,
@@ -502,70 +376,44 @@ export const Header = ({
   const [open, setOpen] = useState(false);
 
   return (
-    <header
-      className={twMerge(
-        `${
-          webProperty === "ousd" || webProperty === "oeth"
-            ? "px-8 md:!px-16 lg:!px-[8.375rem]"
-            : ""
-        }`,
-        background,
-        className
-      )}
-    >
+    <header className={twMerge("px-8 md:!px-16 lg:!px-[8.375rem]", className)}>
       <div
-        className={`py-9 md:!py-16 w-full flex justify-between items-center mx-auto ${
-          webProperty === "ousd" || webProperty === "oeth"
-            ? "max-w-[89.5rem]"
-            : "max-w-screen-xl px-9"
-        }`}
+        className={
+          "py-9 md:!py-16 w-full flex justify-between items-center mx-auto max-w-[89.5rem]"
+        }
       >
         <div className="flex h-4 md:!h-6">
           <a href="/">
-            {webProperty === "originprotocol" && <OriginLogo />}
-            {webProperty === "ousd" && <OriginDollarLogo />}
-            {webProperty === "oeth" && <OriginEtherLogo />}
-            {webProperty === "story" && <OriginStoryLogo />}
+            <Image
+              src={assetRootPath("/images/origin-ether-logo.svg")}
+              width={181}
+              height={24}
+              alt="Origin Ether Logo"
+              className="w-[121px] h-[16px] md:!w-[181px] md:!h-[24px]"
+            />
           </a>
         </div>
         <div className="hidden md:!block">
-          <NavLinks
-            background={background}
-            mappedLinks={mappedLinks}
-            webProperty={webProperty}
-            active={active}
-          />
+          <NavLinks mappedLinks={mappedLinks} active={active} />
         </div>
         <div className="block md:!hidden">
-          <Hamburger open={open} setOpen={setOpen} webProperty={webProperty} />
+          <Hamburger open={open} setOpen={setOpen} />
         </div>
         <div
           className={`
             ${open ? "translate-y-0" : "translate-y-full"}
-            ${
-              webProperty === "ousd" || webProperty === "oeth"
-                ? "bg-black"
-                : "bg-white"
-            }
+            bg-origin-bg-black
             transform md:!hidden fixed top-0 bottom-0 right-0 left-0 transition-transform shadow z-50
           `}
         >
           <div className="relative h-full">
             <div className="flex flex-col justify-center align-middle h-full">
-              <div className="absolute left-8 top-9 h-4">
-                <a href="/">{webProperty === "ousd" && <OriginDollarLogo />}</a>
-              </div>
               <div className="absolute right-8 top-9">
-                <Hamburger
-                  open={open}
-                  setOpen={setOpen}
-                  webProperty={webProperty}
-                />
+                <Hamburger open={open} setOpen={setOpen} />
               </div>
               <NavLinks
                 background={background}
                 mappedLinks={mappedLinks}
-                webProperty={webProperty}
                 isMobile
               />
             </div>
@@ -575,3 +423,5 @@ export const Header = ({
     </header>
   );
 };
+
+export default Header;

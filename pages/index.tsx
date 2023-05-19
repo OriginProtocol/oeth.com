@@ -1,5 +1,6 @@
 import moment from "moment";
 import { Header } from "@originprotocol/origin-storybook";
+import { Header as HeaderEx } from "../components";
 import {
   Faq,
   Hero,
@@ -67,11 +68,8 @@ const IndexPage = ({
         <title>Origin Ether (OETH)</title>
       </Head>
 
-      <Header
-        webProperty="oeth"
-        mappedLinks={navLinks}
-        background="bg-origin-bg-black"
-      />
+      <HeaderEx mappedLinks={navLinks} background="bg-origin-bg-black" />
+
       <Hero apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0} tvl={tvl} />
 
       <Wallet />
@@ -106,7 +104,7 @@ export async function getStaticProps() {
   const collateral = await fetchCollateral();
   const faqRes: { data: FaqData[] } = await fetchAPI("/oeth-faqs");
   const ogvStats = await fetchOgvStats();
-  const navRes = await fetchAPI("/oeth-nav-links", {
+  const navRes = await fetchAPI("/ousd-nav-links", {
     populate: {
       links: {
         populate: "*",

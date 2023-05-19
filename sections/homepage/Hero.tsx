@@ -90,7 +90,7 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
             >
               Get OETH
             </GradientButton>
-            <div className="flex mt-10 md:mt-20">
+            <div className="flex mt-10 md:mt-20 max-w-[calc(100vw-32px)] w-[638px]">
               <HeroData
                 className="border-r-0 rounded-l-lg"
                 title="APY"

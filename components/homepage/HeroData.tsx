@@ -13,7 +13,7 @@ const HeroData = ({ title, value, subtext, className }: HeroDataProps) => {
   return (
     <div
       className={twMerge(
-        "py-4 md:py-8 px-6 md:px-[70px] border border-[#ffffff1a] text-center leading-[28px] md:leading-[32px]",
+        "py-4 md:py-8 border border-[#ffffff1a] text-center leading-[28px] md:leading-[32px] w-1/2 bg-origin-bg-blackt",
         className
       )}
     >

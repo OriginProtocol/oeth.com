@@ -38,7 +38,8 @@ import Head from "next/head";
 interface IndexPageProps {
   audits: Audit[];
   apy: number[];
-  tvl: number;
+  tvl: string;
+  tvlUsd: string;
   apyHistory: ApyHistory;
   faq: FaqData[];
   stats: OgvStats;
@@ -51,6 +52,7 @@ const IndexPage = ({
   audits,
   apy,
   tvl,
+  tvlUsd,
   apyHistory,
   faq,
   stats,
@@ -72,7 +74,11 @@ const IndexPage = ({
         mappedLinks={navLinks}
         background="bg-origin-bg-black"
       />
-      <Hero apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0} tvl={tvl} />
+      <Hero
+        apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0}
+        tvl={tvl}
+        tvlUsd={tvlUsd}
+      />
 
       <Wallet />
 
@@ -163,7 +169,8 @@ export async function getStaticProps() {
     props: {
       audits: auditsRes.data,
       apy,
-      tvl,
+      tvl: allocation.total_supply,
+      tvlUsd: allocation.total_value_usd,
       apyHistory,
       faq: faqData,
       stats: ogvStats,

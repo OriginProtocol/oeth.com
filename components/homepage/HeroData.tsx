@@ -5,21 +5,25 @@ import { twMerge } from "tailwind-merge";
 interface HeroDataProps {
   title: string;
   value: string;
+  subtext: string;
   className?: string;
 }
 
-const HeroData = ({ title, value, className }: HeroDataProps) => {
+const HeroData = ({ title, value, subtext, className }: HeroDataProps) => {
   return (
     <div
       className={twMerge(
-        "py-4 md:py-12 px-12 md:px-[100px] border border-[#ffffff1a] text-center",
+        "py-4 md:py-8 px-6 md:px-[70px] border border-[#ffffff1a] text-center leading-[28px] md:leading-[32px]",
         className
       )}
     >
       <Typography.Body>{title}</Typography.Body>
-      <Typography.H5 className="font-bold text-xl md:text-4xl mt-2">
+      <Typography.H5 className="font-bold text-2xl md:text-[40px] leading-[32px] md:leading-[48px]">
         {value}
       </Typography.H5>
+      <Typography.Body2 className="mt-1 text-subheading text-xs md:text-sm">
+        {subtext}
+      </Typography.Body2>
     </div>
   );
 };

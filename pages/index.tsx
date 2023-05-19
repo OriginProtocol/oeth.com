@@ -1,5 +1,6 @@
 import moment from "moment";
 import { Header } from "@originprotocol/origin-storybook";
+import { Header as HeaderEx } from "../components";
 import {
   Faq,
   Hero,
@@ -112,7 +113,7 @@ export async function getStaticProps() {
   const collateral = await fetchCollateral();
   const faqRes: { data: FaqData[] } = await fetchAPI("/oeth-faqs");
   const ogvStats = await fetchOgvStats();
-  const navRes = await fetchAPI("/oeth-nav-links", {
+  const navRes = await fetchAPI("/ousd-nav-links", {
     populate: {
       links: {
         populate: "*",

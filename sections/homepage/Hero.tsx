@@ -2,7 +2,7 @@ import Image from "next/image";
 import { useState, MouseEvent, useEffect } from "react";
 import { Typography } from "@originprotocol/origin-storybook";
 import { GradientButton, HeroInfo, Section, HeroData } from "../../components";
-import { assetRootPath, postEmail } from "../../utils";
+import { assetRootPath, commifyToDecimalPlaces, postEmail } from "../../utils";
 import { mdSize } from "../../constants";
 import { useViewWidth } from "../../hooks";
 import { sanitize } from "dompurify";
@@ -10,7 +10,8 @@ import { twMerge } from "tailwind-merge";
 
 interface HeroProps {
   apy: number;
-  tvl: number;
+  tvl: string;
+  tvlUsd: string;
   sectionOverrideCss?: string;
 }
 
@@ -21,7 +22,7 @@ enum NotifStatuses {
   SERVER_ERROR = "Something went wrong. Please try again",
 }
 
-const Hero = ({ apy, tvl, sectionOverrideCss }: HeroProps) => {
+const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
   const width = useViewWidth();
   const [emailInput, setEmailInput] = useState<string>("");
   const [notifText, setNotifText] = useState<string>(NotifStatuses.DEFAULT);
@@ -84,21 +85,23 @@ const Hero = ({ apy, tvl, sectionOverrideCss }: HeroProps) => {
                 window.open(process.env.NEXT_PUBLIC_DAPP_URL, "_blank")
               }
               outerDivClassName="mt-10 md:mt-20 w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
-              className="w-full bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
+              className="w-full bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent text-base md:text-2xl"
               elementId="btn-hero-buy"
             >
               Get OETH
             </GradientButton>
-            <div className="flex mt-10 md:mt-20">
+            <div className="flex mt-10 md:mt-20 max-w-[calc(100vw-32px)] w-[638px]">
               <HeroData
                 className="border-r-0 rounded-l-lg"
                 title="APY"
                 value={`${(apy * 100).toFixed(2)}%`}
+                subtext="Trailing 7-day APY"
               />
               <HeroData
                 className="rounded-r-lg"
                 title="TVL"
-                value={`Ξ ${tvl.toFixed(2)}`}
+                value={`Ξ ${parseFloat(tvl).toFixed(2)}`}
+                subtext={`$${commifyToDecimalPlaces(parseFloat(tvlUsd), 2)}`}
               />
             </div>
           </>

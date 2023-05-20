@@ -1,5 +1,5 @@
 import moment from "moment";
-import { Header } from "@originprotocol/origin-storybook";
+import { Header } from "../components";
 import {
   Faq,
   Hero,
@@ -38,7 +38,8 @@ import Head from "next/head";
 interface IndexPageProps {
   audits: Audit[];
   apy: number[];
-  tvl: number;
+  tvl: string;
+  tvlUsd: string;
   apyHistory: ApyHistory;
   faq: FaqData[];
   stats: OgvStats;
@@ -51,6 +52,7 @@ const IndexPage = ({
   audits,
   apy,
   tvl,
+  tvlUsd,
   apyHistory,
   faq,
   stats,
@@ -67,12 +69,13 @@ const IndexPage = ({
         <title>Origin Ether (OETH)</title>
       </Head>
 
-      <Header
-        webProperty="oeth"
-        mappedLinks={navLinks}
-        background="bg-origin-bg-black"
+      <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
+
+      <Hero
+        apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0}
+        tvl={tvl}
+        tvlUsd={tvlUsd}
       />
-      <Hero apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0} tvl={tvl} />
 
       <Wallet />
 
@@ -106,7 +109,7 @@ export async function getStaticProps() {
   const collateral = await fetchCollateral();
   const faqRes: { data: FaqData[] } = await fetchAPI("/oeth-faqs");
   const ogvStats = await fetchOgvStats();
-  const navRes = await fetchAPI("/oeth-nav-links", {
+  const navRes = await fetchAPI("/ousd-nav-links", {
     populate: {
       links: {
         populate: "*",
@@ -163,7 +166,8 @@ export async function getStaticProps() {
     props: {
       audits: auditsRes.data,
       apy,
-      tvl,
+      tvl: allocation.total_supply,
+      tvlUsd: allocation.total_value_usd,
       apyHistory,
       faq: faqData,
       stats: ogvStats,

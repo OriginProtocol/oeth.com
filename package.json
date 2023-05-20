@@ -10,6 +10,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
+    "@headlessui/react": "^1.7.14",
     "@mui/material": "^5.12.0",
     "@originprotocol/origin-storybook": "^0.27.13",
     "@sentry/nextjs": "^7.51.2",

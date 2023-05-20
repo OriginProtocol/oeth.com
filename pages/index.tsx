@@ -109,7 +109,7 @@ export async function getStaticProps() {
   const collateral = await fetchCollateral();
   const faqRes: { data: FaqData[] } = await fetchAPI("/oeth-faqs");
   const ogvStats = await fetchOgvStats();
-  const navRes = await fetchAPI("/ousd-nav-links", {
+  const navRes = await fetchAPI("/oeth-nav-links", {
     populate: {
       links: {
         populate: "*",

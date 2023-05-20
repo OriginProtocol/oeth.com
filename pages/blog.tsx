@@ -1,7 +1,8 @@
 import React, { useRef } from "react";
 import Head from "next/head";
 import { News } from "../components";
-import { Typography, Header } from "@originprotocol/origin-storybook";
+import { Typography } from "@originprotocol/origin-storybook";
+import { Header } from "../components";
 import { useRouter } from "next/router";
 import { Footer, Seo } from "../components";
 import { fetchAPI, transformLinks, formatSeo } from "../utils";
@@ -26,7 +27,7 @@ const Blog = ({
         <title>Blog</title>
       </Head>
       <Seo seo={seo} />
-      <Header mappedLinks={navLinks} webProperty="oeth" />
+      <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
       <section className="bg-[#141519] px-8 md:px-16 lg:px-[8.375rem]">
         <div className="max-w-[89.5rem] mx-auto mt-5 md:mt-16 pb-[56px] md:pb-[120px]">
           <Typography.H2

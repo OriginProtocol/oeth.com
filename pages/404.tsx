@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import Head from "next/head";
-import { Typography, Header } from "@originprotocol/origin-storybook";
-import { Footer } from "../components/";
+import { Typography } from "@originprotocol/origin-storybook";
+import { Footer, Header } from "../components";
 import { transformLinks, fetchAPI } from "../utils";
 
 const Error404 = ({ navLinks }) => {
@@ -12,7 +12,7 @@ const Error404 = ({ navLinks }) => {
         <title>Origin Ether | 404</title>
       </Head>
       <section className="error bg-[#1e1e1e]">
-        <Header mappedLinks={navLinks} webProperty="ousd" />
+        <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
         <div className="px-8 md:px-16 lg:px-[134px] pb-[136px] md:pb-[294px]">
           <div className="max-w-[1432px] mx-auto">
             <div className="mt-5 md:mt-16">

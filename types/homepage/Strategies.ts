@@ -9,6 +9,7 @@ interface Strategy {
     STETH?: number;
   };
   address: string;
+  tvl?: number;
 }
 
 interface Strategies {

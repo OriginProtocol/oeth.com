@@ -9,28 +9,17 @@ import { tokenColors, strategyMapping } from "../../constants";
 import { Collateral as CollateralType, Strategies } from "../../types";
 import { GradientButton } from "../../components";
 
-const mockBacking = [
-  { name: "eth", total: 11981522.633824237 },
-  { name: "steth", total: 13409101.919790775 },
-  { name: "reth", total: 13264216.480711127 },
-  { name: "sfrxeth", total: 13264216.480711127 },
-];
-
 interface CollateralProps {
   collateral: CollateralType[];
   strategies: Strategies;
+  tvl: string;
 }
 
-const Collateral = ({ collateral, strategies }: CollateralProps) => {
+const Collateral = ({ collateral, tvl, strategies }: CollateralProps) => {
   const [open, setOpen] = useState(false);
-  const backingTokens = ["weth", "steth", "reth", "frxeth", "oeth"];
+  const backingTokens = ["eth", "weth", "steth", "reth", "frxeth", "oeth"];
 
-  //@ts-ignore
-  const total: number = collateral?.reduce((t, s) => {
-    return {
-      total: Number(t.total) + Number(s.total),
-    };
-  }).total;
+  const total = parseFloat(tvl).toFixed(2);
 
   const strategiesSorted =
     strategies &&
@@ -47,12 +36,13 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
     .map((token) => {
       return {
         title: token?.name.toUpperCase(),
-        value: total ? (Number(token?.total) / total) * 100 : 0,
+        value: total ? (Number(token?.total) / parseFloat(total)) * 100 : 0,
         color: tokenColors[token?.name] || "#ff0000",
       };
     });
 
   const tokenSymbols = {
+    eth: "ETH",
     weth: "WETH",
     steth: "stETH",
     reth: "rETH",
@@ -60,6 +50,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
   };
 
   const tokenNames = {
+    eth: "Ether",
     weth: "Wrapped Ether",
     steth: "Lido Staked ETH",
     reth: "Rocket Pool ETH",
@@ -139,7 +130,7 @@ const Collateral = ({ collateral, strategies }: CollateralProps) => {
                               style={{ fontWeight: 700 }}
                             >
                               {`${formatCurrency(
-                                (Number(token.total) / total) * 100,
+                                (Number(token.total) / parseFloat(total)) * 100,
                                 2
                               )}%`}
                             </Typography.Body>

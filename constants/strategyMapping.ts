@@ -20,7 +20,7 @@ const strategyMapping: {
       WETH: "/images/weth-icon.svg",
       FRXETH: "/images/frax-icon.svg",
     },
-    tokens: ["weth", "frxeth"],
+    tokens: ["weth", "frxeth", "steth", "reth"],
   },
   r_eth_strat: {
     protocol: "RocketPool",

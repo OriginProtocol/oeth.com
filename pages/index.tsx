@@ -125,7 +125,7 @@ export async function getStaticProps() {
       },
     },
   });
-  const seoRes = await fetchAPI("/ousd/page/en/%2F");
+  const seoRes = await fetchAPI("/oeth/page/en/%2F");
 
   let apyHistory = {};
 

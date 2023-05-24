@@ -1,13 +1,15 @@
+interface Holding {
+  ETH?: number;
+  WETH?: number;
+  RETH?: number;
+  FRXETH?: number;
+  STETH?: number;
+}
 interface Strategy {
   total: number;
   name: string;
-  holdings: {
-    ETH?: number;
-    WETH?: number;
-    RETH?: number;
-    FRXETH?: number;
-    STETH?: number;
-  };
+  holdings: Holding;
+  holdings_value: Holding;
   address: string;
   tvl?: number;
 }

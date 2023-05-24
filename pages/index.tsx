@@ -147,27 +147,36 @@ export async function getStaticProps() {
   const strategies = allocation.strategies;
 
   const holdings = cloneDeep(strategies["vault_holding"].holdings);
+  const holdingsValue = cloneDeep(strategies["vault_holding"].holdings_value);
   strategies.r_eth_strat = {
     _address: strategyMapping["r_eth_strat"].address,
     holdings: {
       RETH: holdings["RETH"],
+    },
+    holdings_value: {
+      RETH: holdingsValue["RETH"],
     },
     name: strategyMapping["r_eth_strat"].name,
     total: holdings["RETH"],
   };
   strategies.vault_holding.total -= holdings["RETH"];
   delete strategies["vault_holding"].holdings["RETH"];
+  delete strategies["vault_holding"].holdings_value["RETH"];
 
   strategies.st_eth_strat = {
     address: strategyMapping["st_eth_strat"].address,
     holdings: {
       STETH: holdings["STETH"],
     },
+    holdings_value: {
+      RETH: holdingsValue["STETH"],
+    },
     name: strategyMapping["st_eth_strat"].name,
     total: holdings["STETH"],
   };
   strategies.vault_holding.total -= holdings["STETH"];
   delete strategies["vault_holding"].holdings["STETH"];
+  delete strategies["vault_holding"].holdings_value["STETH"];
 
   return {
     props: {

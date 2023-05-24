@@ -1,5 +1,5 @@
 import moment from "moment";
-import { Header } from "../components";
+import { Header, Seo } from "../components";
 import {
   Faq,
   Hero,
@@ -18,7 +18,7 @@ import {
   fetchApyHistory,
   fetchCollateral,
   fetchOgvStats,
-  setupContracts,
+  formatSeo,
   transformLinks,
 } from "../utils";
 import {
@@ -44,7 +44,9 @@ interface IndexPageProps {
   faq: FaqData[];
   stats: OgvStats;
   strategies: Strategies;
+  strategiesCollateral: Strategies;
   collateral: CollateralType[];
+  seo: any;
   navLinks: LinkType[];
 }
 
@@ -57,7 +59,9 @@ const IndexPage = ({
   faq,
   stats,
   strategies,
+  strategiesCollateral,
   collateral,
+  seo,
   navLinks,
 }: IndexPageProps) => {
   const apyOptions = apy;
@@ -68,6 +72,7 @@ const IndexPage = ({
       <Head>
         <title>Origin Ether (OETH)</title>
       </Head>
+      <Seo seo={seo} />
 
       <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
 
@@ -83,7 +88,11 @@ const IndexPage = ({
 
       <Allocation strategies={strategies} />
 
-      <Collateral strategies={strategies} collateral={collateral} />
+      <Collateral
+        tvl={tvl}
+        strategies={strategiesCollateral}
+        collateral={collateral}
+      />
 
       {process.env.NEXT_PUBLIC_UNREADY_COMPONENTS && (
         <>
@@ -116,12 +125,9 @@ export async function getStaticProps() {
       },
     },
   });
+  const seoRes = await fetchAPI("/ousd/page/en/%2F");
 
   let apyHistory = {};
-
-  const { oethVault } = setupContracts();
-  const tvlRaw = await oethVault.functions.totalValue();
-  const tvl = Number(tvlRaw) / 1e18;
 
   Object.keys(apyHistoryData).map((key) => {
     apyHistory[key] = apyHistoryData[key].filter((item) =>
@@ -137,6 +143,7 @@ export async function getStaticProps() {
 
   //Extract rETH and stETH from vault holdings
 
+  const strategiesCollateral = cloneDeep(allocation.strategies);
   const strategies = allocation.strategies;
 
   const holdings = cloneDeep(strategies["vault_holding"].holdings);
@@ -172,7 +179,9 @@ export async function getStaticProps() {
       faq: faqData,
       stats: ogvStats,
       strategies,
+      strategiesCollateral,
       collateral: collateral.collateral,
+      seo: formatSeo(seoRes?.data),
       navLinks,
     },
     revalidate: 60 * 5,

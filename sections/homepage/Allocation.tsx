@@ -9,47 +9,6 @@ import { groupBy } from "lodash";
 import { Strategies } from "../../types";
 import { GradientButton } from "../../components";
 
-const mockAllocation = {
-  vault_holding: {
-    name: "Vault",
-    address: "0xe75d77b1865ae93c7eaa3040b038d7aa7bc02f70",
-    total: 0,
-    holdings: { ETH: 10000, stETH: 0, rETH: 0, sfrxETH: 0 },
-  },
-  lidostrat_holding: {
-    name: "Lido Strategy",
-    address: "0x4f6a43ad7cba042606decaca730d4ce0a57ac62e",
-    total: 0,
-    holdings: { stETH: 100000 },
-  },
-  rocketpoolstrat_holding: {
-    name: "Rocket Pool Strategy",
-    address: "0x7a192dd9cc4ea9bdedec9992df74f1da55e60a19",
-    icon_file: "rocketpool-icon.png",
-    total: 0,
-    holdings: {
-      rETH: 144997.30075483903,
-    },
-  },
-  convexstrat_holding: {
-    name: "Convex Strategy",
-    address: "0x7a192dd9cc4ea9bdedec9992df74f1da55e60a19",
-    total: 0,
-    holdings: {
-      rETH: 344997.30075483903,
-    },
-  },
-  fraxstrat_holding: {
-    name: "Frax Strategy",
-    address: "0x7a192dd9cc4ea9bdedec9992df74f1da55e60a19",
-    icon_file: "frax.png",
-    total: 0,
-    holdings: {
-      sfrxETH: 344997.30075483903,
-    },
-  },
-};
-
 interface AllocationProps {
   strategies: Strategies;
 }
@@ -68,20 +27,22 @@ const Allocation = ({ strategies }: AllocationProps) => {
   const yieldSources = Object.keys(strategies)
     .flatMap((strategy) => {
       if (strategyMapping[strategy]?.vault) {
-        return Object.keys(strategies[strategy]?.holdings).map((token) => {
-          return {
-            name: token,
-            protocol: strategyMapping[strategy]?.protocol,
-            total: strategies[strategy]?.holdings[token],
-            icon: strategyMapping[strategy]?.icons[token],
-          };
-        });
+        return Object.keys(strategies[strategy]?.holdings_value).map(
+          (token) => {
+            return {
+              name: token,
+              protocol: strategyMapping[strategy]?.protocol,
+              total: strategies[strategy]?.holdings_value[token],
+              icon: strategyMapping[strategy]?.icons[token],
+            };
+          }
+        );
       }
       return {
         name: strategyMapping[strategy]?.name,
         protocol: strategyMapping[strategy]?.protocol,
-        total: Object.keys(strategies[strategy]?.holdings).reduce(
-          (accum, key) => (accum += strategies[strategy]?.holdings[key]),
+        total: Object.keys(strategies[strategy]?.holdings_value).reduce(
+          (accum, key) => (accum += strategies[strategy]?.holdings_value[key]),
           0
         ),
         icon: strategyMapping[strategy]?.icon,

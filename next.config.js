@@ -19,6 +19,23 @@ const nextConfig = {
       "avatars.githubusercontent.com",
     ],
   },
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: "/sitemap.xml",
+          destination: `${process.env.STRAPI_API_URL}/api/oeth/sitemap`,
+        },
+        {
+          source: "/robots.txt",
+          destination:
+            process.env.APP_ENV === "prod"
+              ? "/robots.prod.txt"
+              : "/robots.staging.txt",
+        },
+      ],
+    };
+  },
 };
 
 module.exports = withSentryConfig(

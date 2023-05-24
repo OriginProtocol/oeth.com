@@ -22,8 +22,6 @@ async function fetchApyHistory() {
     data[`apy${days}`] = apyHistory ? apyHistory[i] : [];
   });
 
-  console.log(data);
-
   Object.keys(data).map((key) => {
     data[key] = data[key].filter((item) =>
       moment(item.day).isAfter("2023-05-06")

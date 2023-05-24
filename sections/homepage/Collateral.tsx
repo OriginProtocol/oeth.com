@@ -36,7 +36,7 @@ const Collateral = ({ collateral, tvl, strategies }: CollateralProps) => {
     .map((token) => {
       return {
         title: token?.name.toUpperCase(),
-        value: total ? (Number(token?.total) / parseFloat(total)) * 100 : 0,
+        value: total ? (Number(token?.value) / parseFloat(total)) * 100 : 0,
         color: tokenColors[token?.name] || "#ff0000",
       };
     });
@@ -130,7 +130,7 @@ const Collateral = ({ collateral, tvl, strategies }: CollateralProps) => {
                               style={{ fontWeight: 700 }}
                             >
                               {`${formatCurrency(
-                                (Number(token.total) / parseFloat(total)) * 100,
+                                (Number(token.value) / parseFloat(total)) * 100,
                                 2
                               )}%`}
                             </Typography.Body>
@@ -138,7 +138,7 @@ const Collateral = ({ collateral, tvl, strategies }: CollateralProps) => {
                               className="text-[12px] md:text-[16px] text-subheading"
                               style={{ fontWeight: 400 }}
                             >
-                              {`Ξ${formatCurrency(token.total, 2)}`}
+                              {`Ξ${formatCurrency(token.value, 2)}`}
                             </Typography.Body>
                           </div>
                         </div>
@@ -216,7 +216,7 @@ const Collateral = ({ collateral, tvl, strategies }: CollateralProps) => {
                                 >
                                   <Typography.Body3 className="text-[12px] leading-[19px] text-subheading">
                                     {`Ξ${rounded(
-                                      strategies[strategy].holdings[
+                                      strategies[strategy].holdings_value[
                                         token.toUpperCase()
                                       ],
                                       2

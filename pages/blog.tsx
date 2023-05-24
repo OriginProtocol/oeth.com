@@ -27,7 +27,11 @@ const Blog = ({
         <title>Blog</title>
       </Head>
       <Seo seo={seo} />
-      <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
+      <Header
+        mappedLinks={navLinks}
+        background="bg-origin-bg-black"
+        active={active}
+      />
       <section className="bg-[#141519] px-8 md:px-16 lg:px-[8.375rem]">
         <div className="max-w-[89.5rem] mx-auto mt-5 md:mt-16 pb-[56px] md:pb-[120px]">
           <Typography.H2

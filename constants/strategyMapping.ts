@@ -62,7 +62,7 @@ const strategyMapping: {
     icon: "/images/convex-oeth.svg",
     tokens: ["oeth", "eth"],
   },
-  morpho_aave_strat: {
+  oeth_morpho_aave_strat: {
     protocol: "Morpho",
     short_name: "Morpho AAVE",
     name: "Morpho Aave WETH",

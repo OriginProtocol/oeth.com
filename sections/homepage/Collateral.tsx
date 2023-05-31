@@ -275,7 +275,11 @@ const Collateral = ({ collateral, tvl, strategies }: CollateralProps) => {
               className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
               elementId="btn-collateral-docs"
               onClick={() =>
-                window.open("https://docs.ousd.com/how-it-works", "_blank")
+                window.open(
+                  "https://docs.ousd.com/how-it-works",
+                  "_blank",
+                  "noopener,noreferrer"
+                )
               }
             >
               <Typography.H7 className="font-normal">

@@ -14,7 +14,6 @@ interface AllocationProps {
 }
 
 const Allocation = ({ strategies }: AllocationProps) => {
-  // strategies = mockAllocation;
 
   const [open, setOpen] = useState({});
   const [loaded, setLoaded] = useState(false);

@@ -23,6 +23,11 @@ const protocolMapping = {
     description:
       "When OETH is minted, collateral is deposited into the Origin Vault and held until the allocate function is called. This happens automatically for larger transactions, which are less impacted by increased gas costs.",
   },
+  Morpho: {
+    image: "/images/morpho-strategy.svg",
+    description:
+        "Morpho adds a peer-to-peer layer on top of Compound and Aave allowing lenders and borrowers to be matched more efficiently with better interest rates. When no matching opportunity exists, funds flow directly through to the underlying protocol. OUSD supplies stablecoins to three of Morpho’s Compound markets to earn interest. Additional yield is generated from protocol token incentives, including both COMP (regularly sold for USDT) and MORPHO (currently locked).",
+  },
 };
 
 export default protocolMapping;

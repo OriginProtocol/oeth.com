@@ -18,6 +18,9 @@ const theme = createTheme({
     Vault: {
       main: "#8c66fc",
     },
+    Morpho: {
+      main: "#9bc3e9",
+    },
   },
 });
 

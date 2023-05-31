@@ -62,6 +62,14 @@ const strategyMapping: {
     icon: "/images/convex-oeth.svg",
     tokens: ["oeth", "eth"],
   },
+  oeth_morpho_aave_strat: {
+    protocol: "Morpho",
+    short_name: "Morpho AAVE",
+    name: "Morpho Aave WETH",
+    address: "0xc1fc9E5eC3058921eA5025D703CBE31764756319",
+    icon: "/images/morpho-weth.svg",
+    tokens: ["weth"],
+  },
 };
 
 export default strategyMapping;

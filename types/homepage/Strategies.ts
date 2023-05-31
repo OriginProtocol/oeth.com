@@ -20,6 +20,7 @@ interface Strategies {
   r_eth_strat: Strategy;
   frax_eth_strat: Strategy;
   convexstrat_holding: Strategy;
+  oeth_morpho_aave_strat: Strategy;
   [key: string]: Strategy;
 }
 

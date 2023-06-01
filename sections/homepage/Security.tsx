@@ -109,7 +109,7 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
           elementId="btn-security-docs"
           onClick={() =>
             window.open(
-              "https://docs.ousd.com/security-and-risks/audits",
+              "https://docs.oeth.com/security-and-risks/audits",
               "_blank"
             )
           }

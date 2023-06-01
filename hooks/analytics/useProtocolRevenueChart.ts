@@ -1,7 +1,11 @@
 import { useQuery } from "react-query";
 import { useMemo, useState } from "react";
 import { isMobile } from "react-device-detect";
-import { borderFormatting, filterByDuration, formatDisplay } from "../../utils/analytics";
+import {
+  borderFormatting,
+  filterByDuration,
+  formatDisplay,
+} from "../../utils/analytics";
 
 export const useProtocolRevenueChart = () => {
   const { data, isFetching } = useQuery(

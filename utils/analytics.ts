@@ -258,7 +258,8 @@ const sumHoldings = (holdings) =>
  */
 export const aggregateCollateral = ({ collateral, allocation }) => {
   console.log({
-    collateral, strategies: allocation.strategies
+    collateral,
+    strategies: allocation.strategies,
   });
 
   const aggregateTotal = collateral?.reduce((t, s) => ({

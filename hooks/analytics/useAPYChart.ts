@@ -1,6 +1,10 @@
 import { useQuery } from "react-query";
 import { useMemo, useState } from "react";
-import { borderFormatting, filterByDuration, formatDisplay } from "../../utils/analytics";
+import {
+  borderFormatting,
+  filterByDuration,
+  formatDisplay,
+} from "../../utils/analytics";
 
 export const useAPYChart = () => {
   const { data, isFetching } = useQuery(`/api/analytics/charts/apy`, {

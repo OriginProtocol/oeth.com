@@ -18,11 +18,7 @@ import {
 import { last, orderBy } from "lodash";
 import { Typography } from "@originprotocol/origin-storybook";
 import { GetServerSideProps } from "next";
-import {
-  ErrorBoundary,
-  LayoutBox,
-  TwoColumnLayout,
-} from "../../components";
+import { ErrorBoundary, LayoutBox, TwoColumnLayout } from "../../components";
 import { formatCurrency, formatPercentage } from "../../utils/math";
 import { aggregateCollateral, chartOptions } from "../../utils/analytics";
 import {
@@ -34,7 +30,7 @@ import { useAPYChart } from "../../hooks/analytics/useAPYChart";
 import { useTotalSupplyChart } from "../../hooks/analytics/useTotalSupplyChart";
 import { fetchAllocation, fetchCollateral } from "../../utils/api";
 import { useMemo } from "react";
-import {tokenColors} from "../../constants";
+import { tokenColors } from "../../constants";
 
 ChartJS.register(
   CategoryScale,
@@ -247,7 +243,11 @@ const Analytics = ({ collateral, tvl, tvlUsd }) => {
           <TotalSupplyChartContainer />
         </div>
         <div className="col-span-12">
-          <CurrentCollateralContainer data={collateral} tvl={tvl} tvlUsd={tvlUsd} />
+          <CurrentCollateralContainer
+            data={collateral}
+            tvl={tvl}
+            tvlUsd={tvlUsd}
+          />
         </div>
       </div>
     </ErrorBoundary>

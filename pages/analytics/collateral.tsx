@@ -27,9 +27,7 @@ import {
   createGradient,
 } from "../../utils/analytics";
 import { fetchAllocation, fetchCollateral } from "../../utils/api";
-import {
-  formatCurrency,
-} from "../../utils/math";
+import { formatCurrency } from "../../utils/math";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
@@ -52,7 +50,10 @@ const CollateralAggregate = ({ data = [] }) => {
               <Typography.Caption className="text-subheading">
                 {label}
               </Typography.Caption>
-              <Typography.Body>{`Ξ ${formatCurrency(total, 2)}`}</Typography.Body>
+              <Typography.Body>{`Ξ ${formatCurrency(
+                total,
+                2
+              )}`}</Typography.Body>
               <Typography.Caption className="text-subheading">
                 {formatCurrency(percentage * 100, 2)}%
               </Typography.Caption>

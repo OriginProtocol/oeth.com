@@ -1,10 +1,6 @@
 import { Typography } from "@originprotocol/origin-storybook";
 import Head from "next/head";
-import {
-  ErrorBoundary,
-  LayoutBox,
-  TwoColumnLayout,
-} from "../../components";
+import { ErrorBoundary, LayoutBox, TwoColumnLayout } from "../../components";
 
 const monitoring = {
   macro: [

@@ -10,17 +10,10 @@ import {
   LinearScale,
 } from "chart.js";
 import { last } from "lodash";
-import {
-  DefaultChartHeader,
-  DurationFilter,
-} from "../../components/analytics";
+import { DefaultChartHeader, DurationFilter } from "../../components/analytics";
 import { useProtocolRevenueChart } from "../../hooks/analytics/useProtocolRevenueChart";
 import { formatCurrency } from "../../utils/math";
-import {
-  ErrorBoundary,
-  LayoutBox,
-  TwoColumnLayout,
-} from "../../components";
+import { ErrorBoundary, LayoutBox, TwoColumnLayout } from "../../components";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 

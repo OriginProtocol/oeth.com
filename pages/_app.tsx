@@ -30,55 +30,56 @@ export const GlobalContext = createContext({
 });
 
 export const NavigationContext = createContext({
-    links: [],
+  links: [],
 });
 
 const { provider, webSocketProvider } = configureChains(
-    [mainnet],
-    [publicProvider()]
+  [mainnet],
+  [publicProvider()]
 );
 
 const wagmiClient = createClient({
-    autoConnect: false,
-    provider,
-    webSocketProvider,
+  autoConnect: false,
+  provider,
+  webSocketProvider,
 });
 
 const useNavigationLinks = () => {
-    const [links, setLinks] = useState([]);
+  const [links, setLinks] = useState([]);
 
-    useEffect(() => {
-        (async function () {
-            try {
-                const { data } = await fetch("/api/navigation", {
-                    method: "POST",
-                    headers: {
-                        "content-type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        params: {
-                            populate: {
-                                links: {
-                                    populate: "*",
-                                },
-                            },
-                        },
-                    }),
-                }).then((res) => res.json());
-                setLinks(data);
-            } catch (e) {
-                console.error(e);
-            }
-        })();
-    }, []);
-    return [{ links }];
+  useEffect(() => {
+    (async function () {
+      try {
+        const { data } = await fetch("/api/navigation", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            params: {
+              populate: {
+                links: {
+                  populate: "*",
+                },
+              },
+            },
+          }),
+        }).then((res) => res.json());
+        setLinks(data);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, []);
+  return [{ links }];
 };
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
-    const [{ links }] = useNavigationLinks();
+  const [{ links }] = useNavigationLinks();
 
-    const getLayout = Component.getLayout || ((page) => page);
+  // @ts-ignore
+  const getLayout = Component.getLayout || ((page) => page);
 
   useContracts();
 
@@ -108,15 +109,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <QueryClientProvider client={queryClient}>
-          <WagmiConfig client={wagmiClient}>
-              <NavigationContext.Provider
-                  value={{
-                      links,
-                  }}
-              >
-                  {getLayout(<Component {...pageProps} />)}
-              </NavigationContext.Provider>
-          </WagmiConfig>
+        <WagmiConfig client={wagmiClient}>
+          <NavigationContext.Provider
+            value={{
+              links,
+            }}
+          >
+            {getLayout(<Component {...pageProps} />)}
+          </NavigationContext.Provider>
+        </WagmiConfig>
       </QueryClientProvider>
     </>
   );

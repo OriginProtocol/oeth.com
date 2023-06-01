@@ -27,7 +27,7 @@ export const jobsLookup = {
   totalSupplyBreakdown: {
     queryId: 2520879,
     expiresAfter: 86400,
-  }
+  },
 };
 
 const BASE_URL = "https://api.dune.com/api/v1";

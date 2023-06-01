@@ -3,68 +3,9 @@ import Head from "next/head";
 import { ErrorBoundary, LayoutBox, TwoColumnLayout } from "../../components";
 
 const monitoring = {
-  macro: [
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=10",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=22",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=24",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=34",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=32",
-      description: "",
-    },
-  ],
-  statistics: [
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=26",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=2",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=4",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=28",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=30",
-      description: "",
-    },
-  ],
-  strategies: [
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=8",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=18",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=6",
-      description: "",
-    },
-    {
-      url: "https://ousd-dashboard.ogn.app/d-solo/0YIjaWh4z/main-dashboard?orgId=1&panelId=20",
-      description: "",
-    },
-  ],
+  macro: [],
+  statistics: [],
+  strategies: [],
 };
 
 const AnalyticsHealthMonitoring = () => {
@@ -75,7 +16,7 @@ const AnalyticsHealthMonitoring = () => {
       </Head>
       <div className="flex flex-col w-full h-full space-y-10">
         <Typography.Caption className="text-subheading">
-          Monitoring the health of DEFI contracts that can affect OUSD strategy
+          Monitoring the health of DEFI contracts that can affect OETH strategy
           health.
         </Typography.Caption>
         <div className="flex flex-col w-full space-y-6">

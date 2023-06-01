@@ -35,42 +35,6 @@ const YieldSourceBreakdown = ({ data, total }) => (
   </div>
 );
 
-const LookingForYield = () => {
-  return (
-    <LayoutBox>
-      <div className="flex flex-col space-y-6 p-8">
-        <Typography.Body>
-          Looking for a full breakdown of where the yield comes from?
-        </Typography.Body>
-        <Typography.Body2 className="text-subheading text-sm">
-          OUSD’s yield is transparent, real and 100% verifiable on-chain. See
-          the evidence of OUSD’s consistent performance over the past X days.
-        </Typography.Body2>
-        <footer>
-          <a
-            href="https://www.ousd.com/ogv-dashboard"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Button
-              append={
-                <Image
-                  src="/images/ext-link-white.svg"
-                  height={16}
-                  width={16}
-                  alt="External link icon"
-                />
-              }
-            >
-              <Typography.Body2>View OETH Proof of Yield</Typography.Body2>
-            </Button>
-          </a>
-        </footer>
-      </div>
-    </LayoutBox>
-  );
-};
-
 const AnalyticsStrategies = ({ protocols, total }) => {
   return (
     <ErrorBoundary>
@@ -128,9 +92,6 @@ const AnalyticsStrategies = ({ protocols, total }) => {
             </LayoutBox>
           );
         })}
-        {/*<div className="col-span-12">*/}
-        {/*  <LookingForYield />*/}
-        {/*</div>*/}
       </div>
     </ErrorBoundary>
   );

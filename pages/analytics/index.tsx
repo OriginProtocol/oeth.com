@@ -30,7 +30,6 @@ import { useAPYChart } from "../../hooks/analytics/useAPYChart";
 import { useTotalSupplyChart } from "../../hooks/analytics/useTotalSupplyChart";
 import { fetchAllocation, fetchCollateral } from "../../utils/api";
 import { useMemo } from "react";
-import { tokenColors } from "../../constants";
 
 ChartJS.register(
   CategoryScale,

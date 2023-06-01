@@ -4,6 +4,11 @@ import { ChartOptions } from "chart.js";
 import { slice } from "lodash";
 
 export const backingTokens = {
+  OETH: {
+    label: "OETH",
+    logoSrc: "/images/oeth-icon.svg",
+    color: "#3390f3",
+  },
   ETH: {
     label: "ETH",
     logoSrc: "/images/eth-icon.svg",

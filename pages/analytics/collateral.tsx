@@ -1,12 +1,10 @@
-import React, { useMemo, useState } from "react";
-import { useQuery } from "react-query";
+import React from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { Typography } from "@originprotocol/origin-storybook";
 import { GetServerSideProps } from "next";
 import classnames from "classnames";
-import { last, map } from "lodash";
-import { Bar } from "react-chartjs-2";
+import { map } from "lodash";
 import { orderBy } from "lodash";
 import {
   BarElement,
@@ -20,19 +18,13 @@ import {
   Image,
   TwoColumnLayout,
 } from "../../components";
-import { DurationFilter } from "../../components/analytics";
-import {
-  aggregateCollateral,
-  backingTokens,
-  createGradient,
-} from "../../utils/analytics";
+import { aggregateCollateral, backingTokens } from "../../utils/analytics";
 import { fetchAllocation, fetchCollateral } from "../../utils/api";
 import { formatCurrency } from "../../utils/math";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
 const CollateralAggregate = ({ data = [] }) => {
-  console.log(data);
   return (
     <div className="flex flex-col md:flex-row gap-1 items-center w-full">
       {data.map(({ label, logoSrc, percentage, total }, index) => (
@@ -65,195 +57,57 @@ const CollateralAggregate = ({ data = [] }) => {
   );
 };
 
-const CollateralChart = () => {
-  const { data, isFetching } = useQuery("/api/analytics/charts/totalSupply", {
-    initialData: {
-      labels: [],
-      datasets: [],
-    },
-    refetchOnWindowFocus: false,
-    keepPreviousData: true,
-  });
-
-  const [chartState, setChartState] = useState({
-    duration: "all",
-    typeOf: "total",
-  });
-
-  const chartData = useMemo(() => {
-    return {
-      labels: data?.labels,
-      datasets: data?.datasets?.reduce((acc, dataset) => {
-        if (!chartState?.typeOf || dataset.id === chartState?.typeOf) {
-          acc.push({
-            ...dataset,
-            borderWidth: 0,
-            backgroundColor: createGradient(["#8C66FC", "#0274F1"]),
-            fill: true,
-          });
-        }
-        return acc;
-      }, []),
-    };
-  }, [JSON.stringify(data), chartState?.duration, chartState?.typeOf]);
-
-  const labels = [];
-
-  return (
-    <LayoutBox
-      loadingClassName="flex items-center justify-center h-[370px] w-full"
-      isLoading={isFetching}
-    >
-      <div className="flex flex-row justify-between w-full h-[210px] p-4 md:p-6">
-        <div className="flex flex-col w-full h-full">
-          <Typography.Caption className="text-subheading">
-            Collateral
-          </Typography.Caption>
-          <div className="flex flex-col text-sm my-2 space-y-1">
-            <div className="flex flex-row items-center space-x-2">
-              <div className="w-[6px] h-[6px] bg-[#FBC247] rounded-full" />
-              <Typography.Caption className="text-subheading">
-                DAI
-              </Typography.Caption>
-              <Typography.Caption>$14,380,104</Typography.Caption>
-              <Typography.Caption className="text-subheading pl-2">
-                26.38%
-              </Typography.Caption>
-            </div>
-            <div className="flex flex-row items-center space-x-2">
-              <div className="w-[6px] h-[6px] bg-gradient2 rounded-full" />
-              <Typography.Caption className="text-subheading">
-                USDC
-              </Typography.Caption>
-              <Typography.Caption>$14,380,104</Typography.Caption>
-              <Typography.Caption className="text-subheading pl-2">
-                26.38%
-              </Typography.Caption>
-            </div>
-            <div className="flex flex-row items-center space-x-2">
-              <div className="w-[6px] h-[6px] bg-gradient2 rounded-full" />
-              <Typography.Caption className="text-subheading">
-                USDT
-              </Typography.Caption>
-              <Typography.Caption>$14,380,104</Typography.Caption>
-              <Typography.Caption className="text-subheading pl-2">
-                26.38%
-              </Typography.Caption>
-            </div>
-          </div>
-          <Typography.Caption className="text-subheading">
-            {last(chartData?.labels)}
-          </Typography.Caption>
-        </div>
-        <div className="flex flex-col space-y-2">
-          <DurationFilter
-            value={chartState?.duration}
-            onChange={(duration) => {
-              setChartState((prev) => ({
-                ...prev,
-                duration: duration || "all",
-              }));
-            }}
-          />
-        </div>
-      </div>
-      <div className="mr-6">
-        <Bar
-          options={{
-            plugins: {
-              title: {
-                display: true,
-              },
-            },
-            responsive: true,
-            scales: {
-              x: {
-                stacked: true,
-              },
-              y: {
-                stacked: true,
-              },
-            },
-          }}
-          data={{
-            labels,
-            datasets: [
-              {
-                label: "Dataset 1",
-                data: labels.map(() => Math.random() * 1000),
-                backgroundColor: "rgb(255, 99, 132)",
-              },
-              {
-                label: "Dataset 2",
-                data: labels.map(() => Math.random() * 1000),
-                backgroundColor: "rgb(75, 192, 192)",
-              },
-              {
-                label: "Dataset 3",
-                data: labels.map(() => Math.random() * 1000),
-                backgroundColor: "rgb(53, 162, 235)",
-              },
-            ],
-          }}
-        />
-      </div>
-    </LayoutBox>
-  );
-};
-
 const CollateralPoolDistributions = ({ data = [] }) => {
   return (
     <div className="flex flex-col space-y-6">
       <Typography.Body3>Collateral Distribution</Typography.Body3>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-        {data?.map(
-          ({ name, address, icon_file: iconFilename, total, holdings }) => (
-            <LayoutBox key={name}>
-              <div className="flex flex-col w-full h-full p-6">
-                <Typography.Body3>{name}</Typography.Body3>
-                <Typography.Caption2 className="text-subheading">
-                  Collateral
-                </Typography.Caption2>
-                <div className="flex flex-wrap w-full h-full gap-4 py-4">
-                  {map(holdings, (holdingTotal, token) =>
-                    backingTokens[token] ? (
-                      <div
-                        key={token}
-                        className="flex flex-row space-x-3 items-center h-[40px] w-[150px]"
-                      >
-                        <Image
-                          src={backingTokens[token]?.logoSrc}
-                          width={28}
-                          height={28}
-                          alt={token}
-                        />
-                        <div className="flex flex-col">
-                          <Typography.Caption>{token}</Typography.Caption>
-                          <Link
-                            href={`https://etherscan.io/address/${address}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex flex-row space-x-1 items-center w-full"
-                          >
-                            <Typography.Caption className="text-subheading">
-                              {`Ξ ${formatCurrency(holdingTotal, 2)}`}
-                            </Typography.Caption>
-                            <Image
-                              src="/images/link.svg"
-                              width="12"
-                              height="12"
-                              alt="External link"
-                            />
-                          </Link>
-                        </div>
+        {data?.map(({ name, address, holdings }) => (
+          <LayoutBox key={name}>
+            <div className="flex flex-col w-full h-full p-6">
+              <Typography.Body3>{name}</Typography.Body3>
+              <Typography.Caption2 className="text-subheading">
+                Collateral
+              </Typography.Caption2>
+              <div className="flex flex-wrap w-full gap-4 py-4">
+                {map(holdings, (holdingTotal, token) =>
+                  backingTokens[token] ? (
+                    <div
+                      key={token}
+                      className="flex flex-row space-x-3 items-center h-[40px] w-[150px]"
+                    >
+                      <Image
+                        src={backingTokens[token]?.logoSrc}
+                        width={28}
+                        height={28}
+                        alt={token}
+                      />
+                      <div className="flex flex-col">
+                        <Typography.Caption>{token}</Typography.Caption>
+                        <Link
+                          href={`https://etherscan.io/address/${address}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex flex-row space-x-1 items-center w-full"
+                        >
+                          <Typography.Caption className="text-subheading">
+                            {`Ξ ${formatCurrency(holdingTotal, 2)}`}
+                          </Typography.Caption>
+                          <Image
+                            src="/images/link.svg"
+                            width="12"
+                            height="12"
+                            alt="External link"
+                          />
+                        </Link>
                       </div>
-                    ) : null
-                  )}
-                </div>
+                    </div>
+                  ) : null
+                )}
               </div>
-            </LayoutBox>
-          )
-        )}
+            </div>
+          </LayoutBox>
+        ))}
       </div>
     </div>
   );
@@ -270,9 +124,6 @@ const AnalyticsCollateral = ({ strategies, collateral }) => {
         <div className="col-span-12">
           <CollateralAggregate data={collateral} />
         </div>
-        {/*<div className="col-span-12">*/}
-        {/*  <CollateralChart />*/}
-        {/*</div>*/}
         <div className="col-span-12">
           <CollateralPoolDistributions data={strategies} />
         </div>

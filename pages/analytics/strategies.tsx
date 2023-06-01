@@ -1,3 +1,5 @@
+import React from "react";
+import classnames from "classnames";
 import Head from "next/head";
 import Image from "next/image";
 import { GetServerSideProps } from "next";
@@ -13,8 +15,6 @@ import {
 import { fetchAllocation } from "../../utils/api";
 import { strategyMapping, protocolMapping } from "../../constants";
 import { formatCurrency } from "../../utils/math";
-import React from "react";
-import classnames from "classnames";
 
 const YieldSourceBreakdown = ({ data, total }) => (
   <div className="flex flex-col lg:flex-row flex-wrap lg:items-center gap-0 lg:gap-4">

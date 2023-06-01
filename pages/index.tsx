@@ -179,9 +179,11 @@ export async function getStaticProps() {
   delete strategies["vault_holding"].holdings["STETH"];
   delete strategies["vault_holding"].holdings_value["STETH"];
 
+  const audits = (auditsRes.data as Audit[]).sort((a, b) => a.id - b.id) || [];
+
   return {
     props: {
-      audits: auditsRes.data,
+      audits,
       apy,
       tvl: allocation.total_supply,
       tvlUsd: allocation.total_value_usd,

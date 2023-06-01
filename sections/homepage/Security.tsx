@@ -65,7 +65,7 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
                       />
                     </div>
                   </div>
-                  <Typography.Body className="mt-4 text-sm text-subheading">
+                  <Typography.Body className="mt-4 text-sm md:text-sm text-subheading">
                     {audit.attributes.name}
                   </Typography.Body>
                 </Link>

@@ -36,16 +36,22 @@ const CollateralAggregate = ({ data = [] }) => {
             "rounded-tl-none rounded-bl-none": index === data.length - 1,
           })}
         >
-          <div className="flex flex-row w-full h-[110px] md:h-[150px] items-center space-x-6 px-6">
-            <Image src={logoSrc} width={48} height={48} alt={label} />
+          <div className="flex flex-row w-full h-[110px] md:h-[150px] items-center space-x-3 px-6">
+            <Image
+              className="flex flex-shrink-0"
+              src={logoSrc}
+              width={42}
+              height={42}
+              alt={label}
+            />
             <div className="flex flex-col space-y-1">
-              <Typography.Caption className="text-subheading">
+              <Typography.Caption2 className="text-subheading">
                 {label}
-              </Typography.Caption>
-              <Typography.Body>{`Ξ ${formatCurrency(
+              </Typography.Caption2>
+              <Typography.Body2 className="flex flex-row">{`Ξ ${formatCurrency(
                 total,
                 2
-              )}`}</Typography.Body>
+              )}`}</Typography.Body2>
               <Typography.Caption className="text-subheading">
                 {formatCurrency(percentage * 100, 2)}%
               </Typography.Caption>

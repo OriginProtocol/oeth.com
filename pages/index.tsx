@@ -94,11 +94,7 @@ const IndexPage = ({
         collateral={collateral}
       />
 
-      {process.env.NEXT_PUBLIC_UNREADY_COMPONENTS && (
-        <>
-          <Security audits={audits} />
-        </>
-      )}
+      <Security audits={audits} />
 
       <SecretSauce />
 

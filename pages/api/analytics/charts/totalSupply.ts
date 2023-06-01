@@ -14,7 +14,7 @@ export const getTotalSupply = async () => {
       _7_day_total_supply: "_7_day",
       _14_day_total_supply: "_14_day",
       _30_day_total_supply: "_30_day",
-      totalSupply: "total",
+      total_supply: "total",
       block_date: "labels",
     });
 

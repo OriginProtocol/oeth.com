@@ -29,12 +29,12 @@ import {
 import { fetchAllocation, fetchCollateral } from "../../utils/api";
 import {
   formatCurrency,
-  formatCurrencyAbbreviated,
 } from "../../utils/math";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
 const CollateralAggregate = ({ data = [] }) => {
+  console.log(data);
   return (
     <div className="flex flex-col md:flex-row gap-1 items-center w-full">
       {data.map(({ label, logoSrc, percentage, total }, index) => (
@@ -52,7 +52,7 @@ const CollateralAggregate = ({ data = [] }) => {
               <Typography.Caption className="text-subheading">
                 {label}
               </Typography.Caption>
-              <Typography.Body>${formatCurrency(total, 2)}</Typography.Body>
+              <Typography.Body>{`Ξ ${formatCurrency(total, 2)}`}</Typography.Body>
               <Typography.Caption className="text-subheading">
                 {formatCurrency(percentage * 100, 2)}%
               </Typography.Caption>
@@ -162,7 +162,6 @@ const CollateralChart = () => {
             plugins: {
               title: {
                 display: true,
-                text: "Chart.js Bar Chart - Stacked",
               },
             },
             responsive: true,
@@ -219,7 +218,7 @@ const CollateralPoolDistributions = ({ data = [] }) => {
                     backingTokens[token] ? (
                       <div
                         key={token}
-                        className="flex flex-row space-x-3 items-center w-[120px]"
+                        className="flex flex-row space-x-3 items-center h-[40px] w-[150px]"
                       >
                         <Image
                           src={backingTokens[token]?.logoSrc}
@@ -233,10 +232,10 @@ const CollateralPoolDistributions = ({ data = [] }) => {
                             href={`https://etherscan.io/address/${address}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex flex-row space-x-1 items-center"
+                            className="flex flex-row space-x-1 items-center w-full"
                           >
                             <Typography.Caption className="text-subheading">
-                              ${formatCurrencyAbbreviated(holdingTotal, 2)}
+                              {`Ξ ${formatCurrency(holdingTotal, 2)}`}
                             </Typography.Caption>
                             <Image
                               src="/images/link.svg"
@@ -288,6 +287,7 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<{
     fetchAllocation(),
     fetchCollateral(),
   ]);
+
   return {
     props: {
       strategies: orderBy(allocation?.strategies, "total", "desc"),

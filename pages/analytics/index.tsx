@@ -34,6 +34,7 @@ import { useAPYChart } from "../../hooks/analytics/useAPYChart";
 import { useTotalSupplyChart } from "../../hooks/analytics/useTotalSupplyChart";
 import { fetchAllocation, fetchCollateral } from "../../utils/api";
 import { useMemo } from "react";
+import {tokenColors} from "../../constants";
 
 ChartJS.register(
   CategoryScale,
@@ -110,7 +111,7 @@ const TotalSupplyChartContainer = () => {
             </Typography.Caption>
             <Typography.H4>{`Ξ ${formatCurrency(
               last(data?.datasets?.[0]?.data) || 0,
-              6
+              4
             )}`}</Typography.H4>
             <div className="flex flex-col text-sm mb-2">
               <div className="flex flex-row items-center space-x-2">
@@ -143,7 +144,7 @@ const TotalSupplyChartContainer = () => {
   );
 };
 
-const CurrentCollateralContainer = ({ data }) => {
+const CurrentCollateralContainer = ({ data, tvl, tvlUsd }) => {
   const chartData = useMemo(() => {
     return {
       labels: data.map((item) => item.label),
@@ -169,7 +170,7 @@ const CurrentCollateralContainer = ({ data }) => {
   return data ? (
     <LayoutBox
       className="min-h-[370px]"
-      loadingClassName="flex items-center justify-center w-full h-[370px]"
+      loadingClassName="flex items-center justify-center w-full h-[470px]"
     >
       <ErrorBoundary>
         <div className="flex flex-row justify-between w-full h-[80px] p-4 md:p-6">
@@ -179,8 +180,8 @@ const CurrentCollateralContainer = ({ data }) => {
             </Typography.Caption>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-4 w-full pb-4">
-          <div className="flex flex-col items-center justify-center flex-shrink-0 w-full h-[350px] px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full pb-4">
+          <div className="flex flex-col items-center justify-center flex-shrink-0 w-full h-[450px] px-6">
             <Doughnut
               options={{
                 responsive: true,
@@ -200,7 +201,7 @@ const CurrentCollateralContainer = ({ data }) => {
               data={chartData}
             />
           </div>
-          <div className="flex flex-col flex-shrink-0 w-full h-full space-y-4 px-6">
+          <div className="flex flex-col flex-shrink-0 w-full h-full space-y-2 px-6">
             {data.map(({ label, color, total }) => (
               <div
                 key={label}
@@ -219,7 +220,7 @@ const CurrentCollateralContainer = ({ data }) => {
                       {formatPercentage(total / totalSum)}
                     </Typography.Caption>
                     <Typography.Caption className="text-subheading">
-                      ${formatCurrency(total, 2)}
+                      Ξ {formatCurrency(total, 2)}
                     </Typography.Caption>
                   </div>
                 </div>
@@ -232,7 +233,7 @@ const CurrentCollateralContainer = ({ data }) => {
   ) : null;
 };
 
-const Analytics = ({ collateral }) => {
+const Analytics = ({ collateral, tvl, tvlUsd }) => {
   return (
     <ErrorBoundary>
       <Head>
@@ -245,8 +246,8 @@ const Analytics = ({ collateral }) => {
         <div className="col-span-12">
           <TotalSupplyChartContainer />
         </div>
-        <div className="col-span-12 2xl:col-span-6">
-          <CurrentCollateralContainer data={collateral} />
+        <div className="col-span-12">
+          <CurrentCollateralContainer data={collateral} tvl={tvl} tvlUsd={tvlUsd} />
         </div>
       </div>
     </ErrorBoundary>
@@ -262,6 +263,8 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<{
   ]);
   return {
     props: {
+      tvl: allocation.total_supply,
+      tvlUsd: allocation.total_value_usd,
       collateral: orderBy(
         aggregateCollateral({ collateral, allocation }),
         "total",

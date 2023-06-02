@@ -221,7 +221,11 @@ const Ogv = ({ stats }: OgvProps) => {
                   className="bg-white py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
                   elementId="btn-ogv-earn"
                   onClick={() =>
-                    window.open("https://governance.ousd.com/stake", "_blank")
+                    window.open(
+                      "https://governance.ousd.com/stake",
+                      "_blank",
+                      "noopener,noreferrer"
+                    )
                   }
                 >
                   <Typography.H7 className="font-normal text-black rounded-full">

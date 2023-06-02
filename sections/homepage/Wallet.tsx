@@ -60,7 +60,13 @@ const OethList = ({
         ))}
       </ul>
       <GradientButton
-        onClick={() => window.open(process.env.NEXT_PUBLIC_DOCS_URL, "_blank")}
+        onClick={() =>
+          window.open(
+            process.env.NEXT_PUBLIC_DOCS_URL,
+            "_blank",
+            "noopener,noreferrer"
+          )
+        }
         outerDivClassName="mt-10 w-full md:w-fit"
         className="bg-origin-bg-dgrey w-full md:w-fit"
         elementId="btn-wallet-docs"

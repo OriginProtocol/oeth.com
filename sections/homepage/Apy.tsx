@@ -186,7 +186,11 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
             className="bg-transparent py-[14px] md:py-5 md:px-20 lg:px-20 hover:bg-transparent"
             elementId="btn-apy-app"
             onClick={() =>
-              window.open(process.env.NEXT_PUBLIC_DAPP_URL, "_blank")
+              window.open(
+                process.env.NEXT_PUBLIC_DAPP_URL,
+                "_blank",
+                "noopener,noreferrer"
+              )
             }
           >
             <Typography.H7 className="font-normal">

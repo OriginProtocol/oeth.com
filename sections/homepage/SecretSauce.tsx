@@ -131,7 +131,8 @@ function SecretSauce() {
           onClick={() =>
             window.open(
               "https://docs.ousd.com/core-concepts/elastic-supply/rebasing-and-smart-contracts",
-              "_blank"
+              "_blank",
+              "noopener,noreferrer"
             )
           }
         >

@@ -121,7 +121,8 @@ export default function Footer() {
                     onClick={() =>
                       window.open(
                         `${process.env.NEXT_PUBLIC_DAPP_URL}`,
-                        "_blank"
+                        "_blank",
+                        "nopener,noreferrer"
                       )
                     }
                   >

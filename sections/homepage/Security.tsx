@@ -110,7 +110,8 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
           onClick={() =>
             window.open(
               "https://docs.oeth.com/security-and-risks/audits",
-              "_blank"
+              "_blank",
+              "noopener,noreferrer"
             )
           }
         >

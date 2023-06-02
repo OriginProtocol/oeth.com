@@ -267,7 +267,8 @@ const Allocation = ({ strategies }: AllocationProps) => {
               onClick={() =>
                 window.open(
                   " https://docs.oeth.com/core-concepts/yield-generation",
-                  "_blank"
+                  "_blank",
+                  "noopener,noreferrer"
                 )
               }
             >

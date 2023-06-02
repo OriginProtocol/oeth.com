@@ -39,18 +39,18 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
           subtitle="Changes to the protocol are reviewed by internal and external auditors on an ongoing basis."
           className="flex-1 md:mr-6"
         >
-          <div className="grid grid-rows-2 grid-cols-2 gap-y-10 lg:flex lg:flex-row lg:justify-between mx-auto">
+          <div className="grid grid-cols-2 gap-y-10 lg:flex lg:flex-row lg:justify-between mx-auto">
             {audits.map((audit, i) => {
               return (
                 <Link
-                  className="mx-auto"
+                  className="mx-auto flex justify-center items-center flex-col"
                   href={audit.attributes.auditUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   key={i}
                 >
-                  <div className="relative rounded-full w-[140px] h-[140px] md:w-[200px] md:h-[200px] lg:w-[130px] lg:h-[130px] xl:w-[170px] xl:h-[170px] 2xl:w-[200px] 2xl:h-[200px] bg-origin-bg-black">
-                    <div className="h-[56px] md:h-[80px] lg:h-[56px] 2xl:h-[80px] absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+                  <div className="relative rounded-full w-[104px] h-[104px] md:w-[72px] md:h-[72px] bg-origin-bg-black">
+                    <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
                       <Image
                         src={assetRootPath(
                           `/images/${audit.attributes.name
@@ -58,15 +58,14 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
                             .toLowerCase()}.svg`
                         )}
                         width={
-                          audit.attributes.name === "Trail of Bits" ? 84 : 56
+                          audit.attributes.name === "OpenZeppelin" ? 27 : 56
                         }
                         height={56}
-                        sizes="(max-width: 768px) 56px, (max-width: 1024px) 80px, (max-width: 1536px) 56px, 80px"
                         alt={audit.attributes.name}
                       />
                     </div>
                   </div>
-                  <Typography.Body className="mt-[8px] md:mt-6 opacity-75">
+                  <Typography.Body className="mt-4 text-sm md:text-sm text-subheading">
                     {audit.attributes.name}
                   </Typography.Body>
                 </Link>
@@ -110,7 +109,7 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
           elementId="btn-security-docs"
           onClick={() =>
             window.open(
-              "https://docs.ousd.com/security-and-risks/audits",
+              "https://docs.oeth.com/security-and-risks/audits",
               "_blank",
               "noopener,noreferrer"
             )

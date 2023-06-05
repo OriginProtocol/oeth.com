@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { useMemo, useState } from "react";
 import { isMobile } from "react-device-detect";
 import {
-  borderFormatting,
+  barFormatting,
   filterByDuration,
   formatDisplay,
 } from "../../utils/analytics";
@@ -36,7 +36,7 @@ export const useProtocolRevenueChart = () => {
         if (!chartState?.typeOf || dataset.id === chartState?.typeOf) {
           acc.push({
             ...dataset,
-            ...borderFormatting,
+            ...barFormatting,
           });
         }
         return acc;
@@ -101,7 +101,7 @@ export const useProtocolRevenueChart = () => {
               padding: 20,
               callback: function (val, index) {
                 return (
-                  isMobile ? (index + 22) % 28 === 0 : (index + 8) % 14 === 0
+                  isMobile ? (index + 22) % 28 === 0 : (index + 2) % 5 === 0
                 )
                   ? this.getLabelForValue(val)
                   : null;

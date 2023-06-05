@@ -35,10 +35,14 @@ const ProtocolRevenueDetails = ({ breakdowns, isFetching }) => {
               <Typography.Body2 className="relative text-subheading">
                 {label}
                 {percentageDiff && (
-                  <span className="text-white">{<span></span>}</span>
+                  <span className="text-white">
+                    {<span>{percentageDiff}</span>}
+                  </span>
                 )}
               </Typography.Body2>
-              <Typography.H7>{display}</Typography.H7>
+              <Typography.H7>
+                {display} <span className="text-base font-medium">OETH</span>
+              </Typography.H7>
             </div>
           </div>
         </LayoutBox>
@@ -98,17 +102,17 @@ const AnalyticsProtocolRevenue = () => {
     return [
       {
         label: "24H revenue",
-        display: `Ξ ${formatCurrency(dailyRevenue, 6)}`,
+        display: `Ξ ${formatCurrency(dailyRevenue, 4)}`,
         value: dailyRevenue,
       },
       {
         label: "7D revenue",
-        display: `Ξ ${formatCurrency(weeklyRevenue, 6)}`,
+        display: `Ξ ${formatCurrency(weeklyRevenue, 4)}`,
         value: weeklyRevenue,
       },
       {
-        label: "Total revenue",
-        display: `Ξ ${formatCurrency(allTimeRevenue, 6)}`,
+        label: "All time revenue",
+        display: `Ξ ${formatCurrency(allTimeRevenue, 4)}`,
         value: allTimeRevenue,
       },
     ];

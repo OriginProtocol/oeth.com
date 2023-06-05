@@ -26,33 +26,26 @@ ChartJS.register(CategoryScale, LinearScale, BarElement);
 
 const CollateralAggregate = ({ data = [] }) => {
   return (
-    <div className="flex flex-col md:flex-row gap-1 items-center w-full">
+    <div className="flex flex-col grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 items-center w-full">
       {data.map(({ label, logoSrc, percentage, total }, index) => (
-        <LayoutBox
-          key={label}
-          className={classnames({
-            "rounded-tr-none rounded-br-none w-full h-full": index === 0,
-            "rounded-none": index > 0 && index !== data.length - 1, // middle sections
-            "rounded-tl-none rounded-bl-none": index === data.length - 1,
-          })}
-        >
-          <div className="flex flex-row w-full h-[110px] md:h-[150px] items-center space-x-3 px-6">
+        <LayoutBox key={label} className="flex flex-shrink-0 w-full">
+          <div className="flex flex-row w-full h-[150px] md:h-[150px] items-center px-6">
             <Image
-              className="flex flex-shrink-0"
+              className="flex flex-shrink-0 mr-3"
               src={logoSrc}
               width={42}
               height={42}
               alt={label}
             />
             <div className="flex flex-col space-y-1">
-              <Typography.Caption2 className="text-subheading">
+              <Typography.Caption2 className="text-subheading text-base">
                 {label}
               </Typography.Caption2>
-              <Typography.Body2 className="flex flex-row">{`Ξ ${formatCurrency(
+              <Typography.Body2 className="flex flex-row text-2xl">{`Ξ ${formatCurrency(
                 total,
                 2
               )}`}</Typography.Body2>
-              <Typography.Caption className="text-subheading">
+              <Typography.Caption className="text-xl text-subheading">
                 {formatCurrency(percentage * 100, 2)}%
               </Typography.Caption>
             </div>
@@ -67,7 +60,7 @@ const CollateralPoolDistributions = ({ data = [] }) => {
   return (
     <div className="flex flex-col space-y-6">
       <Typography.Body3>Collateral Distribution</Typography.Body3>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 3xl:grid-cols-4 gap-1">
         {data?.map(({ name, address, holdings }) => (
           <LayoutBox key={name}>
             <div className="flex flex-col w-full h-full p-6">
@@ -80,7 +73,7 @@ const CollateralPoolDistributions = ({ data = [] }) => {
                   backingTokens[token] ? (
                     <div
                       key={token}
-                      className="flex flex-row space-x-3 items-center h-[40px] w-[150px]"
+                      className="flex flex-row space-x-3 items-center h-[40px] w-[135px]"
                     >
                       <Image
                         src={backingTokens[token]?.logoSrc}

@@ -101,12 +101,12 @@ const TotalSupplyChartContainer = () => {
       <ErrorBoundary>
         <div className="flex flex-row justify-between w-full h-[210px] p-4 md:p-6">
           <div className="flex flex-col w-full h-full">
-            <Typography.Caption className="text-subheading">
+            <Typography.Caption className="text-subheading text-base">
               Total Supply
             </Typography.Caption>
             <Typography.H4>{`Ξ ${formatCurrency(
               last(data?.datasets?.[0]?.data) || 0,
-              4
+              2
             )}`}</Typography.H4>
             <div className="flex flex-col text-sm mb-2">
               <div className="flex flex-row items-center space-x-2">

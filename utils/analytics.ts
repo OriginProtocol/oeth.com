@@ -101,6 +101,10 @@ export const createGradient =
     return gradient;
   };
 
+export const barFormatting = {
+  backgroundColor: createGradient(["#426EF7", "#426EF7"]),
+};
+
 export const borderFormatting = {
   borderColor: createGradient(["#FEDBA8", "#CF75D5"]),
   borderWidth: 2,
@@ -175,11 +179,6 @@ export const chartOptions: ChartOptions<"line"> = {
 };
 
 export const aggregateCollateral = ({ collateral, allocation }) => {
-  console.log({
-    collateral,
-    strategies: allocation.strategies,
-  });
-
   const aggregateTotal = collateral?.reduce((t, s) => ({
     total: Number(t?.total || 0) + Number(s?.total || 0),
   })).total;

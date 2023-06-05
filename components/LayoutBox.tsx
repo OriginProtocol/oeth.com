@@ -9,14 +9,14 @@ const LayoutBox = ({
 }) => (
   <div
     className={cx(
-      "relative flex flex-col w-full h-full bg-origin-bg-grey rounded-md",
+      "relative flex flex-col w-full h-full bg-origin-bg-grey",
       className
     )}
   >
     {isLoading && (
       <div
         className={cx(
-          "flex items-center justify-center rounded-md absolute z-[2] left-0 top-0 w-full h-full bg-black bg-opacity-20",
+          "flex items-center justify-center absolute z-[2] left-0 top-0 w-full h-full bg-black bg-opacity-20",
           loadingClassName
         )}
       >

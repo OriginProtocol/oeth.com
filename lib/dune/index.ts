@@ -13,7 +13,7 @@ console.debug = function () {};
 
 export const jobsLookup = {
   apy: {
-    queryId: 2520876,
+    queryId: 2611997,
     expiresAfter: 86400,
   },
   totalSupplyOETH: {

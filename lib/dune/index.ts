@@ -21,7 +21,7 @@ export const jobsLookup = {
     expiresAfter: 86400,
   },
   protocolRevenue: {
-    queryId: 2520880,
+    queryId: 2612143,
     expiresAfter: 86400,
   },
   totalSupplyBreakdown: {

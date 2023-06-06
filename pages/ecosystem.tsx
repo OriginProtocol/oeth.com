@@ -29,10 +29,10 @@ const Ecosystem = ({ seo, navLinks, partners }) => {
   return (
     <>
       <Head>
-        <title>Partners</title>
+        <title>Ecosystem</title>
       </Head>
       <Seo seo={seo} />
-      <section className="partners black">
+      <section className="ecosystem black">
         <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
         <div className="px-8 md:px-16 lg:px-[134px] pb-[132px] text-left">
           <div className="max-w-[1432px] mx-auto mt-5 md:mt-16">

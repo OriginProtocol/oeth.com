@@ -99,7 +99,7 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
                 className="border-r-0 rounded-l-lg"
                 title="APY"
                 value={`${(apy * 100).toFixed(2)}%`}
-                subtext="Trailing 7-day"
+                subtext="Trailing 30-day"
               />
               <HeroData
                 className="rounded-r-lg"

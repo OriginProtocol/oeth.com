@@ -32,7 +32,7 @@ const protocolMapping = {
     color: "#9bc3e9",
     image: "/images/morpho-strategy.svg",
     description:
-      "Morpho adds a peer-to-peer layer on top of Compound and Aave allowing lenders and borrowers to be matched more efficiently with better interest rates. When no matching opportunity exists, funds flow directly through to the underlying protocol.",
+      "Morpho adds a peer-to-peer layer on top of Compound and Aave allowing lenders and borrowers to be matched more efficiently with better interest rates. When no matching opportunity exists, funds flow directly through to the underlying protocol. OETH supplies WETH to Morpho’s Aave V2 market to earn interest. Additional value is generated from protocol MORPHO token emissions (currently locked).",
   },
 };
 

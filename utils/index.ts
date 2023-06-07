@@ -7,6 +7,7 @@ export { default as createGradient } from "./createGradient";
 export { default as tailwindConfig } from "./tailwindConfig";
 export { default as createTooltip } from "./createTooltip";
 export { default as forwardMouseEvent } from "./forwardMouseEvent";
+export { default as shortenAddress } from "./shortenAddress";
 
 export * from "./api";
 export * from "./contracts";

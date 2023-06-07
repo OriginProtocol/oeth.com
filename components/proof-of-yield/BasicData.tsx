@@ -5,13 +5,13 @@ import TitleWithInfo from "./TitleWithInfo";
 
 interface BasicDataProps {
   title: string;
-  info?: boolean;
+  info?: string;
   className?: string;
 }
 
 const BasicData = ({
   title,
-  info = true,
+  info,
   className,
   children,
 }: PropsWithChildren<BasicDataProps>) => {
@@ -24,7 +24,7 @@ const BasicData = ({
     >
       <div>
         {info ? (
-          <TitleWithInfo>{title}</TitleWithInfo>
+          <TitleWithInfo info={info}>{title}</TitleWithInfo>
         ) : (
           <Typography.Body2 className="text-xs md:text-base text-table-title">
             {title}

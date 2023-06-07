@@ -75,7 +75,7 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
         {moment(timestamp).format("MMM D, YYYY")} UTC
       </Typography.Body>
 
-      <TitleWithInfo className="mt-4 md:mt-10 mb-2 md:mb-4">
+      <TitleWithInfo info="" className="mt-4 md:mt-10 mb-2 md:mb-4">
         Yield distributed
       </TitleWithInfo>
 
@@ -167,7 +167,7 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
                       Amount / Action
                     </TableHead>
                   )}
-                  <TableHead info={true} className={eventChartColumnCssRight}>
+                  <TableHead info="asd" className={eventChartColumnCssRight}>
                     Fees
                   </TableHead>
                   <TableHead className={eventChartColumnCssRight}>

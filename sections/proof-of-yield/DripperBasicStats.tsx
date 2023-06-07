@@ -35,21 +35,21 @@ const DripperBasicStats = ({ overrideCss }: DripperBasicStats) => {
         <BasicData
           className="rounded-l-lg flex-1 justify-center lg:justify-start"
           title="Per day"
-          info={false}
+          info="asds"
         >
           ${commify(1529)}
         </BasicData>
         <BasicData
           className="flex-1 justify-center lg:justify-start"
           title="Per hour"
-          info={false}
+          info="asd"
         >
           ${commify(63.71)}
         </BasicData>
         <BasicData
           className="rounded-r-lg flex-1 justify-center lg:justify-start"
           title="Per minute"
-          info={false}
+          info="asds"
         >
           ${commify(1.0618)}
         </BasicData>

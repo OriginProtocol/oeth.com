@@ -35,7 +35,7 @@ const DayOtherSources = ({ sectionOverrideCss }: DayOtherSourcesProps) => {
             <TableHead align="left" className="pl-4 md:pl-8 w-auto">
               Other Sources
             </TableHead>
-            <TableHead info={true} className="pr-6 md:pr-24 whitespace-normal">
+            <TableHead info="asd" className="pr-6 md:pr-24 whitespace-normal">
               Yield / <br />{" "}
               <span className="whitespace-nowrap">% of total</span>
             </TableHead>

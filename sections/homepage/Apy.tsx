@@ -22,15 +22,7 @@ interface ApyProps {
 
 const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
   const [loaded, setLoaded] = useState(false);
-  const [apyDays, setApyDays] = useState(
-    process.browser &&
-      localStorage.getItem("last_user_selected_apy") !== null &&
-      apyDayOptions.includes(
-        Number(localStorage.getItem("last_user_selected_apy"))
-      )
-      ? Number(localStorage.getItem("last_user_selected_apy"))
-      : 7
-  );
+  const [apyDays, setApyDays] = useState(30);
 
   const apyHistoryQuery = useApyHistoryQuery(apyData);
 

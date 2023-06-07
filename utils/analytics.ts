@@ -150,7 +150,7 @@ export const chartOptions: ChartOptions<"line"> = {
         minRotation: 0,
         padding: 20,
         callback: function (val, index) {
-          return (isMobile ? (index + 22) % 28 === 0 : (index + 8) % 14 === 0)
+          return (isMobile ? (index + 22) % 14 === 0 : (index + 8) % 7 === 0)
             ? this.getLabelForValue(Number(val))
             : null;
         },

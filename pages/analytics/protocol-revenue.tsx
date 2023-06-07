@@ -66,7 +66,7 @@ const ProtocolChart = ({
       <div className="flex flex-row justify-between w-full h-[150px] p-4 md:p-6">
         <DefaultChartHeader
           title="Daily Protocol Revenue"
-          display={`Ξ ${formatCurrency(last(data?.datasets?.[0]?.data), 6)}`}
+          display={`${formatCurrency(last(data?.datasets?.[0]?.data), 6)}`}
           date={last(data?.labels)}
         />
         <div className="flex flex-col space-y-2">
@@ -102,17 +102,17 @@ const AnalyticsProtocolRevenue = () => {
     return [
       {
         label: "24H revenue",
-        display: `Ξ ${formatCurrency(dailyRevenue, 4)}`,
+        display: `${formatCurrency(dailyRevenue, 4)}`,
         value: dailyRevenue,
       },
       {
         label: "7D revenue",
-        display: `Ξ ${formatCurrency(weeklyRevenue, 4)}`,
+        display: `${formatCurrency(weeklyRevenue, 4)}`,
         value: weeklyRevenue,
       },
       {
         label: "All time revenue",
-        display: `Ξ ${formatCurrency(allTimeRevenue, 4)}`,
+        display: `${formatCurrency(allTimeRevenue, 4)}`,
         value: allTimeRevenue,
       },
     ];

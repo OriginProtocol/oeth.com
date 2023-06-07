@@ -72,7 +72,7 @@ const AnalyticsStrategies = ({ protocols, total }) => {
                   </div>
                   <div className="flex flex-row space-x-2">
                     <Typography.Body className="text-subheading">
-                      Ξ {formatCurrency(strategyTotal, 2)}
+                      {formatCurrency(strategyTotal, 2)}
                     </Typography.Body>
                     <Typography.Body>
                       ({((strategyTotal / total) * 100).toFixed(2)}%)

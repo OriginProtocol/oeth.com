@@ -57,6 +57,8 @@ const Collateral = ({ collateral, tvl, strategies }: CollateralProps) => {
     frxeth: "Frax ETH",
   };
 
+  console.log(chartData);
+
   return (
     <>
       <section className="bg-origin-bg-grey">
@@ -84,7 +86,7 @@ const Collateral = ({ collateral, tvl, strategies }: CollateralProps) => {
                   <Typography.H6 className="text-[16px] md:text-[24px] leading-[32px]">
                     Total
                   </Typography.H6>
-                  <Typography.H6 className="md:mt-3 text-[24px] md:text-[40px] leading-[32px] md:leading-[40px]">{`Ξ ${formatCurrency(
+                  <Typography.H6 className="md:mt-3 text-[24px] md:text-[40px] leading-[32px] md:leading-[40px]">{`${formatCurrency(
                     total,
                     2
                   )}`}</Typography.H6>

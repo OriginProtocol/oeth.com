@@ -41,7 +41,7 @@ const CollateralAggregate = ({ data = [] }) => {
               <Typography.Caption2 className="text-subheading text-base">
                 {label}
               </Typography.Caption2>
-              <Typography.Body2 className="flex flex-row text-2xl">{`Ξ ${formatCurrency(
+              <Typography.Body2 className="flex flex-row text-2xl">{`${formatCurrency(
                 total,
                 2
               )}`}</Typography.Body2>
@@ -90,7 +90,7 @@ const CollateralPoolDistributions = ({ data = [] }) => {
                           className="flex flex-row space-x-1 items-center w-full"
                         >
                           <Typography.Caption className="text-subheading">
-                            {`Ξ ${formatCurrency(holdingTotal, 2)}`}
+                            {`${formatCurrency(holdingTotal, 2)}`}
                           </Typography.Caption>
                           <Image
                             src="/images/link.svg"

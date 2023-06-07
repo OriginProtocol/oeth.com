@@ -1,5 +1,7 @@
+import React, { useMemo, useState } from "react";
 import Head from "next/head";
-import { Line, Doughnut } from "react-chartjs-2";
+import { PieChart } from "react-minimal-pie-chart";
+import { Line } from "react-chartjs-2";
 import {
   ArcElement,
   BarElement,
@@ -18,7 +20,12 @@ import {
 import { last, orderBy } from "lodash";
 import { Typography } from "@originprotocol/origin-storybook";
 import { GetServerSideProps } from "next";
-import { ErrorBoundary, LayoutBox, TwoColumnLayout } from "../../components";
+import {
+  ErrorBoundary,
+  LayoutBox,
+  TwoColumnLayout,
+  ReactTooltip,
+} from "../../components";
 import { formatCurrency, formatPercentage } from "../../utils/math";
 import { aggregateCollateral, chartOptions } from "../../utils/analytics";
 import {
@@ -29,7 +36,6 @@ import {
 import { useAPYChart } from "../../hooks/analytics/useAPYChart";
 import { useTotalSupplyChart } from "../../hooks/analytics/useTotalSupplyChart";
 import { fetchAllocation, fetchCollateral } from "../../utils/api";
-import { useMemo } from "react";
 
 ChartJS.register(
   CategoryScale,
@@ -50,10 +56,10 @@ const APYChartContainer = () => {
   const [{ data, filter, isFetching }, { onChangeFilter }] = useAPYChart();
   return data ? (
     <LayoutBox
-      loadingClassName="flex items-center justify-center h-[350px] w-full"
+      loadingClassName="flex items-center justify-center h-[370px] w-full"
       isLoading={isFetching}
     >
-      <div className="flex flex-row justify-between w-full h-[150px] p-4 md:p-6">
+      <div className="flex flex-row justify-between w-full h-[130px] p-4 md:p-6">
         <DefaultChartHeader
           title="APY"
           display={`${formatCurrency(
@@ -99,12 +105,12 @@ const TotalSupplyChartContainer = () => {
       isLoading={isFetching}
     >
       <ErrorBoundary>
-        <div className="flex flex-row justify-between w-full h-[210px] p-4 md:p-6">
+        <div className="flex flex-row justify-between w-full h-[150px] p-4 md:p-6">
           <div className="flex flex-col w-full h-full">
             <Typography.Caption className="text-subheading text-base">
               Total Supply
             </Typography.Caption>
-            <Typography.H4>{`Ξ ${formatCurrency(
+            <Typography.H4 className="mt-3">{`${formatCurrency(
               last(data?.datasets?.[0]?.data) || 0,
               2
             )}`}</Typography.H4>
@@ -139,7 +145,18 @@ const TotalSupplyChartContainer = () => {
   );
 };
 
+const makeTooltipContent = ({ tooltip, value }) => {
+  return (
+    <div className="flex flex-col items-center justify-center bg-origin-bg-black">
+      <Typography.Caption>{tooltip}</Typography.Caption>
+      <Typography.Caption>{formatCurrency(value, 2)}</Typography.Caption>
+    </div>
+  );
+};
+
 const CurrentCollateralContainer = ({ data, tvl, tvlUsd }) => {
+  const [hovered, setHovered] = useState<number | null>(null);
+
   const chartData = useMemo(() => {
     return {
       labels: data.map((item) => item.label),
@@ -162,41 +179,66 @@ const CurrentCollateralContainer = ({ data, tvl, tvlUsd }) => {
     }, 0);
   }, [JSON.stringify(data)]);
 
+  const piechartData = useMemo(() => {
+    return chartData?.datasets?.[0]?.data.map((value, index) => {
+      const token = chartData?.labels?.[index];
+      const color = chartData?.datasets?.[0]?.backgroundColor[index];
+      return {
+        title: token,
+        value,
+        color,
+        tooltip: token,
+      };
+    });
+  }, [JSON.stringify(chartData)]);
+
   return data ? (
     <LayoutBox
       className="min-h-[370px]"
-      loadingClassName="flex items-center justify-center w-full h-[470px]"
+      loadingClassName="flex items-center justify-center w-full h-[370px]"
     >
       <ErrorBoundary>
         <div className="flex flex-row justify-between w-full h-[80px] p-4 md:p-6">
           <div className="flex flex-col w-full h-full">
-            <Typography.Caption className="text-subheading">
+            <Typography.Caption className="text-subheading text-base">
               Current Collateral
             </Typography.Caption>
           </div>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full pb-4">
-          <div className="flex flex-col items-center justify-center flex-shrink-0 w-full h-[450px] px-6">
-            <Doughnut
-              options={{
-                responsive: true,
-                plugins: {
-                  title: {
-                    display: false,
-                  },
-                  legend: {
-                    display: false,
-                  },
-                  tooltip: {
-                    enabled: false,
-                  },
-                },
-                cutout: "75%",
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-4 w-full pb-4 px-10">
+          <div
+            className="flex flex-col flex-shrink-0 max-w-[350px] h-[370px] px-6"
+            data-tooltip-id="chart"
+            data-tooltip-offset={-20}
+            data-tooltip-content={hovered}
+          >
+            <PieChart
+              data={piechartData}
+              lineWidth={15}
+              startAngle={270}
+              paddingAngle={1}
+              onMouseOver={(_, index) => {
+                setHovered(index);
               }}
-              data={chartData}
+              onMouseOut={() => {
+                setHovered(null);
+              }}
+            />
+            <ReactTooltip
+              id="chart"
+              style={{
+                backgroundColor: "#141519",
+                border: "1px solid #252833",
+                borderRadius: 8,
+              }}
+              render={() => {
+                return typeof hovered === "number"
+                  ? makeTooltipContent(piechartData?.[hovered])
+                  : null;
+              }}
             />
           </div>
-          <div className="flex flex-col flex-shrink-0 w-full h-full space-y-2 px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full gap-2">
             {data.map(({ label, color, total }) => (
               <div
                 key={label}
@@ -215,7 +257,7 @@ const CurrentCollateralContainer = ({ data, tvl, tvlUsd }) => {
                       {formatPercentage(total / totalSum)}
                     </Typography.Caption>
                     <Typography.Caption className="text-subheading">
-                      Ξ {formatCurrency(total, 2)}
+                      {formatCurrency(total, 2)}
                     </Typography.Caption>
                   </div>
                 </div>

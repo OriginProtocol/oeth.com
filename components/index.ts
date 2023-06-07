@@ -1,5 +1,6 @@
 export { default as Image } from "next/image";
 export { default as Link } from "next/link";
+export { Tooltip as ReactTooltip } from "react-tooltip";
 
 export { default as Footer } from "./Footer";
 export { default as Section } from "./Section";

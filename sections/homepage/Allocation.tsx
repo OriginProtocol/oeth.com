@@ -14,7 +14,6 @@ interface AllocationProps {
 }
 
 const Allocation = ({ strategies }: AllocationProps) => {
-
   const [open, setOpen] = useState({});
   const [loaded, setLoaded] = useState(false);
 
@@ -149,7 +148,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
                                   <Typography.H7
                                     className="inline items-center text-[12px] md:text-[24px] text-subheading"
                                     style={{ fontWeight: 400 }}
-                                  >{`Ξ ${formatCurrency(
+                                  >{`${formatCurrency(
                                     protocol.total,
                                     2
                                   )}`}</Typography.H7>

@@ -6,7 +6,7 @@ const DefaultChartHeader = ({ title, display, date }) => {
       <Typography.Caption className="text-subheading text-base">
         {title}
       </Typography.Caption>
-      <Typography.H4 className="text-4xl font-medium">{display}</Typography.H4>
+      <Typography.H4 className="font-medium mt-3">{display}</Typography.H4>
       <Typography.Caption className="text-subheading">
         {date}
       </Typography.Caption>

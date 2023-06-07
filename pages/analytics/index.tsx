@@ -206,6 +206,7 @@ const CurrentCollateralContainer = ({ data, tvl, tvlUsd }) => {
           </div>
         </div>
         <div className="flex flex-col lg:flex-row items-center justify-center gap-4 w-full pb-4 px-10">
+          {/* @ts-ignore */}
           <div
             className="flex flex-col flex-shrink-0 max-w-[350px] h-[370px] px-6"
             data-tooltip-id="chart"

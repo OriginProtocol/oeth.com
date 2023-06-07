@@ -2,7 +2,7 @@ import { PropsWithChildren } from "react";
 import { twMerge } from "tailwind-merge";
 
 interface TableDataProps {
-  align?: "left" | "right" | "center" | "justify" | "char";
+  align?: "left" | "right" | "center";
   className?: string;
   width?: string;
 }
@@ -15,9 +15,10 @@ const TableData = ({
 }: PropsWithChildren<TableDataProps>) => {
   return (
     <td
-      align={`${align || "right"}`}
       className={twMerge(
-        `text-xs md:text-xl text-table-data py-6 lg:py-9 w-[1%] whitespace-nowrap`,
+        `text-xs md:text-xl text-table-data py-6 lg:py-9 w-[1%] whitespace-nowrap ${
+          align ? align : "text-right"
+        }`,
         className
       )}
       width={width || "auto"}

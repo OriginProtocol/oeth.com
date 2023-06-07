@@ -101,44 +101,48 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
         {/* Table Body */}
 
         <tbody className="relative px-6">
-          {stats.map((item, i) => (
-            <tr
-              className="group border-t md:border-t-2 hover:bg-hover-bg border-origin-bg-black /cursor-pointer"
-              key={item.date}
-              // onClick={() => routeToYieldOnDay(item.date)}
-            >
-              <TableData align="left" className="pl-8">
-                {i === 0
-                  ? "Today so far"
-                  : moment.utc(item.date).format("MMM D, YYYY")}
-              </TableData>
-              <TableData className="pr-8 lg:pr-14 xl:pr-24">
-                Ξ {commifyToDecimalPlaces(parseFloat(item.yield), 2)}
-              </TableData>
-              <TableData className="pr-8 sm:pr-8 lg:pr-14 xl:pr-24">
-                {parseFloat(item.apy) === 0
-                  ? "-"
-                  : `${commifyToDecimalPlaces(parseFloat(item.apy), 2)}%`}
-              </TableData>
-              {width >= smSize && (
-                <TableData className="px-8">
-                  Ξ {commifyToDecimalPlaces(parseFloat(item.backing_supply), 2)}
+          {stats.map((item, i) =>
+            // Skip estimation for current day
+            i === 0 ? (
+              <></>
+            ) : (
+              <tr
+                className="group border-t md:border-t-2 hover:bg-hover-bg border-origin-bg-black /cursor-pointer"
+                key={item.date}
+                // onClick={() => routeToYieldOnDay(item.date)}
+              >
+                <TableData align="left" className="pl-8">
+                  {moment.utc(item.date).format("MMM D, YYYY")}
                 </TableData>
-              )}
-              {/* {width >= smSize && (
+                <TableData className="pr-8 lg:pr-14 xl:pr-24">
+                  Ξ {commifyToDecimalPlaces(parseFloat(item.yield), 2)}
+                </TableData>
+                <TableData className="pr-8 sm:pr-8 lg:pr-14 xl:pr-24">
+                  {parseFloat(item.apy) === 0
+                    ? "-"
+                    : `${commifyToDecimalPlaces(parseFloat(item.apy), 2)}%`}
+                </TableData>
+                {width >= smSize && (
+                  <TableData className="px-8">
+                    Ξ{" "}
+                    {commifyToDecimalPlaces(parseFloat(item.backing_supply), 2)}
+                  </TableData>
+                )}
+                {/* {width >= smSize && (
                 <TableData className="pr-0 xl:pr-8">
                   Ξ {commifyToDecimalPlaces(parseFloat(item.backing_supply), 2)}
                 </TableData>
               )} */}
-              {/* <TableData className="px-6" align="center">
+                {/* <TableData className="px-6" align="center">
                 <ChartDetailsButton
                   onClick={() => routeToYieldOnDay(item.date)}
                 >
                   Proof of yield
                 </ChartDetailsButton>
               </TableData> */}
-            </tr>
-          ))}
+              </tr>
+            )
+          )}
         </tbody>
       </Table>
 

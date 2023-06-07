@@ -146,7 +146,7 @@ const DayStrategyPerformance = ({
               </TableHead>
             )}
             <TableHead
-              info={true}
+              info="asd"
               className={twMerge(strategyChartColumnCssRight, "pr-2")}
             >
               APY

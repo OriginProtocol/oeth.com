@@ -59,7 +59,11 @@ const YieldBoostMultiplier = () => {
       </div>
       <div className="mt-8 flex flex-col xl:flex-row border-t md:border-t-2 border-origin-bg-black">
         <div className="w-full xl:w-1/2 py-6 px-6 border-b md:border-b-2 xl:border-b-0 xl:border-r-2 border-origin-bg-black">
-          <TitleWithInfo className="mb-1" textClassName="text-xs md:text-xs">
+          <TitleWithInfo
+            info="asd"
+            className="mb-1"
+            textClassName="text-xs md:text-xs"
+          >
             Non-Rebasing supply
           </TitleWithInfo>
           <Typography.Body className="text-left w-full inline">
@@ -70,7 +74,11 @@ const YieldBoostMultiplier = () => {
 
         <div className="flex xl:justify-center items-center my-6">
           <div className="px-6 whitespace-nowrap">
-            <TitleWithInfo className="mb-1" textClassName="text-xs md:text-xs">
+            <TitleWithInfo
+              info="asds"
+              className="mb-1"
+              textClassName="text-xs md:text-xs"
+            >
               Rebasing supply
             </TitleWithInfo>
             <Typography.Body className="text-left w-full inline">

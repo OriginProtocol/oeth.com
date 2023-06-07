@@ -208,9 +208,8 @@ const CurrentCollateralContainer = ({ data, tvl, tvlUsd }) => {
         <div className="flex flex-col lg:flex-row items-center justify-center gap-4 w-full pb-4 px-10">
           {/* @ts-ignore */}
           <div
-            className="flex flex-col flex-shrink-0 max-w-[350px] h-[370px] px-6"
+            className="flex flex-col flex-shrink-0 max-w-[350px] px-6"
             data-tooltip-id="chart"
-            data-tooltip-offset={-20}
             data-tooltip-content={hovered}
           >
             <PieChart
@@ -237,6 +236,7 @@ const CurrentCollateralContainer = ({ data, tvl, tvlUsd }) => {
                   ? makeTooltipContent(piechartData?.[hovered])
                   : null;
               }}
+              float
             />
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 w-full h-full gap-2">

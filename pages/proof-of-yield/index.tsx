@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React from "react";
 import { Header, Seo } from "../../components";
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import { fetchAPI, fetchDailyStats, transformLinks } from "../../utils";
 import { Heading, DailyYield } from "../../sections";
 import { Footer } from "../../components";
@@ -30,8 +30,9 @@ const ProofOfYield = ({ navLinks, dailyStats }: ProofOfYieldProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (): Promise<{
+export const getStaticProps: GetStaticProps = async (): Promise<{
   props: ProofOfYieldProps;
+  revalidate: number;
 }> => {
   const navRes = await fetchAPI("/oeth-nav-links", {
     populate: {
@@ -48,6 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<{
       navLinks,
       dailyStats,
     },
+    revalidate: 60 * 5,
   };
 };
 export default ProofOfYield;

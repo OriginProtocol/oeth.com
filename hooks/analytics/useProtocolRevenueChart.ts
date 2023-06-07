@@ -101,7 +101,7 @@ export const useProtocolRevenueChart = () => {
               padding: 20,
               callback: function (val, index) {
                 return (
-                  isMobile ? (index + 22) % 4 === 0 : (index + 8) % 2 === 0
+                  isMobile ? (index + 22) % 6 === 0 : (index + 8) % 3 === 0
                 )
                   ? this.getLabelForValue(val)
                   : null;

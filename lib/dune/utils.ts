@@ -12,7 +12,9 @@ export const toChartData = (rows, keys) => {
   return rows?.reduce((acc, row) => {
     Object.keys(keys).forEach((fromKey) => {
       const toKey = keys[fromKey];
-      acc[toKey]?.push(row[fromKey]);
+      if (typeof row[fromKey] !== "undefined") {
+        acc[toKey]?.push(row[fromKey]);
+      }
     });
     return acc;
   }, initialState);

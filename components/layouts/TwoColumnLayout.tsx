@@ -62,7 +62,7 @@ const Breadcrumbs = ({ pathname }) => {
   }, [pathname]);
 
   return (
-    <ol className="flex flex-row items-center space-x-2 font-header text-xl">
+    <ol className="flex flex-row items-center space-x-2 font-header text-base lg:text-lg">
       {parts.map((part, index) => {
         const isLast = index === parts?.length - 1;
         const href = partsToHref(parts, index - 1);

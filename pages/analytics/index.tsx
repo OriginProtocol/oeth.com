@@ -89,7 +89,7 @@ const APYChartContainer = () => {
           </div>
         </div>
       </div>
-      <div className="mr-6">
+      <div className="-ml-4 mr-4">
         <Line options={chartOptions} data={data} />
       </div>
     </LayoutBox>
@@ -137,7 +137,7 @@ const TotalSupplyChartContainer = () => {
             />
           </div>
         </div>
-        <div className="mr-6">
+        <div className="-ml-4 mr-4">
           <Line options={chartOptions} data={data} />
         </div>
       </ErrorBoundary>
@@ -205,10 +205,10 @@ const CurrentCollateralContainer = ({ data, tvl, tvlUsd }) => {
             </Typography.Caption>
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-4 w-full pb-4 px-10">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-4 w-full pb-4 px-6 lg:px-10">
           {/* @ts-ignore */}
           <div
-            className="flex flex-col flex-shrink-0 max-w-[350px] px-6"
+            className="flex flex-col flex-shrink-0 max-w-[350px] px-6 pb-[26px]"
             data-tooltip-id="chart"
             data-tooltip-content={hovered}
           >

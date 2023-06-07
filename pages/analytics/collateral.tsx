@@ -94,8 +94,8 @@ const CollateralPoolDistributions = ({ data = [] }) => {
                           </Typography.Caption>
                           <Image
                             src="/images/link.svg"
-                            width="12"
-                            height="12"
+                            width={12}
+                            height={12}
                             alt="External link"
                           />
                         </Link>

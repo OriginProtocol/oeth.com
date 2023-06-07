@@ -9,7 +9,7 @@ const LayoutBox = ({
 }) => (
   <div
     className={cx(
-      "relative flex flex-col w-full h-full bg-origin-bg-grey",
+      "relative flex flex-col w-full h-full bg-origin-bg-grey overflow-hidden",
       className
     )}
   >

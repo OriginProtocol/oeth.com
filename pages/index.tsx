@@ -77,7 +77,7 @@ const IndexPage = ({
       <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
 
       <Hero
-        apy={get(daysToApy, "7") ? get(daysToApy, "7") : 0}
+        apy={get(daysToApy, "30") ? get(daysToApy, "30") : 0}
         tvl={tvl}
         tvlUsd={tvlUsd}
       />

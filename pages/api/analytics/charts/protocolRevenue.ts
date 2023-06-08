@@ -82,14 +82,11 @@ export const getProtocolRevenue = async () => {
         },
       ],
       aggregations: {
-        // Revenue
-        dailyRevenue: last(revenue_daily),
-        weeklyRevenue: sumOf(takeRight(revenue_daily, 7)),
-        allTimeRevenue: last(revenue_total),
-        // Yield
-        dailyYield: last(yield_daily),
-        weeklyYield: sumOf(takeRight(yield_daily, 7)),
-        allTimeYield: last(yield_total),
+        // Revenue agg
+        dailyRevenue: Number(last(revenue_daily)) + Number(last(yield_daily)),
+        weeklyRevenue:
+          sumOf(takeRight(revenue_daily, 7)) + sumOf(takeRight(yield_daily, 7)),
+        allTimeRevenue: Number(last(revenue_total)) + Number(last(yield_total)),
       },
     };
   } catch (e) {

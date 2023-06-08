@@ -203,3 +203,16 @@ body {
     #0274f133 144.97%
   );
 }
+
+.arrow-down {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+
+  border-top: 20px solid #f00;
+}
+
+.tooltip-shadow {
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+}

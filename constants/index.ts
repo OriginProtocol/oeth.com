@@ -9,3 +9,4 @@ export { default as tokenColors } from "./tokenColors";
 export * from "./screenSizes";
 export * from "./staking";
 export * from "./abis";
+export * from "./proof-of-yield";

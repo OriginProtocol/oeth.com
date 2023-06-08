@@ -50,10 +50,7 @@ const ProtocolRevenueDetails = ({ breakdowns, isFetching }) => {
 };
 
 const AnalyticsProtocolRevenue = () => {
-  const [
-    { data, aggregations, filter, chartOptions, isFetching },
-    { onChangeFilter },
-  ] = useProtocolRevenueChart();
+  const [{ data, aggregations, isFetching }] = useProtocolRevenueChart();
 
   const breakdowns = useMemo(() => {
     const {
@@ -93,13 +90,7 @@ const AnalyticsProtocolRevenue = () => {
           />
         </div>
         <div className="col-span-12">
-          <ProtocolChart
-            data={data}
-            filter={filter}
-            chartOptions={chartOptions}
-            isFetching={isFetching}
-            onChangeFilter={onChangeFilter}
-          />
+          <ProtocolChart />
         </div>
       </div>
     </ErrorBoundary>

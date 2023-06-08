@@ -23,8 +23,10 @@ export const useProtocolRevenueChart = () => {
 
   const [chartState, setChartState] = useState({
     duration: "all",
-    typeOf: "total",
+    typeOf: "_7_day",
   });
+
+  const barsToShow = ["revenue_daily", "yield_daily"];
 
   const baseData = useMemo(() => {
     if (data?.error) {
@@ -33,16 +35,31 @@ export const useProtocolRevenueChart = () => {
     return {
       labels: data?.labels,
       datasets: data?.datasets?.reduce((acc, dataset) => {
-        if (!chartState?.typeOf || dataset.id === chartState?.typeOf) {
+        if (
+          barsToShow.includes(dataset.id) ||
+          !chartState?.typeOf ||
+          dataset.id === chartState?.typeOf
+        ) {
           acc.push({
             ...barFormatting,
             ...dataset,
+            ...(dataset.type === "line"
+              ? {
+                  type: "line",
+                  borderColor: "#ffffff",
+                  borderWidth: 2,
+                  tension: 0,
+                  borderJoinStyle: "round",
+                  pointRadius: 0,
+                  pointHitRadius: 1,
+                }
+              : {}),
           });
         }
         return acc;
       }, []),
     };
-  }, [JSON.stringify(data)]);
+  }, [JSON.stringify(data), JSON.stringify(chartState?.typeOf)]);
 
   const chartData = useMemo(() => {
     return baseData

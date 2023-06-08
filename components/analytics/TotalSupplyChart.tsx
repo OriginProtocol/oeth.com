@@ -1,13 +1,9 @@
 import React from "react";
 import {
-  ArcElement,
-  BarElement,
   CategoryScale,
   Chart as ChartJS,
   LinearScale,
   LineElement,
-  PointElement,
-  RadialLinearScale,
   TimeScale,
   Title,
   Tooltip,

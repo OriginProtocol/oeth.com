@@ -1,14 +1,11 @@
 import React from "react";
 import { last } from "lodash";
 import {
-  ArcElement,
   BarElement,
   CategoryScale,
   Chart as ChartJS,
   LinearScale,
   LineElement,
-  PointElement,
-  RadialLinearScale,
   TimeScale,
   Title,
   Tooltip,
@@ -16,17 +13,18 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+import { Typography } from "@originprotocol/origin-storybook";
 import { formatCurrency } from "../../utils";
 import { useProtocolRevenueChart } from "../../hooks/analytics/useProtocolRevenueChart";
 import LayoutBox from "../LayoutBox";
-import DefaultChartHeader from "./DefaultChartHeader";
 import DurationFilter from "./DurationFilter";
-import { Typography } from "@originprotocol/origin-storybook";
+import MovingAverageFilter from "./MovingAverageFilter";
 
 ChartJS.register(
   CategoryScale,
   TimeScale,
   LinearScale,
+  LineElement,
   BarElement,
   Title,
   Tooltip,
@@ -49,13 +47,13 @@ const ProtocolChart = () => {
           </Typography.Caption>
           <div className="flex flex-col space-y-2">
             <Typography.H4 className="mt-3">{`Ξ ${formatCurrency(
-              Number(last(data?.datasets?.[0]?.data)) +
-                Number(last(data?.datasets?.[1]?.data)),
+              Number(last(data?.datasets?.[1]?.data)) +
+                Number(last(data?.datasets?.[2]?.data)),
               4
             )}`}</Typography.H4>
             <div className="flex flex-col">
               {data?.datasets?.map((dataset, index) => (
-                <div key={index} className="flex flex-col">
+                <div key={dataset.id} className="flex flex-col">
                   <div className="flex flex-row items-center space-x-2">
                     <div
                       className="w-[6px] h-[6px] rounded-full"
@@ -87,6 +85,16 @@ const ProtocolChart = () => {
               });
             }}
           />
+          <div className="flex justify-end">
+            <MovingAverageFilter
+              value={filter?.typeOf}
+              onChange={(typeOf) => {
+                onChangeFilter({
+                  typeOf: typeOf,
+                });
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className="mr-6">

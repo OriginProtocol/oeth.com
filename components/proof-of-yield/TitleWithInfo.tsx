@@ -31,23 +31,26 @@ const TitleWithInfo = ({
       )}
     >
       <Typography.Body2
-        className={twMerge(`text-xs md:text-base pr-2`, textClassName)}
+        className={twMerge(
+          `text-xs md:text-base pr-1 md:pr-2 whitespace-nowrap`,
+          textClassName
+        )}
       >
         {children}
       </Typography.Body2>
       <div
-        className="relative group"
+        className="relative group flex items-center"
         ref={tooltip}
         onMouseEnter={() => setShowTooltip(true)}
         onMouseLeave={() => setShowTooltip(false)}
         onClick={() => !showTooltip && setShowTooltip(true)}
       >
         <Image
-          src={assetRootPath("/images/info.svg")}
-          width="12"
-          height="12"
+          src={assetRootPath("/images/info.png")}
+          width="16"
+          height="16"
           alt="info"
-          className="inline"
+          className="inline min-w-[12px] min-h-[12px] max-w-[12px] max-h-[12px] w-[12px] h-[12px] md:min-w-[16px] md:min-h-[16px] md:max-w-[16px] md:max-h-[16px] md:w-[16px] md:h-[16px]"
         />
         <div
           className={`${

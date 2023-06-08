@@ -12,7 +12,7 @@ const Heading = () => {
         Proof of yield
       </Typography.H2>
 
-      <Typography.Body className="mt-4 md:mt-10 xl:max-w-[75%] text-table-title">
+      <Typography.Body className="mt-4 md:mt-10 xl:max-w-[75%] text-table-title text-sm md:text-base">
         {`Do you know where your DeFi yield comes from? OETH's yield is transparent, real and 100% verifiable on-chain. See the evidence of OETH's consistent performance over the past 30 days.`}
       </Typography.Body>
     </Section>

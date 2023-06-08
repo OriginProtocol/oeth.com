@@ -66,7 +66,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
 
         <thead>
           <tr>
-            <TableHead align="left" className="pl-8">
+            <TableHead align="left" className="pl-4 md:pl-8">
               Date
             </TableHead>
             <TableHead
@@ -77,14 +77,14 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
             </TableHead>
             <TableHead
               info={`The annualized, compounded rate earned by OETH holders on this day`}
-              className="pr-8 sm:pr-8 lg:pr-14 xl:pr-24"
+              className="pr-4 sm:pr-8 lg:pr-14 xl:pr-24"
             >
               APY
             </TableHead>
             {width >= smSize && (
               <TableHead
                 info={`The sum of all assets currently held by OETH`}
-                className="px-8"
+                className="px-4 md:px-8"
               >
                 Vault value
               </TableHead>
@@ -111,19 +111,19 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
                 key={item.date}
                 // onClick={() => routeToYieldOnDay(item.date)}
               >
-                <TableData align="left" className="pl-8">
+                <TableData align="left" className="pl-4 md:pl-8">
                   {moment.utc(item.date).format("MMM D, YYYY")}
                 </TableData>
                 <TableData className="pr-8 lg:pr-14 xl:pr-24">
                   Ξ {commifyToDecimalPlaces(parseFloat(item.yield), 2)}
                 </TableData>
-                <TableData className="pr-8 sm:pr-8 lg:pr-14 xl:pr-24">
+                <TableData className="pr-4 sm:pr-8 lg:pr-14 xl:pr-24">
                   {parseFloat(item.apy) === 0
                     ? "-"
                     : `${commifyToDecimalPlaces(parseFloat(item.apy), 2)}%`}
                 </TableData>
                 {width >= smSize && (
-                  <TableData className="px-8">
+                  <TableData className="px-4 md:px-8">
                     Ξ{" "}
                     {commifyToDecimalPlaces(parseFloat(item.backing_supply), 2)}
                   </TableData>
@@ -147,11 +147,11 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
       </Table>
 
       <GradientButton
-        outerDivClassName="mx-auto mt-6"
-        className="bg-transparent hover:bg-transparent text-base lg:px-10 py-3"
+        outerDivClassName="mx-auto mt-6 mb-10 md:mb-0"
+        className="bg-transparent hover:bg-transparent text-base px-8 py-[6px] md:px-10 md:py-3"
         onClick={() => moreDays(stats.length, stats.length + viewMoreAmount)}
       >
-        View More
+        View more
       </GradientButton>
     </Section>
   );

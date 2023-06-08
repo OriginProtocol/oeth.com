@@ -57,8 +57,6 @@ const Collateral = ({ collateral, tvl, strategies }: CollateralProps) => {
     frxeth: "Frax ETH",
   };
 
-  console.log(chartData);
-
   return (
     <>
       <section className="bg-origin-bg-grey">

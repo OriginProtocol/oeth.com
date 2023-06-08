@@ -4,11 +4,11 @@ import { ChartOptions } from "chart.js";
 import { slice } from "lodash";
 
 export const backingTokens = {
-  OETH: {
-    label: "OETH",
-    logoSrc: "/images/oeth-icon.svg",
-    color: "#3390f3",
-  },
+  // OETH: {
+  //   label: "OETH",
+  //   logoSrc: "/images/oeth-icon.svg",
+  //   color: "#3390f3",
+  // },
   ETH: {
     label: "ETH",
     logoSrc: "/images/eth-icon.svg",
@@ -61,10 +61,6 @@ export const durationOptions = [
 
 export const typeOptions = [
   {
-    value: "",
-    label: "All",
-  },
-  {
     value: "_7_day",
     label: "7-Day",
   },
@@ -75,10 +71,6 @@ export const typeOptions = [
   {
     value: "_30_day",
     label: "30-Day",
-  },
-  {
-    value: "total",
-    label: "Current",
   },
 ];
 
@@ -179,9 +171,14 @@ export const chartOptions: ChartOptions<"line"> = {
 };
 
 export const aggregateCollateral = ({ collateral, allocation }) => {
-  const aggregateTotal = collateral?.reduce((t, s) => ({
-    total: Number(t?.total || 0) + Number(s?.total || 0),
-  })).total;
+  const aggregateTotal = collateral?.reduce((acc, token) => {
+    const { name } = token;
+    const normalizedTokenName = name?.toUpperCase();
+    if (!Object.keys(backingTokens).includes(normalizedTokenName)) {
+      return acc;
+    }
+    return Number(acc || 0) + Number(token?.total || 0);
+  }, 0);
 
   return collateral.reduce((acc, token) => {
     const { name } = token;

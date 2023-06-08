@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import Head from "next/head";
-import { Bar } from "react-chartjs-2";
 import classnames from "classnames";
 import { Typography } from "@originprotocol/origin-storybook";
 import {
@@ -9,8 +8,7 @@ import {
   Chart as ChartJS,
   LinearScale,
 } from "chart.js";
-import { last } from "lodash";
-import { DefaultChartHeader, DurationFilter } from "../../components/analytics";
+import { ProtocolChart } from "../../components/analytics";
 import { useProtocolRevenueChart } from "../../hooks/analytics/useProtocolRevenueChart";
 import { formatCurrency } from "../../utils/math";
 import { ErrorBoundary, LayoutBox, TwoColumnLayout } from "../../components";
@@ -49,42 +47,6 @@ const ProtocolRevenueDetails = ({ breakdowns, isFetching }) => {
       ))}
     </div>
   );
-};
-
-const ProtocolChart = ({
-  data,
-  isFetching,
-  onChangeFilter,
-  chartOptions,
-  filter,
-}) => {
-  return data ? (
-    <LayoutBox
-      loadingClassName="flex items-center justify-center h-[350px] w-full"
-      isLoading={isFetching}
-    >
-      <div className="flex flex-row justify-between w-full h-[150px] p-4 md:p-6">
-        <DefaultChartHeader
-          title="Daily Protocol Revenue"
-          display={`${formatCurrency(last(data?.datasets?.[0]?.data), 6)}`}
-          date={last(data?.labels)}
-        />
-        <div className="flex flex-col space-y-2">
-          <DurationFilter
-            value={filter?.duration}
-            onChange={(duration) => {
-              onChangeFilter({
-                duration: duration || "all",
-              });
-            }}
-          />
-        </div>
-      </div>
-      <div className="mr-6">
-        <Bar options={chartOptions} data={data} />
-      </div>
-    </LayoutBox>
-  ) : null;
 };
 
 const AnalyticsProtocolRevenue = () => {

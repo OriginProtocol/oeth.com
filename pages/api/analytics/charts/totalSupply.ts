@@ -38,7 +38,7 @@ export const getTotalSupply = async () => {
         },
         {
           id: "total",
-          label: "Daily",
+          label: "Total Supply",
           data: total,
         },
       ],

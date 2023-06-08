@@ -35,8 +35,8 @@ export const useProtocolRevenueChart = () => {
       datasets: data?.datasets?.reduce((acc, dataset) => {
         if (!chartState?.typeOf || dataset.id === chartState?.typeOf) {
           acc.push({
-            ...dataset,
             ...barFormatting,
+            ...dataset,
           });
         }
         return acc;
@@ -86,6 +86,7 @@ export const useProtocolRevenueChart = () => {
         },
         scales: {
           x: {
+            stacked: true,
             border: {
               color: "#4d505e",
               width: 0.5,
@@ -109,6 +110,7 @@ export const useProtocolRevenueChart = () => {
             },
           },
           y: {
+            stacked: true,
             border: {
               display: false,
               dash: [2, 4],

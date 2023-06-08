@@ -19,7 +19,7 @@ export const useAPYChart = () => {
 
   const [chartState, setChartState] = useState({
     duration: "all",
-    typeOf: "total",
+    typeOf: "_30_day",
   });
 
   const chartData = useMemo(() => {

@@ -1,6 +1,6 @@
-import { chunk, last, takeRight, map } from "lodash";
+import { last, takeRight } from "lodash";
 import DuneClient, { toChartData, jobsLookup } from "../../../../lib/dune";
-import { sumOf } from "../../../../utils/analytics";
+import { createGradient, sumOf } from "../../../../utils/analytics";
 
 export const getProtocolRevenue = async () => {
   try {
@@ -12,42 +12,39 @@ export const getProtocolRevenue = async () => {
 
     rows.reverse();
 
-    const chunked = chunk(rows, 2);
-
-    const dailyRevRows = chunked.reduce((acc, chunk) => {
-      const [before, after] = chunk;
-      if (after) {
-        acc.push({
-          // @ts-ignore
-          sum_amount:
-            parseFloat(after?.sum_amount) - parseFloat(before?.sum_amount),
-          day: after?.day,
-        });
-      }
-      return acc;
-    }, []);
-
-    const { total, labels } = toChartData(dailyRevRows, {
-      sum_amount: "total",
-      day: "labels",
-    });
-
-    const allRawAmounts = map(rows, "sum_amount");
-    const dailyDevAmounts = map(dailyRevRows, "sum_amount");
-
+    const { revenue_daily, yield_daily, revenue_total, yield_total, labels } =
+      toChartData(rows, {
+        amount: "revenue_daily",
+        yield_generated: "yield_daily",
+        sum_amount: "revenue_total",
+        sum_yield_generated: "yield_total",
+        day: "labels",
+      });
     return {
       labels,
       datasets: [
         {
           id: "total",
-          label: "Daily Revenue",
-          data: total,
+          label: "Yield Distributed",
+          data: yield_daily,
+          backgroundColor: "#426EF7",
+        },
+        {
+          id: "total",
+          label: "Fees Collected",
+          data: revenue_daily,
+          backgroundColor: "#E7A9BF",
         },
       ],
       aggregations: {
-        dailyRevenue: last(dailyDevAmounts),
-        weeklyRevenue: sumOf(takeRight(dailyDevAmounts, 7)),
-        allTimeRevenue: last(allRawAmounts),
+        // Revenue
+        dailyRevenue: last(revenue_daily),
+        weeklyRevenue: sumOf(takeRight(revenue_daily, 7)),
+        allTimeRevenue: last(revenue_total),
+        // Yield
+        dailyYield: last(yield_daily),
+        weeklyYield: sumOf(takeRight(yield_daily, 7)),
+        allTimeYield: last(yield_total),
       },
     };
   } catch (e) {

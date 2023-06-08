@@ -62,15 +62,15 @@ export const durationOptions = [
 export const typeOptions = [
   {
     value: "_7_day",
-    label: "7-Day",
+    label: "7-Day MA",
   },
   {
     value: "_14_day",
-    label: "14-Day",
+    label: "14-Day MA",
   },
   {
     value: "_30_day",
-    label: "30-Day",
+    label: "30-Day MA",
   },
 ];
 

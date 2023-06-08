@@ -23,12 +23,12 @@ export const getTotalSupply = async () => {
       datasets: [
         {
           id: "_7_day",
-          label: "7 Day",
+          label: "7 Day MA",
           data: _7_day,
         },
         {
           id: "_14_day",
-          label: "14 Day",
+          label: "14 Day MA",
           data: _14_day,
         },
         {

@@ -27,6 +27,7 @@ module.exports = {
         "table-title": "#828699",
         "table-data": "#ebecf2",
         "hover-bg": "#222329",
+        "tooltip-border": "#252833",
         subheading: "#828699",
         tooltip: "#1e1f25",
         "origin-border": "#272727",

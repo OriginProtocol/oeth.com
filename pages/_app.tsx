@@ -9,7 +9,7 @@ import { WagmiConfig, createClient, configureChains, mainnet } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { assetRootPath } from "../utils";
 import { GTM_ID, pageview } from "../utils/gtm";
-import { useContracts } from "../hooks";
+import { useContracts, usePreviousRoute } from "../hooks";
 import "../styles/globals.css";
 
 const defaultQueryFn = async ({ queryKey }) => {
@@ -76,12 +76,14 @@ const useNavigationLinks = () => {
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
+
   const [{ links }] = useNavigationLinks();
 
   // @ts-ignore
   const getLayout = Component.getLayout || ((page) => page);
 
   useContracts();
+  usePreviousRoute();
 
   useEffect(() => {
     router.events.on("routeChangeComplete", pageview);

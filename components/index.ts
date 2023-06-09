@@ -18,3 +18,4 @@ export { default as ErrorBoundary } from "./ErrorBoundary";
 
 export * from "./homepage";
 export * from "./strapi";
+export * from "./proof-of-yield";

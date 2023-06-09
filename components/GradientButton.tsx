@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import { twMerge } from "tailwind-merge";
 
-interface Gradient2ButtonProps {
+interface GradientButtonProps {
   onClick?: () => void;
   className?: string;
   elementId?: string;
@@ -14,7 +14,7 @@ const GradientButton = ({
   elementId,
   outerDivClassName,
   children,
-}: PropsWithChildren<Gradient2ButtonProps>) => {
+}: PropsWithChildren<GradientButtonProps>) => {
   return (
     <div
       className={twMerge(

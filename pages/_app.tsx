@@ -1,14 +1,16 @@
 import "@originprotocol/origin-storybook/lib/styles.css";
-import "../styles/globals.css";
-import React, { createContext, useEffect } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { AppProps } from "next/app";
 import Script from "next/script";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
+import { WagmiConfig, createClient, configureChains, mainnet } from "wagmi";
+import { publicProvider } from "wagmi/providers/public";
 import { assetRootPath } from "../utils";
 import { GTM_ID, pageview } from "../utils/gtm";
 import { useContracts, usePreviousRoute } from "../hooks";
+import "../styles/globals.css";
 
 const defaultQueryFn = async ({ queryKey }) => {
   return await fetch(queryKey).then((res) => res.json());
@@ -27,8 +29,58 @@ export const GlobalContext = createContext({
   siteName: "",
 });
 
+export const NavigationContext = createContext({
+  links: [],
+});
+
+const { provider, webSocketProvider } = configureChains(
+  [mainnet],
+  [publicProvider()]
+);
+
+const wagmiClient = createClient({
+  autoConnect: false,
+  provider,
+  webSocketProvider,
+});
+
+const useNavigationLinks = () => {
+  const [links, setLinks] = useState([]);
+
+  useEffect(() => {
+    (async function () {
+      try {
+        const { data } = await fetch("/api/navigation", {
+          method: "POST",
+          headers: {
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            params: {
+              populate: {
+                links: {
+                  populate: "*",
+                },
+              },
+            },
+          }),
+        }).then((res) => res.json());
+        setLinks(data);
+      } catch (e) {
+        console.error(e);
+      }
+    })();
+  }, []);
+  return [{ links }];
+};
+
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
+
+  const [{ links }] = useNavigationLinks();
+
+  // @ts-ignore
+  const getLayout = Component.getLayout || ((page) => page);
 
   useContracts();
   usePreviousRoute();
@@ -59,8 +111,15 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <QueryClientProvider client={queryClient}>
-        {/* @ts-ignore */}
-        <Component {...pageProps} />
+        <WagmiConfig client={wagmiClient}>
+          <NavigationContext.Provider
+            value={{
+              links,
+            }}
+          >
+            {getLayout(<Component {...pageProps} />)}
+          </NavigationContext.Provider>
+        </WagmiConfig>
       </QueryClientProvider>
     </>
   );

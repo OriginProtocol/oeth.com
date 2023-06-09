@@ -104,7 +104,7 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
               <HeroData
                 className="rounded-r-lg"
                 title="TVL"
-                value={`Ξ ${parseFloat(tvl).toFixed(2)}`}
+                value={`${parseFloat(tvl).toFixed(2)}`}
                 subtext={`$${commifyToDecimalPlaces(parseFloat(tvlUsd), 2)}`}
               />
             </div>

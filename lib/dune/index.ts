@@ -199,7 +199,6 @@ class DuneClient {
     );
     const data = await this._checkCache(String(queryID));
     if (data) {
-      console.log("Got from cache");
       return data as ResultsResponse;
     } else {
       const { execution_id: jobID } = await this.execute(queryID, parameters);

@@ -49,7 +49,7 @@ const Error404 = ({ navLinks }) => {
 };
 
 export async function getStaticProps() {
-  const navRes = await fetchAPI("/ousd-nav-links", {
+  const navRes = await fetchAPI("/oeth-nav-links", {
     populate: {
       links: {
         populate: "*",

@@ -40,10 +40,10 @@ const navigationLinks = async (req, res) => {
 const handler = async (req, res) => {
   const { method } = req;
   switch (method) {
-    case "POST":
+    case "GET":
       return navigationLinks(req, res);
     default:
-      res.setHeader("Allow", ["POST", "OPTIONS"]);
+      res.setHeader("Allow", ["GET", "OPTIONS"]);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 };

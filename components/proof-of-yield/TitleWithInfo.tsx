@@ -8,6 +8,7 @@ import { useOutOfBoundsClick } from "../../hooks";
 interface TitleWithInfoProps {
   className?: string;
   textClassName?: string;
+  whiteTooltip?: boolean;
   info: string;
 }
 
@@ -15,6 +16,7 @@ const TitleWithInfo = ({
   className,
   textClassName,
   info,
+  whiteTooltip,
   children,
 }: PropsWithChildren<TitleWithInfoProps>) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -46,7 +48,9 @@ const TitleWithInfo = ({
         onClick={() => !showTooltip && setShowTooltip(true)}
       >
         <Image
-          src={assetRootPath("/images/info.png")}
+          src={assetRootPath(
+            `/images/${whiteTooltip ? "info-white.svg" : "info.png"}`
+          )}
           width="16"
           height="16"
           alt="info"

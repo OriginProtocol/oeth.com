@@ -27,7 +27,7 @@ const strategyMapping: {
     short_name: "Rocket Pool Ethereum Staking",
     name: "Rocket Pool Ether (rETH)",
     address: "0xDD3f50F8A6CafbE9b31a427582963f465E745AF8",
-    icon: "/images/rocketpool-icon.png",
+    icon: "/images/reth-icon.svg",
     tokens: ["reth"],
   },
   st_eth_strat: {

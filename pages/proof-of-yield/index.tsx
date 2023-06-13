@@ -18,6 +18,7 @@ const ProofOfYield = ({ navLinks, dailyStats }: ProofOfYieldProps) => {
       <Head>
         <title>Proof of Yield</title>
       </Head>
+
       <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
 
       {/* Heading */}

@@ -6,12 +6,14 @@ interface DailyStatsResponse {
 
 async function fetchDailyStats(
   end: number,
-  begin?: number
+  startAt?: number
 ): Promise<DailyStat[]> {
   try {
-    const endpoint = `${process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT}/api/v2/oeth/daily_stats/${end}`;
-    if (begin) endpoint.concat(`/${begin}`);
+    let endpoint = `${process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT}/api/v2/oeth/daily_stats/${end}`;
+    if (startAt) endpoint += `/${startAt}`;
     const response = await fetch(endpoint);
+
+    console.log(`Fetching daily stats from ${endpoint}`);
 
     if (!response.ok) {
       throw new Error(`Failed to fetch daily stats`);

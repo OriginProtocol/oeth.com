@@ -57,7 +57,7 @@ const LineChart = ({ chartData, isMobile }) => {
                 minRotation: 0,
                 callback: function (val, index) {
                   return (
-                    isMobile ? (index + 22) % 4 === 0 : (index + 8) % 2 === 0
+                    isMobile ? (index + 22) % 14 === 0 : (index + 8) % 7 === 0
                   )
                     ? this.getLabelForValue(Number(val))
                     : null;

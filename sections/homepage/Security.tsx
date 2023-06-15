@@ -79,12 +79,19 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
           className="flex-1 mt-3 md:mt-0 md:mr-6"
         >
           <div className="w-full flex justify-center">
-            <Image
-              src={assetRootPath("/images/lock.svg")}
-              width="96"
-              height="96"
-              alt="lock"
-            />
+            <Link
+              className="mx-auto flex justify-center items-center flex-col"
+              href={"https://docs.oeth.com/governance/timelock"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src={assetRootPath("/images/lock.svg")}
+                width="96"
+                height="96"
+                alt="lock"
+              />
+            </Link>
           </div>
         </SecurityFeature>
         <SecurityFeature
@@ -93,12 +100,19 @@ const Security = ({ audits, sectionOverrideCss }: SecurityProps) => {
           className="mt-3 md:mt-0 flex-1"
         >
           <div className="w-full flex justify-center">
-            <Image
-              src={assetRootPath("/images/immunefi.svg")}
-              width="180"
-              height="180"
-              alt="lock"
-            />
+            <Link
+              className="mx-auto flex justify-center items-center flex-col"
+              href={"https://docs.oeth.com/security-and-risks/bug-bounties"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src={assetRootPath("/images/immunefi.svg")}
+                width="180"
+                height="180"
+                alt="immunefi"
+              />
+            </Link>
           </div>
         </SecurityFeature>
       </div>

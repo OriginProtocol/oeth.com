@@ -13,8 +13,6 @@ async function fetchDailyStats(
     if (startAt) endpoint += `/${startAt}`;
     const response = await fetch(endpoint);
 
-    console.log(`Fetching daily stats from ${endpoint}`);
-
     if (!response.ok) {
       throw new Error(`Failed to fetch daily stats`);
     }

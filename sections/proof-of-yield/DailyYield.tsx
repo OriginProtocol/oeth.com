@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Image from "next/image";
 import {
   Section,
   TableData,
@@ -11,15 +10,9 @@ import {
 import { smSize } from "../../constants";
 import { useViewWidth } from "../../hooks";
 import { useRouter } from "next/router";
-import { utils } from "ethers";
 import { DailyStat } from "../../types";
-import {
-  assetRootPath,
-  commifyToDecimalPlaces,
-  fetchDailyStats,
-} from "../../utils";
+import { commifyToDecimalPlaces, fetchDailyStats } from "../../utils";
 import moment from "moment";
-const { commify } = utils;
 
 interface DailyYieldProps {
   dailyStats: DailyStat[];
@@ -33,12 +26,12 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
   const [stats, setStats] = useState(dailyStats);
 
   const routeToYieldOnDay = (date: number) => {
-    router.push(`/proof-of-yield/${date}`);
+    router.push(`/proof-of-yield/${date}`, undefined, { scroll: true });
   };
 
   const moreDays = async (begin: number, end: number) => {
     const moreStats = await fetchDailyStats(end, begin);
-    setStats(() => [...moreStats]);
+    setStats((prevStats) => prevStats.concat(moreStats));
   };
 
   const validDate = (date: string) => {
@@ -92,7 +85,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
             </TableHead>
             {width >= smSize && (
               <TableHead
-                info={`Yield is distributed to all regular Ethereum wallets and any smart contracts or mult-sigs that have opted-in.`}
+                info={`Yield is distributed to all regular Ethereum wallets and any smart contracts or multi-sigs that have opted-in.`}
                 className="pr-0 xl:pr-8"
               >
                 Yield-earning supply
@@ -105,7 +98,6 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
         {/* Table Body */}
 
         <tbody className="relative px-6">
-          {console.log(stats.filter((s) => validDate(s.date)))}
           {stats
             .filter((s) => validDate(s.date))
             .map((item, i) =>
@@ -126,13 +118,6 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
                   <TableData className="pr-8 lg:pr-14 xl:pr-24">
                     <div className="flex items-center">
                       {commifyToDecimalPlaces(parseFloat(item.yield), 2)}
-                      <Image
-                        src={assetRootPath("/images/oeth.svg")}
-                        width="64"
-                        height="64"
-                        alt="oeth"
-                        className="inline ml-1 md:ml-2 w-[16px] h-[16px] md:w-[24px] md:h-[24px]"
-                      />
                     </div>
                   </TableData>
                   <TableData className="pr-4 sm:pr-8 lg:pr-14 xl:pr-24">
@@ -148,13 +133,6 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
                           parseFloat(item.rebasing_supply),
                           2
                         )}
-                        <Image
-                          src={assetRootPath("/images/oeth.svg")}
-                          width="64"
-                          height="64"
-                          alt="oeth"
-                          className="inline ml-1 md:ml-2 w-[16px] h-[16px] md:w-[24px] md:h-[24px]"
-                        />
                       </div>
                     </TableData>
                   )}

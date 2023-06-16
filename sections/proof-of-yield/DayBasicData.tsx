@@ -37,11 +37,11 @@ const DayBasicData = ({
   const width = useViewWidth();
 
   const yieldBonusProps: YieldBoostMultiplierProps = {
-    rawApy: parseFloat(dailyStat.raw_apy),
-    boost: parseFloat(dailyStat.apy_boost),
-    totalApy: parseFloat(dailyStat.apy),
-    rebasingSupply: parseFloat(dailyStat.rebasing_supply),
-    nonRebasingSupply: parseFloat(dailyStat.non_rebasing_supply),
+    rawApy: parseFloat(dailyStat?.raw_apy) || 0.0,
+    boost: parseFloat(dailyStat?.apy_boost) || 0.0,
+    totalApy: parseFloat(dailyStat?.apy) || 0.0,
+    rebasingSupply: parseFloat(dailyStat?.rebasing_supply) || 0.0,
+    nonRebasingSupply: parseFloat(dailyStat?.non_rebasing_supply) || 0.0,
   };
 
   return (
@@ -76,15 +76,8 @@ const DayBasicData = ({
 
       <div className="w-fit flex justify-center items-center">
         <Typography.H2 className="font-bold inline">
-          {commifyToDecimalPlaces(parseFloat(dailyStat.yield), 2)}
+          {commifyToDecimalPlaces(parseFloat(dailyStat.yield), 4)}
         </Typography.H2>
-        <Image
-          src={assetRootPath("/images/oeth.svg")}
-          width="64"
-          height="64"
-          alt="oeth"
-          className="inline ml-4 w-[40px] h-[40px] md:w-[64px] md:h-[64px]"
-        />
       </div>
 
       <div className="w-full mt-8 md:mt-14 flex">
@@ -115,14 +108,7 @@ const DayBasicData = ({
                 info="The portion of the yield paid to OGV stakers"
               >
                 <div className="flex items-center">
-                  {commifyToDecimalPlaces(parseFloat(dailyStat.fees), 2)}
-                  <Image
-                    src={assetRootPath("/images/oeth.svg")}
-                    width="64"
-                    height="64"
-                    alt="oeth"
-                    className="inline ml-1 w-[16px] h-[16px] md:w-[24px] md:h-[24px]"
-                  />
+                  {commifyToDecimalPlaces(parseFloat(dailyStat.fees), 4)}
                 </div>
               </BasicData>
             )}
@@ -135,14 +121,7 @@ const DayBasicData = ({
               info="The portion of the yield paid to OGV stakers"
             >
               <div className="flex items-center">
-                {commifyToDecimalPlaces(parseFloat(dailyStat.yield), 2)}
-                <Image
-                  src={assetRootPath("/images/oeth.svg")}
-                  width="64"
-                  height="64"
-                  alt="oeth"
-                  className="inline ml-1 w-[20px] h-[20px] md:w-[24px] md:h-[24px]"
-                />
+                {commifyToDecimalPlaces(parseFloat(dailyStat.yield), 4)}
               </div>
             </BasicData>
           )}
@@ -201,12 +180,11 @@ const DayBasicData = ({
                 </tr>
               </thead>
               <tbody>
-                {dailyStat.rebase_events.map((item) => (
+                {dailyStat?.rebase_events?.map((item) => (
                   <tr
                     className="group border-t md:border-t-2 hover:bg-hover-bg border-origin-bg-black"
                     key={`${item.block_number}-${item.tx_hash}`}
                   >
-                    {console.log(item)}
                     <TableData align="left" className={eventChartColumnCssLeft}>
                       <Typography.Body2 className="text-xs md:text-base mb-1">
                         {item.block_number}
@@ -224,7 +202,7 @@ const DayBasicData = ({
                           {`Rebase`}
                         </TableData>
                         <TableData className={eventChartColumnCssRight}>
-                          {commifyToDecimalPlaces(parseFloat(item.amount), 2)}
+                          {commifyToDecimalPlaces(parseFloat(item.amount), 4)}
                         </TableData>
                       </>
                     ) : (
@@ -235,7 +213,7 @@ const DayBasicData = ({
                         )}
                       >
                         <Typography.Body3 className="text-xs md:text-base text-table-data">
-                          {commifyToDecimalPlaces(parseFloat(item.amount), 2)}
+                          {commifyToDecimalPlaces(parseFloat(item.amount), 4)}
                         </Typography.Body3>
                         <Typography.Body3 className="text-xs md:text-sm text-table-title">
                           {`Rebase`}
@@ -244,7 +222,7 @@ const DayBasicData = ({
                     )}
 
                     <TableData className={eventChartColumnCssRight}>
-                      {commifyToDecimalPlaces(parseFloat(item.fee), 2)}
+                      {commifyToDecimalPlaces(parseFloat(item.fee), 4)}
                     </TableData>
                     <TableData className={eventChartColumnCssRight}>
                       <a

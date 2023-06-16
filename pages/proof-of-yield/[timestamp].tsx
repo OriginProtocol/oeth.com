@@ -60,13 +60,9 @@ export const getServerSideProps: GetServerSideProps = async (
 }> => {
   const { timestamp } = context.query;
 
-  let timestampNumber: number | undefined;
   let dailyStat: DailyStat;
-  if (
-    timestamp &&
-    typeof timestamp === "string" &&
-    (timestampNumber = parseInt(timestamp))
-  ) {
+  if (timestamp && typeof timestamp === "string" && parseInt(timestamp)) {
+    let timestampNumber = parseInt(timestamp);
     const daysAgo = moment().diff(moment(timestampNumber), "days");
     const dailyStats = await fetchDailyStats(daysAgo, daysAgo - 1);
     dailyStat = get(dailyStats, `[${dailyStats.length - 1}]`); // At daysAgo = 1, the array returns both current day and last day

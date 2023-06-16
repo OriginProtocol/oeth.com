@@ -67,7 +67,7 @@ const YieldBoostMultiplier = ({
       <div className="mt-8 flex flex-col xl:flex-row border-t md:border-t-2 border-origin-bg-black">
         <div className="w-full xl:w-1/2 py-6 px-6 border-b md:border-b-2 xl:border-b-0 xl:border-r-2 border-origin-bg-black">
           <TitleWithInfo
-            info="Yield is distributed to all regular Ethereum wallets and any smart contracts or mult-sigs that have opted-in"
+            info="Yield is distributed to all regular Ethereum wallets and any smart contracts or multi-sigs that have opted-in"
             className="mb-1"
             textClassName="text-xs md:text-xs"
           >

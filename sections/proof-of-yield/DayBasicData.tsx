@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { useRouter } from "next/router";
 import { assetRootPath, commifyToDecimalPlaces } from "../../utils";
 import {
@@ -23,7 +23,7 @@ const eventChartColumnCssRight = "pr-6 xl:pr-8";
 const eventChartColumnCssLeft = "pl-6 xl:pr-8";
 
 interface DayBasicDataProps {
-  timestamp: number;
+  timestamp: Moment;
   dailyStat: DailyStat;
   sectionOverrideCss?: string;
 }
@@ -64,7 +64,7 @@ const DayBasicData = ({
 
       {/* Date UTC */}
       <Typography.Body className="mt-6 md:mt-20">
-        {moment(timestamp).format("MMM D, YYYY")} UTC
+        {timestamp.format("MMM D, YYYY")} UTC
       </Typography.Body>
 
       <TitleWithInfo
@@ -74,10 +74,11 @@ const DayBasicData = ({
         Yield distributed
       </TitleWithInfo>
 
-      <div className="w-fit flex justify-center items-center">
+      <div className="w-fit flex justify-center items-end">
         <Typography.H2 className="font-bold inline">
           {commifyToDecimalPlaces(parseFloat(dailyStat.yield), 4)}
         </Typography.H2>
+        <Typography.H7 className="inline ml-2 mb-1">OETH</Typography.H7>
       </div>
 
       <div className="w-full mt-8 md:mt-14 flex">
@@ -98,7 +99,7 @@ const DayBasicData = ({
               title="OETH vault value"
               info={`The sum of all assets currently held by OETH`}
             >
-              Ξ{" "}
+              {" "}
               {commifyToDecimalPlaces(parseFloat(dailyStat.backing_supply), 2)}
             </BasicData>
             {width >= xlSize && (

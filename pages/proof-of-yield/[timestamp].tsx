@@ -1,7 +1,7 @@
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
 import Error from "../404";
-import moment from "moment";
+import moment, { Moment } from "moment";
 import { get } from "lodash";
 import { useRouter } from "next/router";
 import {
@@ -12,7 +12,7 @@ import {
   DayTotal,
 } from "../../sections";
 import { DailyStat, YieldOnDayProps } from "../../types";
-import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import { fetchAPI, fetchDailyStats, transformLinks } from "../../utils";
 import { Header, Footer } from "../../components";
 
@@ -22,9 +22,13 @@ const YieldOnDay = ({ navLinks, dailyStat }: YieldOnDayProps) => {
   const router = useRouter();
   let { timestamp } = router.query;
 
-  const timestampNumber = Number(timestamp as any);
+  let timestampMoment: Moment;
 
-  if (Number.isNaN(timestampNumber)) return <Error navLinks={navLinks} />;
+  try {
+    timestampMoment = moment(timestamp);
+  } catch (err) {
+    return <Error navLinks={navLinks} />;
+  }
 
   return (
     <>
@@ -35,7 +39,7 @@ const YieldOnDay = ({ navLinks, dailyStat }: YieldOnDayProps) => {
       <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
 
       <DayBasicData
-        timestamp={timestampNumber}
+        timestamp={timestampMoment}
         dailyStat={dailyStat}
         sectionOverrideCss={overrideCss}
       />
@@ -53,19 +57,47 @@ const YieldOnDay = ({ navLinks, dailyStat }: YieldOnDayProps) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext<{ timestamp: string }>
+export const getStaticPaths: GetStaticPaths = async () => {
+  const today = moment().startOf("day");
+  // Last 30 days excluding the current day
+  const dates = Array.from({ length: 30 }, (_, i) =>
+    moment(today)
+      .subtract(i + 1, "days")
+      .format("YYYY-MM-DD")
+  );
+
+  const paths = dates.map((date) => ({
+    params: { timestamp: date },
+  }));
+
+  return { paths, fallback: "blocking" };
+};
+
+export const getStaticProps: GetStaticProps = async (
+  context: GetStaticPropsContext<{ timestamp: string }>
 ): Promise<{
   props: YieldOnDayProps;
+  revalidate: number;
 }> => {
-  const { timestamp } = context.query;
+  const { timestamp } = context.params;
 
-  let dailyStat: DailyStat;
-  if (timestamp && typeof timestamp === "string" && parseInt(timestamp)) {
-    let timestampNumber = parseInt(timestamp);
-    const daysAgo = moment().diff(moment(timestampNumber), "days");
+  let dailyStat: DailyStat = {
+    date: "0",
+    yield: "0",
+    fees: "0",
+    backing_supply: "0",
+    rebasing_supply: "0",
+    non_rebasing_supply: "0",
+    apy: "0",
+    raw_apy: "0",
+    apy_boost: "0",
+    rebase_events: [],
+  };
+  if (timestamp && typeof timestamp === "string") {
+    const daysAgo = moment().diff(moment(timestamp), "days");
     const dailyStats = await fetchDailyStats(daysAgo, daysAgo - 1);
-    dailyStat = get(dailyStats, `[${dailyStats.length - 1}]`); // At daysAgo = 1, the array returns both current day and last day
+    if (Array.isArray(dailyStats) && dailyStats.length > 0)
+      dailyStat = get(dailyStats, `[${dailyStats?.length - 1}]`); // At daysAgo = 1, the array returns both current day and last day
   }
 
   const navRes = await fetchAPI("/oeth-nav-links", {
@@ -77,11 +109,13 @@ export const getServerSideProps: GetServerSideProps = async (
   });
 
   const navLinks = transformLinks(navRes.data);
+
   return {
     props: {
       navLinks,
       dailyStat,
     },
+    revalidate: 60 * 60 * 12, // revalidate every 12 hours
   };
 };
 

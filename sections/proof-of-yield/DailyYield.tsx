@@ -25,7 +25,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
   const router = useRouter();
   const [stats, setStats] = useState(dailyStats);
 
-  const routeToYieldOnDay = (date: number) => {
+  const routeToYieldOnDay = (date: string) => {
     router.push(`/proof-of-yield/${date}`, undefined, { scroll: true });
   };
 
@@ -100,16 +100,17 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
         <tbody className="relative px-6">
           {stats
             .filter((s) => validDate(s.date))
-            .map((item, i) =>
+            .map((item, i) => {
               // Skip estimation for current day
-              i === 0 ? (
-                <></>
-              ) : (
+
+              if (i === 0) return;
+
+              return (
                 <tr
                   className="group border-t md:border-t-2 hover:bg-hover-bg border-origin-bg-black cursor-pointer"
                   key={item.date}
                   onClick={() =>
-                    routeToYieldOnDay(moment(item.date).unix() * 1000)
+                    routeToYieldOnDay(moment(item.date).format("YYYY-MM-DD"))
                   }
                 >
                   <TableData align="left" className="pl-4 md:pl-8">
@@ -139,15 +140,17 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
                   <TableData className="px-6" align="center">
                     <ChartDetailsButton
                       onClick={() =>
-                        routeToYieldOnDay(moment(item.date).milliseconds())
+                        routeToYieldOnDay(
+                          moment(item.date).format("YYYY-MM-DD")
+                        )
                       }
                     >
                       Proof of yield
                     </ChartDetailsButton>
                   </TableData>
                 </tr>
-              )
-            )}
+              );
+            })}
         </tbody>
       </Table>
 

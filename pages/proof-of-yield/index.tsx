@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React from "react";
 import { Header, Seo } from "../../components";
-import { GetServerSideProps, GetStaticProps } from "next";
+import { GetStaticProps } from "next";
 import { fetchAPI, fetchDailyStats, transformLinks } from "../../utils";
 import { Heading, DailyYield } from "../../sections";
 import { Footer } from "../../components";
@@ -50,7 +50,7 @@ export const getStaticProps: GetStaticProps = async (): Promise<{
       navLinks,
       dailyStats,
     },
-    revalidate: 60 * 5,
+    revalidate: 60 * 30, // revalidate every 30 minutes
   };
 };
 export default ProofOfYield;

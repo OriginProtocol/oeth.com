@@ -127,7 +127,7 @@ export async function getStaticProps() {
 
   Object.keys(apyHistoryData).map((key) => {
     apyHistory[key] = apyHistoryData[key].filter((item) =>
-      moment(item.day).isAfter("2023-05-06")
+      moment(item.day).isAfter(moment().subtract(14, "days"))
     );
   });
 
@@ -138,7 +138,6 @@ export async function getStaticProps() {
   const faqData = faqRes?.data.sort((a, b) => a.id - b.id) || [];
 
   //Extract rETH and stETH from vault holdings
-
   const strategiesCollateral = cloneDeep(allocation.strategies);
   const strategies = allocation.strategies;
 

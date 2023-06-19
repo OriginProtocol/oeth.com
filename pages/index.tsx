@@ -88,11 +88,7 @@ const IndexPage = ({
 
       <Allocation strategies={strategies} />
 
-      <Collateral
-        tvl={tvl}
-        strategies={strategiesCollateral}
-        collateral={collateral}
-      />
+      <Collateral />
 
       <Security audits={audits} />
 

@@ -17,7 +17,7 @@ const SecurityFeature = ({
   return (
     <div
       className={twMerge(
-        "py-8 md:py-10 px-4 md:px-16 max-w-[1134px] mx-auto rounded-xl bg-origin-bg-grey",
+        "py-8 md:py-10 px-4 xl:px-16 max-w-[1134px] rounded-xl bg-origin-bg-grey",
         className
       )}
     >

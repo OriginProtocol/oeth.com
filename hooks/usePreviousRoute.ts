@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { RouteStore } from "../stores";
 
 // this would have to go in `_app.tsx` to be a true previous route tracker (across all pages)

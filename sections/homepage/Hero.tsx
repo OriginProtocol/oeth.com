@@ -2,7 +2,12 @@ import Image from "next/image";
 import { useState, MouseEvent, useEffect } from "react";
 import { Typography } from "@originprotocol/origin-storybook";
 import { GradientButton, HeroInfo, Section, HeroData } from "../../components";
-import { assetRootPath, commifyToDecimalPlaces, postEmail } from "../../utils";
+import {
+  assetRootPath,
+  commifyToDecimalPlaces,
+  formatCurrency,
+  postEmail,
+} from "../../utils";
 import { mdSize } from "../../constants";
 import { useViewWidth } from "../../hooks";
 import { sanitize } from "dompurify";
@@ -98,7 +103,7 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
               <HeroData
                 className="border-r-0 rounded-l-lg"
                 title="APY"
-                value={`${(apy * 100).toFixed(2)}%`}
+                value={`${formatCurrency(apy * 100, 2)}%`}
                 subtext="Trailing 30-day"
               />
               <HeroData

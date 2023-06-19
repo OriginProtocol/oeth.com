@@ -1,9 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import moment from "moment";
-import { utils } from "ethers";
+import moment, { Moment } from "moment";
 import { useRouter } from "next/router";
-import { assetRootPath } from "../../utils";
+import { assetRootPath, commifyToDecimalPlaces } from "../../utils";
 import {
   BasicData,
   Table,
@@ -12,45 +11,39 @@ import {
   TitleWithInfo,
   YieldBoostMultiplier,
   Section,
+  Tooltip,
 } from "../../components";
 import { Typography } from "@originprotocol/origin-storybook";
 import { smSize, lgSize, xlSize } from "../../constants";
 import { shortenAddress } from "../../utils";
 import { useViewWidth } from "../../hooks";
 import { twMerge } from "tailwind-merge";
-const { commify } = utils;
-
-const e = {
-  block: 16188461,
-  date: 1675886432000,
-  action: "Rebase",
-  yieldDistributed: 1873.92,
-  fees: 208.21,
-  transactionHash:
-    "0xd9973207c58e3a041786faba972417f853776b88e0453ea113eaa79e44ef4b07",
-};
-
-const mockData = [];
-for (let i = 0; i < 5; i++) {
-  mockData.push(
-    Object.assign(
-      { ...e },
-      { block: e.block + i * 100, date: e.date + i * 1500 }
-    )
-  );
-}
+import { DailyStat, YieldBoostMultiplierProps } from "../../types";
 
 const eventChartColumnCssRight = "pr-6 xl:pr-8";
 const eventChartColumnCssLeft = "pl-6 xl:pr-8";
 
 interface DayBasicDataProps {
-  timestamp: number;
+  timestamp: Moment;
+  dailyStat: DailyStat;
   sectionOverrideCss?: string;
 }
 
-const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
+const DayBasicData = ({
+  timestamp,
+  dailyStat,
+  sectionOverrideCss,
+}: DayBasicDataProps) => {
   const router = useRouter();
   const width = useViewWidth();
+
+  const yieldBonusProps: YieldBoostMultiplierProps = {
+    rawApy: parseFloat(dailyStat?.raw_apy) || 0.0,
+    boost: parseFloat(dailyStat?.apy_boost) || 0.0,
+    totalApy: parseFloat(dailyStat?.apy) || 0.0,
+    rebasingSupply: parseFloat(dailyStat?.rebasing_supply) || 0.0,
+    nonRebasingSupply: parseFloat(dailyStat?.non_rebasing_supply) || 0.0,
+  };
 
   return (
     <Section className={twMerge("mb-10 md:mb-20", sectionOverrideCss)}>
@@ -70,26 +63,33 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
         Back to list
       </button>
 
-      {/* Date UTC */}
-      <Typography.Body className="mt-6 md:mt-20">
-        {moment(timestamp).format("MMM D, YYYY")} UTC
-      </Typography.Body>
+      {/* Date PT */}
+      <div className="flex mt-6 md:mt-20">
+        <Typography.Body className="">
+          {timestamp.format("MMM D, YYYY")} PT
+        </Typography.Body>
+        <Tooltip
+          info={
+            "Yield is distributed at least once per day using Chainlink Automation. It is scheduled to run at approximately midnight Pacific Time, which serves as the beginning of each calendar day."
+          }
+          whiteTooltip
+          className="ml-2 md:min-w-[12px] md:min-h-[12px] md:max-w-[12px] md:max-h-[12px]"
+          tooltipClassName="min-w-[180px]"
+        />
+      </div>
 
-      <TitleWithInfo info="" className="mt-4 md:mt-10 mb-2 md:mb-4">
+      <TitleWithInfo
+        info="The actual amount of OETH added to users' wallet balances"
+        className="mt-4 md:mt-10 mb-2 md:mb-4"
+      >
         Yield distributed
       </TitleWithInfo>
 
-      <div className="w-fit flex justify-center items-center">
+      <div className="w-fit flex justify-center items-end">
         <Typography.H2 className="font-bold inline">
-          ${commify(1873.92)}
+          {commifyToDecimalPlaces(parseFloat(dailyStat.yield), 4)}
         </Typography.H2>
-        <Image
-          src={assetRootPath("/images/ousd-logo.svg")}
-          width="64"
-          height="64"
-          alt="ousd-logo"
-          className="inline ml-4 w-[40px] h-[40px] md:w-[64px] md:h-[64px]"
-        />
+        <Typography.H7 className="inline ml-2 mb-1">OETH</Typography.H7>
       </div>
 
       <div className="w-full mt-8 md:mt-14 flex">
@@ -98,22 +98,30 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
           <div className="flex">
             <BasicData
               className="flex-1 rounded-tl-lg xl:rounded-l-lg justify-center lg:justify-start"
-              title="Distribution APY"
+              title="APY"
+              info={`The annualized, compounded rate earned by OETH holders on this day`}
             >
-              {commify(3.08)}%
+              {parseFloat(dailyStat.apy) === 0
+                ? "-"
+                : `${commifyToDecimalPlaces(parseFloat(dailyStat.apy), 2)}%`}
             </BasicData>
             <BasicData
               className="flex-1 rounded-tr-lg xl:rounded-none justify-center lg:justify-start"
-              title="OUSD vault value"
+              title="OETH vault value"
+              info={`The sum of all assets currently held by OETH`}
             >
-              ${commify(49063918)}
+              {" "}
+              {commifyToDecimalPlaces(parseFloat(dailyStat.backing_supply), 2)}
             </BasicData>
             {width >= xlSize && (
               <BasicData
                 className="flex-1 rounded-b-lg xl:rounded-bl-none xl:rounded-r-lg mt-0.5 xl:mt-0"
                 title="Fees generated"
+                info="The portion of the yield paid to OGV stakers"
               >
-                ${commify(208.21)}
+                <div className="flex items-center">
+                  {commifyToDecimalPlaces(parseFloat(dailyStat.fees), 4)}
+                </div>
               </BasicData>
             )}
           </div>
@@ -122,12 +130,15 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
             <BasicData
               className="flex-1 flex justify-center rounded-b-lg xl:rounded-bl-none xl:rounded-r-lg mt-0.5 xl:mt-0"
               title="Fees generated"
+              info="The portion of the yield paid to OGV stakers"
             >
-              ${commify(208.21)}
+              <div className="flex items-center">
+                {commifyToDecimalPlaces(parseFloat(dailyStat.yield), 4)}
+              </div>
             </BasicData>
           )}
 
-          {width < lgSize && <YieldBoostMultiplier />}
+          {width < lgSize && <YieldBoostMultiplier {...yieldBonusProps} />}
 
           {/* Yield distribution events */}
           <div className="text-blurry mt-14">
@@ -135,8 +146,10 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
               Yield distribution events
             </Typography.Body>
             <Typography.Body3 className="mt-3 text-xs text-table-title">
-              Sorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-              vulputate libero et velit interdum, ac aliquet odio mattis.
+              OETH wallet balances increase at least once per day. Anyone can
+              trigger yield distribution at any time. Each time yield is
+              distributed, there is one corresponding transaction on the
+              blockchain.
             </Typography.Body3>
             <Table className="mt-6">
               <thead>
@@ -167,7 +180,10 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
                       Amount / Action
                     </TableHead>
                   )}
-                  <TableHead info="asd" className={eventChartColumnCssRight}>
+                  <TableHead
+                    info="The portion of the yield paid to OGV stakers"
+                    className={eventChartColumnCssRight}
+                  >
                     Fees
                   </TableHead>
                   <TableHead className={eventChartColumnCssRight}>
@@ -176,17 +192,19 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
                 </tr>
               </thead>
               <tbody>
-                {mockData.map((item) => (
+                {dailyStat?.rebase_events?.map((item) => (
                   <tr
                     className="group border-t md:border-t-2 hover:bg-hover-bg border-origin-bg-black"
-                    key={item.date}
+                    key={`${item.block_number}-${item.tx_hash}`}
                   >
                     <TableData align="left" className={eventChartColumnCssLeft}>
                       <Typography.Body2 className="text-xs md:text-base mb-1">
-                        {item.block}
+                        {item.block_number}
                       </Typography.Body2>
                       <Typography.Body3 className="text-xs md:text-sm text-table-title">
-                        {moment.utc(item.date).format("HH:mm:ss")}
+                        {moment(item.block_time)
+                          .utcOffset("-07:00")
+                          .format("HH:mm:ss")}
                       </Typography.Body3>
                     </TableData>
                     {width >= smSize ? (
@@ -195,10 +213,10 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
                           align="left"
                           className={eventChartColumnCssLeft}
                         >
-                          {item.action}
+                          {`Rebase`}
                         </TableData>
                         <TableData className={eventChartColumnCssRight}>
-                          ${commify(item.yieldDistributed)}
+                          {commifyToDecimalPlaces(parseFloat(item.amount), 4)}
                         </TableData>
                       </>
                     ) : (
@@ -209,28 +227,27 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
                         )}
                       >
                         <Typography.Body3 className="text-xs md:text-base text-table-data">
-                          ${item.yieldDistributed}
+                          {commifyToDecimalPlaces(parseFloat(item.amount), 4)}
                         </Typography.Body3>
                         <Typography.Body3 className="text-xs md:text-sm text-table-title">
-                          {item.action}
+                          {`Rebase`}
                         </Typography.Body3>
                       </TableData>
                     )}
 
                     <TableData className={eventChartColumnCssRight}>
-                      ${item.fees}
+                      {commifyToDecimalPlaces(parseFloat(item.fee), 4)}
                     </TableData>
                     <TableData className={eventChartColumnCssRight}>
                       <a
-                        href={`https://etherscan.io/tx/${e.transactionHash}`}
+                        href={`https://etherscan.io/tx/${item.tx_hash}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex justify-end items-center ml-2"
                       >
-                        {width >= lgSize &&
-                          shortenAddress(item.transactionHash, 3)}
+                        {width >= lgSize && shortenAddress(item.tx_hash, 3)}
                         <Image
-                          src={assetRootPath("/images/ext-link.svg")}
+                          src={assetRootPath("/images/ext-link-white.svg")}
                           width="14"
                           height="14"
                           alt="ext-link"
@@ -246,7 +263,7 @@ const DayBasicData = ({ timestamp, sectionOverrideCss }: DayBasicDataProps) => {
         </div>
         {/* Yield boost multiplier */}
 
-        {width >= lgSize && <YieldBoostMultiplier />}
+        {width >= lgSize && <YieldBoostMultiplier {...yieldBonusProps} />}
       </div>
     </Section>
   );

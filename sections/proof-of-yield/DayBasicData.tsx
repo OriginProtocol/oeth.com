@@ -11,6 +11,7 @@ import {
   TitleWithInfo,
   YieldBoostMultiplier,
   Section,
+  Tooltip,
 } from "../../components";
 import { Typography } from "@originprotocol/origin-storybook";
 import { smSize, lgSize, xlSize } from "../../constants";
@@ -62,10 +63,20 @@ const DayBasicData = ({
         Back to list
       </button>
 
-      {/* Date UTC */}
-      <Typography.Body className="mt-6 md:mt-20">
-        {timestamp.format("MMM D, YYYY")} UTC
-      </Typography.Body>
+      {/* Date PT */}
+      <div className="flex mt-6 md:mt-20">
+        <Typography.Body className="">
+          {timestamp.format("MMM D, YYYY")} PT
+        </Typography.Body>
+        <Tooltip
+          info={
+            "Yield is distributed at least once per day using Chainlink Automation. It is scheduled to run at approximately midnight Pacific Time, which serves as the beginning of each calendar day."
+          }
+          whiteTooltip
+          className="ml-2 md:min-w-[12px] md:min-h-[12px] md:max-w-[12px] md:max-h-[12px]"
+          tooltipClassName="min-w-[180px]"
+        />
+      </div>
 
       <TitleWithInfo
         info="The actual amount of OETH added to users' wallet balances"
@@ -191,7 +202,9 @@ const DayBasicData = ({
                         {item.block_number}
                       </Typography.Body2>
                       <Typography.Body3 className="text-xs md:text-sm text-table-title">
-                        {moment.utc(item.block_time).format("HH:mm:ss")}
+                        {moment(item.block_time)
+                          .utcOffset("-07:00")
+                          .format("HH:mm:ss")}
                       </Typography.Body3>
                     </TableData>
                     {width >= smSize ? (

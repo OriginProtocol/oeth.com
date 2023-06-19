@@ -7,6 +7,18 @@ interface TableDataProps {
   width?: string;
 }
 
+const text = {
+  right: "text-right",
+  left: "text-left",
+  center: "text-center",
+};
+
+const component = {
+  right: "float-right",
+  left: "float-left",
+  center: "flex justify-center",
+};
+
 const TableData = ({
   align,
   className,
@@ -17,13 +29,15 @@ const TableData = ({
     <td
       className={twMerge(
         `text-xs md:text-xl text-table-data py-6 lg:py-9 w-[1%] whitespace-nowrap ${
-          align ? align : "text-right"
+          align ? text[align] : "text-right"
         }`,
         className
       )}
       width={width || "auto"}
     >
-      {children}
+      <div className={`${align ? component[align] : "float-right"}`}>
+        {children}
+      </div>
     </td>
   );
 };

@@ -4,6 +4,7 @@
     "dev": "next",
     "types": "typechain --target ethers-v5 --out-dir types/contracts/ \"constants/abis/*.json\"",
     "build": "next build",
+    "export": "next export",
     "start": "next start",
     "type-check": "tsc"
   },

@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { useState, forwardRef } from "react";
 import { GradientButton } from "../../components";
 import {
   Chart as ChartJS,
@@ -60,9 +60,7 @@ const DripperGraph = forwardRef<ChartJS<"bar">, DripperGraphProps>(
     },
     ref
   ) => {
-    const [chartTime, setChartTime] = React.useState<ChartTime>(
-      ChartTime.SEVEN_DAY
-    );
+    const [chartTime, setChartTime] = useState<ChartTime>(ChartTime.SEVEN_DAY);
 
     const chartData: ChartData<"bar"> = {
       labels: dataX,

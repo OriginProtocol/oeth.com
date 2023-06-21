@@ -140,13 +140,16 @@ const Ecosystem = ({ seo, navLinks, partners }) => {
 };
 
 export async function getStaticProps() {
-  const partnerRes = await fetchAPI("/oeth-partners", {
-    populate: {
-      logo: {
-        populate: "*",
+  const partnerRes = await fetchAPI(
+    "/oeth-partners?pagination[pageSize]=1000",
+    {
+      populate: {
+        logo: {
+          populate: "*",
+        },
       },
-    },
-  });
+    }
+  );
   const seoRes = await fetchAPI("/oeth/page/en/%2Fecosystem");
   const navRes = await fetchAPI("/oeth-nav-links", {
     populate: {

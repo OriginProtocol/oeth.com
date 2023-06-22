@@ -81,7 +81,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
               info={`The annualized, compounded rate earned by OETH holders on this day`}
               className="pr-4 sm:pr-8 lg:pr-14 xl:pr-24"
             >
-              APY
+              Daily APY
             </TableHead>
             {width >= smSize && (
               <TableHead

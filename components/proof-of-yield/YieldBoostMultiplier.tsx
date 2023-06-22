@@ -19,7 +19,7 @@ const YieldBoostMultiplier = ({
           textClassName="text-white text-base md:text-xl mr-1"
           whiteTooltip={true}
         >
-          Yield Bonus
+          Yield bonus
         </TitleWithInfo>
       </div>
       <div className="border md:border-2 mx-4 md:mx-8 border-origin-bg-black px-4 md:px-6 py-4 mt-6 rounded-t-lg flex flex-col 2xl:flex-row 2xl:justify-between 2xl:items-center">
@@ -41,11 +41,11 @@ const YieldBoostMultiplier = ({
           <Typography.Body className="inline mr-1">
             {commifyToDecimalPlaces(boost, 2)}
           </Typography.Body>
-          <Typography.Body2 className="inline">Boost</Typography.Body2>
+          <Typography.Body2 className="inline">Multiplier</Typography.Body2>
         </div>
-        <div className="max-w-[60%]">
+        <div>
           <Typography.Body3 className="text-table-title text-sm text-left 2xl:text-right">
-            OETH total supply ÷ Rebasing OETH supply
+            Total supply / yield-earning supply
           </Typography.Body3>
         </div>
       </div>
@@ -60,7 +60,7 @@ const YieldBoostMultiplier = ({
         </div>
         <div>
           <Typography.Body3 className="text-table-title text-sm text-left 2xl:text-right">
-            Distributed APY
+            Actual yield distributed
           </Typography.Body3>
         </div>
       </div>

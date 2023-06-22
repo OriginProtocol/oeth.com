@@ -158,18 +158,9 @@ const DayBasicData = ({
                     Block / Time
                   </TableHead>
                   {width >= smSize ? (
-                    <>
-                      <TableHead
-                        align="left"
-                        className={eventChartColumnCssLeft}
-                      >
-                        Action
-                      </TableHead>
-
-                      <TableHead className={eventChartColumnCssRight}>
-                        Amount
-                      </TableHead>
-                    </>
+                    <TableHead className={eventChartColumnCssRight}>
+                      Amount
+                    </TableHead>
                   ) : (
                     <TableHead
                       className={twMerge(
@@ -177,7 +168,7 @@ const DayBasicData = ({
                         "whitespace-normal pr-4"
                       )}
                     >
-                      Amount / Action
+                      Amount
                     </TableHead>
                   )}
                   <TableHead
@@ -208,17 +199,9 @@ const DayBasicData = ({
                       </Typography.Body3>
                     </TableData>
                     {width >= smSize ? (
-                      <>
-                        <TableData
-                          align="left"
-                          className={eventChartColumnCssLeft}
-                        >
-                          {`Rebase`}
-                        </TableData>
-                        <TableData className={eventChartColumnCssRight}>
-                          {commifyToDecimalPlaces(parseFloat(item.amount), 4)}
-                        </TableData>
-                      </>
+                      <TableData className={eventChartColumnCssRight}>
+                        {commifyToDecimalPlaces(parseFloat(item.amount), 4)}
+                      </TableData>
                     ) : (
                       <TableData
                         className={twMerge(
@@ -228,9 +211,6 @@ const DayBasicData = ({
                       >
                         <Typography.Body3 className="text-xs md:text-base text-table-data">
                           {commifyToDecimalPlaces(parseFloat(item.amount), 4)}
-                        </Typography.Body3>
-                        <Typography.Body3 className="text-xs md:text-sm text-table-title">
-                          {`Rebase`}
                         </Typography.Body3>
                       </TableData>
                     )}

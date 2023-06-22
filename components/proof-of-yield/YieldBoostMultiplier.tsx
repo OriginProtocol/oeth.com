@@ -43,7 +43,7 @@ const YieldBoostMultiplier = ({
           </Typography.Body>
           <Typography.Body2 className="inline">Multiplier</Typography.Body2>
         </div>
-        <div className="max-w-[60%]">
+        <div>
           <Typography.Body3 className="text-table-title text-sm text-left 2xl:text-right">
             Total supply / yield-earning supply
           </Typography.Body3>

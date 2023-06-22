@@ -26,7 +26,7 @@ export const backingTokens = {
   },
   RETH: {
     label: "Rocket Pool ETH (rETH)",
-    logoSrc: "/images/reth-icon.svg",
+    logoSrc: "/images/reth-icon.png",
     color: "#ffc298",
   },
   STETH: {

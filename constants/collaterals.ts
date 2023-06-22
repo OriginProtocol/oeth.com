@@ -15,7 +15,7 @@ const collaterals = {
     symbol: "stETH",
   },
   reth: {
-    img: "reth-icon.svg",
+    img: "reth-icon.png",
     tokenName: "Rocket Pool ETH",
     symbol: "rETH",
   },

@@ -222,9 +222,11 @@ export const sumOf = (data) => {
   }, 0);
 };
 
-const formatMonthDay = (d) => format(new Date(d), "MMM do");
+const formatMonthDay = (d) => {
+  return format(new Date(d.slice(0, 10)), "MMM do");
+};
 
-export const formatLabels = (labels) => labels?.map(formatMonthDay);
+export const formatLabels = (labels) => labels?.map(formatMonthDay) || [];
 
 export const formatDisplay = ({ labels, datasets }) => ({
   labels: labels ? formatLabels(labels) : [],

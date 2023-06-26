@@ -223,6 +223,7 @@ export const sumOf = (data) => {
 };
 
 const formatMonthDay = (d) => {
+  if (!d || typeof d !== "string") return "";
   return format(new Date(d.slice(0, 10)), "MMM do");
 };
 

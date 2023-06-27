@@ -117,7 +117,7 @@ const DayBasicData = ({
               <BasicData
                 className="flex-1 rounded-b-lg xl:rounded-bl-none xl:rounded-r-lg mt-0.5 xl:mt-0"
                 title="Fees generated"
-                info="The portion of the yield paid to OGV stakers"
+                info="The portion of the yield collected by the Origin DeFi DAO"
               >
                 <div className="flex items-center">
                   {commifyToDecimalPlaces(parseFloat(dailyStat.fees), 4)}
@@ -130,7 +130,7 @@ const DayBasicData = ({
             <BasicData
               className="flex-1 flex justify-center rounded-b-lg xl:rounded-bl-none xl:rounded-r-lg mt-0.5 xl:mt-0"
               title="Fees generated"
-              info="The portion of the yield paid to OGV stakers"
+              info="The portion of the yield collected by the Origin DeFi DAO"
             >
               <div className="flex items-center">
                 {commifyToDecimalPlaces(parseFloat(dailyStat.yield), 4)}
@@ -172,7 +172,7 @@ const DayBasicData = ({
                     </TableHead>
                   )}
                   <TableHead
-                    info="The portion of the yield paid to OGV stakers"
+                    info="The portion of the yield collected by the Origin DeFi DAO"
                     className={eventChartColumnCssRight}
                   >
                     Fees

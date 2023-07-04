@@ -54,7 +54,7 @@ const Article = ({ article, navLinks }) => {
       <Seo seo={seo} />
       {loaded && (
         <>
-          <Header mappedLinks={navLinks} webProperty="ousd" />
+          <Header mappedLinks={navLinks} webProperty="oeth" />
           <div className="bg-[#141519] px-8 md:px-16 lg:px-[134px] pb-8 md:pb-12">
             <div className="max-w-[763px] mx-auto">
               <Link

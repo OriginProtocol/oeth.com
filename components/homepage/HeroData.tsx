@@ -1,6 +1,7 @@
 import { Typography } from "@originprotocol/origin-storybook";
 import React from "react";
 import { twMerge } from "tailwind-merge";
+import Link from "next/link";
 
 interface HeroDataProps {
   title: string;
@@ -9,9 +10,13 @@ interface HeroDataProps {
   className?: string;
 }
 
-const HeroData = ({ title, value, subtext, className }: HeroDataProps) => {
+const HeroData = ({ title, value, subtext, className, href }: HeroDataProps) => {
   return (
-    <div
+    <Link
+      href={href}
+      target="_parent"
+      rel="noopener noreferrer"
+      prefetch={false}
       className={twMerge(
         "py-4 md:py-8 border border-[#ffffff1a] text-center leading-[28px] md:leading-[32px] w-1/2 bg-origin-bg-blackt",
         className
@@ -24,7 +29,7 @@ const HeroData = ({ title, value, subtext, className }: HeroDataProps) => {
       <Typography.Body2 className="mt-1 text-subheading text-xs md:text-sm">
         {subtext}
       </Typography.Body2>
-    </div>
+    </Link>
   );
 };
 

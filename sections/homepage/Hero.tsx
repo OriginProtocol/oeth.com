@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useState, MouseEvent, useEffect } from "react";
 import { Typography } from "@originprotocol/origin-storybook";
 import { GradientButton, HeroInfo, Section, HeroData } from "../../components";
@@ -100,12 +101,19 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
               Get OETH
             </GradientButton>
             <div className="flex mt-10 md:mt-20 max-w-[calc(100vw-32px)] w-[638px]">
-              <HeroData
-                className="border-r-0 rounded-l-lg"
-                title="APY"
-                value={`${formatCurrency(apy * 100, 2)}%`}
-                subtext="Trailing 30-day"
-              />
+              <Link
+                href={"/proof-of-yield"}
+                target="_parent"
+                rel="noopener noreferrer"
+                prefetch={false}
+              >
+                <HeroData
+                  className="border-r-0 rounded-l-lg"
+                  title="APY"
+                  value={`${formatCurrency(apy * 100, 2)}%`}
+                  subtext="Trailing 30-day"
+                />
+              </Link>
               <HeroData
                 className="rounded-r-lg"
                 title="TVL"

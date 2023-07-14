@@ -7,6 +7,7 @@ interface HeroDataProps {
   title: string;
   value: string;
   subtext: string;
+  href: string;
   className?: string;
 }
 

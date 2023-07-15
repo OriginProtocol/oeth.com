@@ -101,12 +101,14 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
             </GradientButton>
             <div className="flex mt-10 md:mt-20 max-w-[calc(100vw-32px)] w-[638px]">
               <HeroData
+                href="/proof-of-yield"
                 className="border-r-0 rounded-l-lg"
                 title="APY"
                 value={`${formatCurrency(apy * 100, 2)}%`}
                 subtext="Trailing 30-day"
               />
               <HeroData
+                href="/analytics"
                 className="rounded-r-lg"
                 title="TVL"
                 value={`${parseFloat(tvl).toFixed(2)}`}

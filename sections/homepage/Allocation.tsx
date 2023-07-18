@@ -204,18 +204,18 @@ const Allocation = ({ strategies }: AllocationProps) => {
                                           className="flex flex-row justify-between xl:mr-10 xl:pt-2.5"
                                           key={i}
                                         >
-                                          <div className="flex flex-row">
+                                          <div className="flex flex-row items-center">
                                             <div
                                               className={`relative ${
                                                 strategy?.protocol === "Convex"
-                                                  ? "w-12"
-                                                  : "w-6"
+                                                  ? "w-[48px] h-[24px]"
+                                                  : "w-[24px] h-[24px]"
                                               }`}
                                             >
                                               <Image
                                                 src={strategy?.icon}
-                                                fill
                                                 alt={strategy.name}
+                                                fill
                                               />
                                             </div>
                                             <Typography.Body3 className="pl-[12px] pr-[16px] font-light text-[12px] md:text-[16px]">

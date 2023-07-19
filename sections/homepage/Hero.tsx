@@ -173,7 +173,7 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
 
           <HeroInfo
             title="Fully collateralized"
-            subtitle="OETH is always redeemable for a basket of ETH and the most trusted liquid staking derivatives."
+            subtitle="OETH is always redeemable for a basket of ETH and the most trusted liquid staking tokens."
             className="w-full md:w-1/2 bg-origin-bg-dgrey rounded-lg"
           >
             <Image

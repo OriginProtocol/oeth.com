@@ -45,7 +45,7 @@ const YieldBoostMultiplier = ({
         </div>
         <div>
           <Typography.Body3 className="text-table-title text-sm text-left 2xl:text-right">
-            Total supply / yield-earning supply
+            Circulating supply / yield-earning supply
           </Typography.Body3>
         </div>
       </div>
@@ -86,7 +86,7 @@ const YieldBoostMultiplier = ({
               className="mb-1"
               textClassName="text-xs md:text-xs"
             >
-              OETH not receiving yield{" "}
+              OETH giving up yield{" "}
             </TitleWithInfo>
             <Typography.Body className="text-left w-full inline">
               {" "}

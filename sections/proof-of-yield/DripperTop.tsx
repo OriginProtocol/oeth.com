@@ -1,13 +1,13 @@
 import React from "react";
 import Image from "next/image";
-import { Section } from "../../components";
-import { assetRootPath } from "../../utils";
 import { Typography } from "@originprotocol/origin-storybook";
-import { GradientButton } from "../../components";
 import { twMerge } from "tailwind-merge";
 import { useRouter } from "next/router";
-import { useGetPreviousRoute } from "../../hooks";
 import moment from "moment";
+import { Section } from "../../components";
+import { assetRootPath } from "../../utils";
+import { GradientButton } from "../../components";
+import { useGetPreviousRoute } from "../../hooks";
 
 interface DripperTopProps {
   overrideCss?: string;
@@ -49,7 +49,7 @@ const DripperTop = ({ overrideCss }: DripperTopProps) => {
 
       {/* Title */}
       <Typography.H3 className="mt-6 md:mt-14 font-bold">
-        OUSD yield dripper
+        OETH yield dripper
       </Typography.H3>
 
       <GradientButton outerDivClassName="mt-7 md:mt-12">

@@ -310,7 +310,7 @@ const TwoColumnLayout = ({ sidebarWidth = 316, children }) => {
     {
       label: "Dripper",
       href: "/analytics/dripper",
-      enabled: false,
+      enabled: true,
     },
     {
       label: "Health monitoring",

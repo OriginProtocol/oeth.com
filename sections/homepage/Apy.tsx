@@ -1,19 +1,19 @@
-import Link from "next/link";
 import { useState, useEffect, useMemo } from "react";
 import { Chart as ChartJS } from "chart.js/auto";
-import { GradientButton, LineChart } from "../../components";
+import { twMerge } from "tailwind-merge";
+import { Dictionary, last } from "lodash";
 import { Typography } from "@originprotocol/origin-storybook";
+import { CategoryScale, ChartData } from "chart.js";
+import { GradientButton, LineChart } from "../../components";
 import { formatCurrency } from "../../utils/math";
 import { apyDayOptions, mdSize } from "../../constants";
-import { CategoryScale, ChartData } from "chart.js";
 import { Section } from "../../components";
 import { ApyHistory } from "../../types";
-import { twMerge } from "tailwind-merge";
-import { Dictionary } from "lodash";
 import { useApyHistoryQuery } from "../../queries";
 import { useViewWidth } from "../../hooks";
 
 ChartJS.register(CategoryScale);
+
 interface ApyProps {
   daysToApy: Dictionary<number>;
   apyData: ApyHistory;
@@ -34,11 +34,11 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
   const viewWidth = useViewWidth();
 
   const [chartData, setChartData] = useState<ChartData<"line">>();
-  const dataReversed =
+
+  const data =
     apyHistory && apyHistory[`apy${apyDays}`]
       ? apyHistory[`apy${apyDays}`]
       : [];
-  const data = dataReversed.slice().reverse();
 
   useEffect(() => {
     apyHistoryQuery.refetch();
@@ -50,6 +50,7 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
   }, [apyDays]);
 
   let width, height, gradient;
+
   function getGradient(ctx, chartArea) {
     const chartWidth = chartArea.right - chartArea.left;
     const chartHeight = chartArea.bottom - chartArea.top;
@@ -81,7 +82,6 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
             borderColor: function (context) {
               const chart = context.chart;
               const { ctx, chartArea } = chart;
-
               if (!chartArea) {
                 return;
               }
@@ -121,7 +121,7 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
               <Typography.H2 className="font-bold xl:inline lg:text-left text-6xl">
                 {formatCurrency(
                   // @ts-ignore
-                  daysToApy[apyDays] * 100,
+                  last(data)?.trailing_apy,
                   2
                 ) + "% "}
               </Typography.H2>

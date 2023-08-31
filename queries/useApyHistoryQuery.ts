@@ -1,5 +1,4 @@
 import { useQuery } from "react-query";
-
 import { QUERY_KEYS, apyDayOptions } from "../constants";
 import moment from "moment";
 
@@ -17,16 +16,22 @@ async function fetchApyHistory() {
   ).catch(function (err) {
     console.log(err.message);
   });
+
   const data = {};
+
   apyDayOptions.map((days, i) => {
     data[`apy${days}`] = apyHistory ? apyHistory[i] : [];
   });
 
   Object.keys(data).map((key) => {
-    data[key] = data[key].filter((item) =>
-      moment(item.day).isAfter(moment().subtract(14, "days"))
-    );
+    data[key] = data[key]
+      .filter((item) => moment(item.day).isAfter(moment().subtract(14, "days")))
+      .reverse();
   });
+
+  // Remove last apy day when apy days for trailing average
+  data?.["apy7"]?.pop();
+  data?.["apy30"]?.pop();
 
   return data;
 }

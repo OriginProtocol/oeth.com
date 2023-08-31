@@ -1,13 +1,15 @@
 import Redis from "ioredis";
-import { fromUnixTime, getUnixTime, startOfDay } from "date-fns";
+import { getUnixTime, startOfDay } from "date-fns";
 import { toChartData } from "../../../../lib/dune";
 
-const tvlHistoryUrl = (days) =>
-  `${process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT}/oeth/tvl_history/${days}`;
+const oethPegUrl = (unixFrom, unixTo) =>
+  `${process.env.NEXT_PUBLIC_COINGECKO_API}/coins/origin-ether/market_chart/range?vs_currency=eth&precision=6&from=${unixFrom}&to=${unixTo}`;
 
-const CACHE_EXPIRATION = 14400; // 4 hours
+const OETH_START_TIMESTAMP = 1684209600;
 
-export const getTotalSupply = async () => {
+const CACHE_EXPIRATION = 43200; // 12 hours
+
+export const getOETHPeg = async () => {
   try {
     const cacheClient = new Redis(process.env.REDIS_URL, {
       tls: {
@@ -21,10 +23,13 @@ export const getTotalSupply = async () => {
       },
     });
 
+    let prices;
+
+    // Serves as a cache key
+    const pegTo = getUnixTime(startOfDay(new Date()));
+
     // Check cache for peg data
-    const days = 14;
-    const startTimestamp = getUnixTime(startOfDay(new Date()));
-    const cacheKey = `${String(startTimestamp)}_${days}`;
+    const cacheKey = String(pegTo);
 
     let data = await cacheClient.get(cacheKey);
 
@@ -40,7 +45,9 @@ export const getTotalSupply = async () => {
 
     // Refetch data
     if (!data) {
-      ({ data } = await fetch(tvlHistoryUrl(days)).then((res) => res.json()));
+      data = await fetch(oethPegUrl(OETH_START_TIMESTAMP, pegTo)).then((res) =>
+        res.json()
+      );
 
       // Store in cache
       const cachedResultSet = JSON.stringify(data);
@@ -53,35 +60,28 @@ export const getTotalSupply = async () => {
     }
 
     // @ts-ignore
-    const formattedData = data.map(
-      ({ block_time, circulating_supply, protocol_owned_supply }) => ({
-        block_date: new Date(fromUnixTime(block_time)),
-        circulating_supply,
-        protocol_owned_supply,
-      })
-    );
+    ({ prices } = data || {});
 
-    const { circulatingSupply, protocolOwned, labels } = toChartData(
-      formattedData,
-      {
-        circulating_supply: "circulatingSupply",
-        protocol_owned_supply: "protocolOwned",
-        block_date: "labels",
-      }
-    );
+    const formattedPrices = prices.map(([timestamp, value]) => {
+      return {
+        timestamp: new Date(timestamp),
+        value,
+      };
+    });
 
+    const { all, labels } = toChartData(formattedPrices, {
+      value: "all",
+      timestamp: "labels",
+    });
+
+    // Resolve data
     return {
-      labels: labels || [],
+      labels,
       datasets: [
         {
-          id: "protocol",
-          label: "Protocol Owned",
-          data: protocolOwned || [],
-        },
-        {
-          id: "circulating",
-          label: "Circulating Supply",
-          data: circulatingSupply || [],
+          id: "all",
+          label: "OETH",
+          data: all,
         },
       ],
     };
@@ -93,7 +93,7 @@ export const getTotalSupply = async () => {
 
 const getHandler = async (req, res) => {
   try {
-    const data = await getTotalSupply();
+    const data = await getOETHPeg();
     return res.json(data);
   } catch (error) {
     return res.status(500).json({

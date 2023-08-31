@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { utils } from "ethers";
-import { assetRootPath } from "../../utils/image";
+import { assetRootPath } from "../../../utils";
 import { TitleWithInfo } from "../components";
 import { Typography } from "@originprotocol/origin-storybook";
 

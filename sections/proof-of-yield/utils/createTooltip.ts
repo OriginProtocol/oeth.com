@@ -1,6 +1,7 @@
 import { TooltipModel } from "chart.js";
-import { priceGradientEnd, priceGradientStart } from "../../constants";
-import { tailwindConfig } from "../../utils";
+import { priceGradientEnd, priceGradientStart } from "../../../constants";
+import { tailwindConfig } from "../../../utils";
+
 const colors = tailwindConfig.theme.colors;
 
 // Should probably just be abstracted for tooltip creation. Instead using a

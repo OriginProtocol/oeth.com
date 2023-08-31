@@ -1,5 +1,3 @@
-import Image from "next/image";
-import { assetRootPath } from "../../utils/image";
 import { PropsWithChildren } from "react";
 import { Typography } from "@originprotocol/origin-storybook";
 import { twMerge } from "tailwind-merge";

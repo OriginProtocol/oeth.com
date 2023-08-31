@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import Gradient2Button from "../../components/Gradient2Button";
+import GradientButton from "../../../components/GradientButton";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +10,7 @@ import {
   ChartOptions,
 } from "chart.js";
 import { barOptions } from "../chart-configs";
-import { tailwindConfig } from "../../utils";
+import { tailwindConfig } from "../../../utils";
 import { createTooltip } from "../utils";
 import { twMerge } from "tailwind-merge";
 import { Typography } from "@originprotocol/origin-storybook";
@@ -110,7 +110,7 @@ const DripperGraph = forwardRef<ChartJS<"bar">, DripperGraphProps>(
           <div
             className={`${setTime ? "visible" : "invisible"} p-0 lg:p-2 flex`}
           >
-            <Gradient2Button
+            <GradientButton
               onClick={() => setChartTime(ChartTime.SEVEN_DAY)}
               outerDivClassName={`rounded-lg ${
                 chartTime === ChartTime.SEVEN_DAY
@@ -124,9 +124,9 @@ const DripperGraph = forwardRef<ChartJS<"bar">, DripperGraphProps>(
               }`}
             >
               7D
-            </Gradient2Button>
+            </GradientButton>
 
-            <Gradient2Button
+            <GradientButton
               onClick={() => setChartTime(ChartTime.THIRTY_DAY)}
               outerDivClassName={`rounded-lg ${
                 chartTime === ChartTime.THIRTY_DAY
@@ -140,8 +140,8 @@ const DripperGraph = forwardRef<ChartJS<"bar">, DripperGraphProps>(
               }`}
             >
               30D
-            </Gradient2Button>
-            <Gradient2Button
+            </GradientButton>
+            <GradientButton
               onClick={() => setChartTime(ChartTime.ONE_YEAR)}
               outerDivClassName={`rounded-lg ${
                 chartTime === ChartTime.ONE_YEAR
@@ -155,7 +155,7 @@ const DripperGraph = forwardRef<ChartJS<"bar">, DripperGraphProps>(
               }`}
             >
               365D
-            </Gradient2Button>
+            </GradientButton>
           </div>
         </div>
         <div className="pb-2 lg:pb-6">

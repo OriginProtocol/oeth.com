@@ -11,7 +11,7 @@ import {
   pointHoverBorderWidth,
   pointHoverBorderColor,
   priceGradientEnd,
-} from "../../constants";
+} from "../../../constants";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -20,7 +20,7 @@ import {
   LineElement,
   LinearScale,
 } from "chart.js";
-import { useChartGradient } from "../../hooks";
+import { useChartGradient } from "../../../hooks";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement);
 interface PastWeekApyChartProps {

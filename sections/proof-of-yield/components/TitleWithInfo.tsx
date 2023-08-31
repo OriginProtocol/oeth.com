@@ -1,6 +1,6 @@
 import React, { Children, PropsWithChildren } from "react";
 import Image from "next/image";
-import { assetRootPath } from "../../utils/image";
+import { assetRootPath } from "../../../utils";
 import { twMerge } from "tailwind-merge";
 import { Typography } from "@originprotocol/origin-storybook";
 

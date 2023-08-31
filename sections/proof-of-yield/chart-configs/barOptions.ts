@@ -1,7 +1,7 @@
 import moment from "moment";
 import { ChartOptions } from "chart.js";
 import { commify } from "ethers/lib/utils";
-import { mdSize } from "../../constants";
+import { mdSize } from "../../../constants";
 
 const barOptions: (e?: Partial<ChartOptions<"bar">>) => ChartOptions<"bar"> = (
   extraOptions

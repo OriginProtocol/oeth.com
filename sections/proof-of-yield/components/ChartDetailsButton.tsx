@@ -1,9 +1,9 @@
 import React, { PropsWithChildren } from "react";
 import Image from "next/image";
-import { Gradient2Button } from "../../components";
-import { useViewWidth } from "../../hooks";
-import { lgSize } from "../../constants";
-import { assetRootPath } from "../../utils/image";
+import { GradientButton } from "../../../components";
+import { useViewWidth } from "../../../hooks";
+import { lgSize } from "../../../constants";
+import { assetRootPath } from "../../../utils";
 
 interface ChartDetailsButtonProps {
   onClick: () => void;
@@ -18,7 +18,7 @@ const ChartDetailsButton = ({
   return (
     <>
       {width >= lgSize ? (
-        <Gradient2Button
+        <GradientButton
           onClick={onClick}
           className="bg-origin-bg-grey w-full group-hover:bg-[#1b1a1abb] text-sm"
         >
@@ -30,7 +30,7 @@ const ChartDetailsButton = ({
             alt="arrow-right"
             className="pl-3 inline translate-y-[-1px]"
           />
-        </Gradient2Button>
+        </GradientButton>
       ) : (
         <button
           onClick={onClick}

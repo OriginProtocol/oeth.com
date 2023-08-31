@@ -22,7 +22,7 @@ export const getTotalSupply = async () => {
     });
 
     // Check cache for peg data
-    const days = 180;
+    const days = 365;
     const startTimestamp = getUnixTime(startOfDay(new Date()));
     const cacheKey = `${String(startTimestamp)}_${days}`;
 

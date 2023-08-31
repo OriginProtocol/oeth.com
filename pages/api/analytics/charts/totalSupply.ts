@@ -3,7 +3,7 @@ import { fromUnixTime, getUnixTime, startOfDay } from "date-fns";
 import { toChartData } from "../../../../lib/dune";
 
 const tvlHistoryUrl = (days) =>
-  `${process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT}/oeth/tvl_history/${days}`;
+  `${process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT}/api/v2/oeth/tvl_history/${days}`;
 
 const CACHE_EXPIRATION = 14400; // 4 hours
 
@@ -22,7 +22,7 @@ export const getTotalSupply = async () => {
     });
 
     // Check cache for peg data
-    const days = 14;
+    const days = 180;
     const startTimestamp = getUnixTime(startOfDay(new Date()));
     const cacheKey = `${String(startTimestamp)}_${days}`;
 

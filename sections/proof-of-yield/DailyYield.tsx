@@ -40,32 +40,9 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
 
   return (
     <Section className="mt-10 md:mt-28">
-      {/* Buttons */}
-      {/* <div className="mb-3 sm:mb-6 bg-tooltip w-fit p-2 rounded-[100px]">
-        <button
-          className={twMerge(
-            `rounded-[100px] border border-tooltip px-12 py-3`,
-            ` ${days ? highlightCss : ""}`
-          )}
-          onClick={() => seTableDataays(true)}
-        >
-          Days
-        </button>
-        <button
-          className={twMerge(
-            `rounded-[100px] border border-tooltip px-12 py-3`,
-            ` ${!days ? highlightCss : ""}`
-          )}
-          onClick={() => seTableDataays(false)}
-        >
-          Blocks
-        </button>
-      </div> */}
-
       {/* Main Table */}
       <Table>
         {/* Table Head */}
-
         <thead>
           <tr>
             <TableHead align="left" className="pl-4 md:pl-8">
@@ -91,20 +68,16 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
                 Yield-earning supply
               </TableHead>
             )}
-            <TableHead></TableHead>
+            <TableHead />
           </tr>
         </thead>
-
         {/* Table Body */}
-
         <tbody className="relative px-6">
           {stats
             .filter((s) => validDate(s.date))
             .map((item, i) => {
               // Skip estimation for current day
-
               if (i === 0) return;
-
               return (
                 <tr
                   className="group border-t md:border-t-2 hover:bg-hover-bg border-origin-bg-black cursor-pointer"

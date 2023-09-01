@@ -295,7 +295,7 @@ const NavLinks = ({
                        ? "from-oeth-purple to-oeth-blue"
                        : ""
                    }`}
-              ></div>
+              />
             </div>
           );
         }

@@ -1,26 +1,20 @@
+import React from "react";
 import Head from "next/head";
-import React, { useEffect } from "react";
-import Error from "../404";
 import moment, { Moment } from "moment";
 import { get } from "lodash";
 import { useRouter } from "next/router";
-import {
-  DayBasicData,
-  DayDripperBanner,
-  DayOtherSources,
-  DayStrategyPerformance,
-  DayTotal,
-} from "../../sections";
+import { DayBasicData } from "../../sections";
 import { DailyStat, YieldOnDayProps } from "../../types";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import { fetchAPI, fetchDailyStats, transformLinks } from "../../utils";
 import { Header, Footer } from "../../components";
+import Error from "../404";
 
 const overrideCss = "px-8 md:px-10 lg:px-10 xl:px-[8.375rem]";
 
 const YieldOnDay = ({ navLinks, dailyStat }: YieldOnDayProps) => {
   const router = useRouter();
-  let { timestamp } = router.query;
+  const { timestamp } = router.query;
 
   let timestampMoment: Moment;
 
@@ -93,11 +87,13 @@ export const getStaticProps: GetStaticProps = async (
     apy_boost: "0",
     rebase_events: [],
   };
+
   if (timestamp && typeof timestamp === "string") {
     const daysAgo = moment().diff(moment(timestamp), "days");
     const dailyStats = await fetchDailyStats(daysAgo, daysAgo - 1);
-    if (Array.isArray(dailyStats) && dailyStats.length > 0)
+    if (Array.isArray(dailyStats) && dailyStats.length > 0) {
       dailyStat = get(dailyStats, `[${dailyStats?.length - 1}]`); // At daysAgo = 1, the array returns both current day and last day
+    }
   }
 
   const navRes = await fetchAPI("/oeth-nav-links", {

@@ -73,31 +73,20 @@ const IndexPage = ({
         <title>Origin Ether (OETH)</title>
       </Head>
       <Seo seo={seo} />
-
       <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
-
       <Hero
         apy={get(daysToApy, "30") ? get(daysToApy, "30") : 0}
         tvl={tvl}
         tvlUsd={tvlUsd}
       />
-
       <Wallet />
-
       <Apy daysToApy={daysToApy} apyData={apyHistory} />
-
       <Allocation strategies={strategies} />
-
       <Collateral />
-
       <Security audits={audits} />
-
       <SecretSauce />
-
       <Ogv stats={stats} />
-
       <Faq faq={faq} />
-
       <Footer />
     </>
   );

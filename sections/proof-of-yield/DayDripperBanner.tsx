@@ -18,7 +18,7 @@ const DayDripperBanner = ({ sectionOverrideCss }: DayDripperBannerProps) => {
       <div className="w-full mt-10 md:mt-20 bg-origin-bg-grey py-10 px-12 flex flex-col md:flex-row rounded-lg items-center">
         <div>
           <Typography.Body className="text-xl mb-4">
-            Introducing the OUSD Dripper
+            Introducing the OETH Dripper
           </Typography.Body>
           <Typography.Body3 className="text-sm leading-6 text-table-title mr-0 md:mr-[52px] lg:mr-[104px]">
             Yield that is harvested is converted to USDT and placed into the

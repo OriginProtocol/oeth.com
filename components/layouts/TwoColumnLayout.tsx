@@ -7,9 +7,8 @@ import { capitalize } from "lodash";
 import { Typography } from "@originprotocol/origin-storybook";
 import { AnimatePresence, motion, useCycle } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
-import Button from "../Button";
-import transformLinks from "../../utils/transformLinks";
 import { useRouter } from "next/router";
+import Button from "../Button";
 import { NavigationContext } from "../../pages/_app";
 
 const RealTimeStats = dynamic(() => import("../RealTimeStats"), {
@@ -159,6 +158,7 @@ const MobileNavigation = ({ links, subLinks, currentPathname }) => {
     onSwipedLeft: () => cycleOpen(),
   });
 
+  // @ts-ignore
   return (
     <>
       <div className="flex flex-row md:hidden flex-shrink-0 items-center justify-between pt-8 pr-4 pl-6 z-[3]">
@@ -310,7 +310,7 @@ const TwoColumnLayout = ({ sidebarWidth = 316, children }) => {
     {
       label: "Dripper",
       href: "/analytics/dripper",
-      enabled: false,
+      enabled: true,
     },
     {
       label: "Health monitoring",

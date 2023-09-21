@@ -18,21 +18,21 @@ interface DripperBasicStats {
 
 const DripperBasicStats = ({ className, data }: DripperBasicStats) => {
   return (
-    <Section className={className}>
-      <div className="flex flex-col space-y-6">
+    <Section className={className} innerDivClassName="max-w-full">
+      <div className="flex flex-col space-y-6 max-w-6xl">
         <div className="flex flex-col space-y-2">
           <Typography.Body className="font-sans text-[16px]">
             Dripper funds
           </Typography.Body>
-          <div className="flex flex-row items-center w-full">
+          <div className="flex flex-col space-y-1 lg:space-y-0 lg:flex-row items-center w-full">
             <BasicData
-              className="rounded-l-lg flex-1 justify-center lg:justify-start"
+              className="rounded-0 lg:rounded-l-lg flex-1"
               title="Funds held by dripper"
             >
               {commify(data?.fundsHeld)} OETH
             </BasicData>
             <BasicData
-              className="rounded-r-lg flex-1 justify-center lg:justify-start"
+              className="rounded-0 lg:rounded-r-lg flex-1"
               title="Available for collection"
             >
               {commify(data?.available)}
@@ -41,21 +41,18 @@ const DripperBasicStats = ({ className, data }: DripperBasicStats) => {
         </div>
         <div className="flex flex-col space-y-2">
           <Typography.Body>Drip rate</Typography.Body>
-          <div className="flex flex-row items-center w-full">
+          <div className="flex flex-col space-y-1 lg:space-y-0 lg:flex-row items-center w-full">
             <BasicData
-              className="rounded-l-lg flex-1 justify-center lg:justify-start"
+              className="rounded-0 lg:rounded-l-lg flex-1"
               title="Per day"
             >
               {commify(data?.ratePerDay)} OETH
             </BasicData>
-            <BasicData
-              className="flex-1 justify-center lg:justify-start"
-              title="Per hour"
-            >
+            <BasicData className="flex-1" title="Per hour">
               {commify(data?.ratePerHour)} OETH
             </BasicData>
             <BasicData
-              className="rounded-r-lg flex-1 justify-center lg:justify-start"
+              className="rounded-0 lg:rounded-r-lg flex-1"
               title="Per minute"
             >
               {commify(data?.ratePerMinute)} OETH

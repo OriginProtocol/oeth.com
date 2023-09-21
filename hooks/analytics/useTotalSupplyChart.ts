@@ -33,7 +33,7 @@ export const useTotalSupplyChart = () => {
           labels: data?.labels || [],
           // Remove total supply
           datasets:
-            data?.datasets?.reduce((acc, dataset, index) => {
+            data?.datasets?.reduceRight((acc, dataset, index) => {
               acc.push({
                 ...dataset,
                 ...borderFormatting,

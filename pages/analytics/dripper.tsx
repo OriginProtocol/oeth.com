@@ -14,7 +14,7 @@ const AnalyticsDripper = ({ dripper }) => {
       </Head>
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-12">
-          <Typography.Caption className="text-subheading">
+          <Typography.Caption className="text-subheading max-w-6xl">
             When yield is generated, it does not immediately get distributed to
             users’ wallets. It first goes through the Dripper, which releases
             the yield steadily over time. Raw yield is often generated at

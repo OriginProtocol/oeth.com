@@ -1,5 +1,5 @@
 import { useFeeData } from "wagmi";
-import { ethers } from "ethers";
+import { formatUnits } from "viem";
 import Image from "next/image";
 import { Typography } from "@originprotocol/origin-storybook";
 
@@ -8,13 +8,11 @@ const RealTimeStats = () => {
 
   const gwei =
     !isLoading && !isError
-      ? parseFloat(
-          ethers.utils.formatUnits(data?.formatted?.gasPrice || 0, "gwei")
-        )?.toFixed(2)
+      ? Number(data?.formatted?.gasPrice || "0").toFixed(2)
       : 0;
 
   return (
-    <div className="flex flex-row lg:justify-end w-full h-[44px] space-x-2 ">
+    <div className="flex flex-row md:justify-end w-full h-[44px] space-x-2 ">
       <div className="flex items-center max-w-[120px] w-full h-full rounded-md px-2 bg-origin-bg-grey text-origin-white">
         <div className="flex flex-row items-center justify-center space-x-2 w-full h-full">
           <Image

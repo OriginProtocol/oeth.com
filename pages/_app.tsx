@@ -5,12 +5,14 @@ import { AppProps } from "next/app";
 import Script from "next/script";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
-import { WagmiConfig, createClient, configureChains, mainnet } from "wagmi";
+import { WagmiConfig, configureChains, mainnet, createConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { assetRootPath } from "../utils";
 import { GTM_ID, pageview } from "../utils/gtm";
 import { useContracts, usePreviousRoute } from "../hooks";
 import "../styles/globals.css";
+import { InjectedConnector } from "@wagmi/connectors/injected";
+import { IntlProvider } from "react-intl";
 
 const defaultQueryFn = async ({ queryKey }) => {
   return await fetch(queryKey).then((res) => res.json());
@@ -33,15 +35,15 @@ export const NavigationContext = createContext({
   links: [],
 });
 
-const { provider, webSocketProvider } = configureChains(
+const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet],
   [publicProvider()]
 );
-
-const wagmiClient = createClient({
-  autoConnect: false,
-  provider,
-  webSocketProvider,
+const config = createConfig({
+  autoConnect: true,
+  connectors: [new InjectedConnector({ chains })],
+  publicClient,
+  webSocketPublicClient,
 });
 
 const useNavigationLinks = () => {
@@ -110,17 +112,20 @@ function MyApp({ Component, pageProps }: AppProps) {
           `,
         }}
       />
-      <QueryClientProvider client={queryClient}>
-        <WagmiConfig client={wagmiClient}>
-          <NavigationContext.Provider
-            value={{
-              links,
-            }}
-          >
-            {getLayout(<Component {...pageProps} />)}
-          </NavigationContext.Provider>
-        </WagmiConfig>
-      </QueryClientProvider>
+      {/* @ts-ignore */}
+      <IntlProvider messages={{}} locale="en" defaultLocale="en">
+        <QueryClientProvider client={queryClient}>
+          <WagmiConfig config={config}>
+            <NavigationContext.Provider
+              value={{
+                links,
+              }}
+            >
+              {getLayout(<Component {...pageProps} />)}
+            </NavigationContext.Provider>
+          </WagmiConfig>
+        </QueryClientProvider>
+      </IntlProvider>
     </>
   );
 }

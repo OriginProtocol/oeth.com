@@ -161,7 +161,7 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
           <HeroInfo
             title="Trusted yield sources"
             subtitle="Only battle-tested, blue-chip protocols are used to generate OETH's market-leading, risk-adjusted yield."
-            className="w-full md:w-1/2 bg-origin-bg-dgrey rounded-lg mr-0 md:mr-7 mb-6 md:mb-0"
+            className="w-full md:w-1/2 bg-origin-bg-dgrey rounded-lg mr-0 md:mr-7 mb-6 md:mb-0 text-wrap-balance"
           >
             <Image
               src={assetRootPath("/images/yield-sources.png")}
@@ -174,7 +174,7 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
           <HeroInfo
             title="Fully collateralized"
             subtitle="OETH is always redeemable for a basket of ETH and the most trusted liquid staking tokens."
-            className="w-full md:w-1/2 bg-origin-bg-dgrey rounded-lg"
+            className="w-full md:w-1/2 bg-origin-bg-dgrey rounded-lg text-wrap-balance"
           >
             <Image
               src={assetRootPath("/images/fully-collateralized.svg")}

@@ -164,7 +164,7 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
             className="w-full md:w-1/2 bg-origin-bg-dgrey rounded-lg mr-0 md:mr-7 mb-6 md:mb-0"
           >
             <Image
-              src={assetRootPath("/images/yield-sources.svg")}
+              src={assetRootPath("/images/yield-sources.png")}
               width="700"
               height="100"
               alt="lido frax curve rocketpool convex"

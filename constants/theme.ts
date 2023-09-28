@@ -9,6 +9,9 @@ const theme = createTheme({
     Lido: {
       main: "#66c8ff",
     },
+    Aura: {
+      main: "#ffffff",
+    },
     RocketPool: {
       main: "#e4ae89",
     },

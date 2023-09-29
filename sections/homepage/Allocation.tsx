@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import { Typography } from '@originprotocol/origin-storybook'
-import { formatCurrency, assetRootPath, camelifyLsd } from '../../utils'
-import { strategyMapping, protocolMapping } from '../../constants'
-import { groupBy } from 'lodash'
-import { Strategies } from '../../types'
-import { GradientButton } from '../../components'
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { Typography } from "@originprotocol/origin-storybook";
+import { formatCurrency, assetRootPath, camelifyLsd } from "../../utils";
+import { strategyMapping, protocolMapping } from "../../constants";
+import { groupBy } from "lodash";
+import { Strategies } from "../../types";
+import { GradientButton } from "../../components";
 
 interface AllocationProps {
-  strategies: Strategies
+  strategies: Strategies;
 }
 
 const Allocation = ({ strategies }: AllocationProps) => {
-  const [open, setOpen] = useState({})
-  const [loaded, setLoaded] = useState(false)
+  const [open, setOpen] = useState({});
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    setLoaded(true)
-  }, [])
+    setLoaded(true);
+  }, []);
 
   // split strategies into separate yield sources by token
   const yieldSources = Object.keys(strategies)
@@ -29,27 +29,27 @@ const Allocation = ({ strategies }: AllocationProps) => {
               name: token,
               protocol: strategyMapping[strategy]?.protocol,
               total: strategies[strategy]?.holdings_value[token],
-              icon: strategyMapping[strategy]?.icons[token]
-            }
-          }
-        )
+              icon: strategyMapping[strategy]?.icons[token],
+            };
+          },
+        );
       }
       return {
         name: strategyMapping[strategy]?.name,
         protocol: strategyMapping[strategy]?.protocol,
         total: Object.keys(strategies[strategy]?.holdings_value).reduce(
           (accum, key) => (accum += strategies[strategy]?.holdings_value[key]),
-          0
+          0,
         ),
-        icon: strategyMapping[strategy]?.icon
-      }
+        icon: strategyMapping[strategy]?.icon,
+      };
     })
     .filter((strategy) => {
-      return strategy
-    })
+      return strategy;
+    });
 
   // group by protocol
-  const protocols = groupBy(yieldSources, (source) => source.protocol)
+  const protocols = groupBy(yieldSources, (source) => source.protocol);
 
   // sort protocol by total of underlying strategies
   const protocolsSorted = Object.keys(protocols)
@@ -59,16 +59,16 @@ const Allocation = ({ strategies }: AllocationProps) => {
         strategies: protocols[protocol],
         // @ts-ignore
         total: protocols[protocol].reduce((t, s) => {
-          return { total: t.total + s.total }
-        }).total
-      }
+          return { total: t.total + s.total };
+        }).total,
+      };
     })
-    .sort((a, b) => b.total - a.total)
+    .sort((a, b) => b.total - a.total);
 
   // @ts-ignore
   const total = yieldSources?.reduce((t, s) => {
-    return { total: t.total + s.total }
-  }).total
+    return { total: t.total + s.total };
+  }).total;
 
   return (
     <>
@@ -91,7 +91,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
             <div>
               <Typography.H7
                 className="flex flex-row justify-between mt-4 md:mt-10 px-8 md:px-[72px] text-subheading"
-                style={{ fontWeight: 400, lineHeight: '20px' }}
+                style={{ fontWeight: 400, lineHeight: "20px" }}
               >
                 <div className="text-[14px] md:text-[16px]">Yield source</div>
                 <div className="text-[14px] md:text-[16px]">Allocation</div>
@@ -100,40 +100,40 @@ const Allocation = ({ strategies }: AllocationProps) => {
                 <div className="flex flex-col justify-between">
                   {loaded &&
                     protocolsSorted?.map((protocol, i) => {
-                      if (protocol.name == 'undefined') return
-                      const pct = (protocol.total / total) * 100
-                      const width = `${pct.toFixed(2)}%`
+                      if (protocol.name == "undefined") return;
+                      const pct = (protocol.total / total) * 100;
+                      const width = `${pct.toFixed(2)}%`;
                       const backgroundColor =
-                        protocolMapping[protocol.name].color
+                        protocolMapping[protocol.name].color;
                       return (
                         <div
                           className="strategy rounded-xl border-2 p-[16px] md:p-8 my-[6px] md:my-[8px]"
                           key={i}
                           onClick={(e) => {
-                            e.preventDefault()
+                            e.preventDefault();
                             setOpen({
                               ...open,
-                              [protocol.name]: !open[protocol.name]
-                            })
+                              [protocol.name]: !open[protocol.name],
+                            });
                           }}
                         >
                           <div>
                             <div className="flex flex-row justify-between">
                               <div
                                 className={`relative ${
-                                  protocol.name !== 'Vault'
-                                    ? 'w-1/3 lg:w-1/4'
-                                    : 'w-fit'
+                                  protocol.name !== "Vault"
+                                    ? "w-1/3 lg:w-1/4"
+                                    : "w-fit"
                                 }`}
                               >
-                                {protocol.name !== 'Vault' ? (
+                                {protocol.name !== "Vault" ? (
                                   <Image
                                     src={protocolMapping[protocol.name]?.image}
                                     fill
                                     sizes="(max-width: 768px) 64px, 128px"
                                     style={{
-                                      objectFit: 'contain',
-                                      objectPosition: '0%'
+                                      objectFit: "contain",
+                                      objectPosition: "0%",
                                     }}
                                     alt={protocol.name}
                                   />
@@ -147,14 +147,14 @@ const Allocation = ({ strategies }: AllocationProps) => {
                                   style={{ fontWeight: 400 }}
                                 >{`${formatCurrency(
                                   protocol.total,
-                                  2
+                                  2,
                                 )}`}</Typography.H7>
                                 <Typography.H7
                                   className="inline pl-[8px] text-[12px] md:text-[24px]"
                                   style={{ fontWeight: 700 }}
                                 >{`(${formatCurrency(
                                   (protocol.total / total) * 100,
-                                  2
+                                  2,
                                 )}%)`}</Typography.H7>
                               </div>
                             </div>
@@ -166,7 +166,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
                             </div>
                             <Typography.Caption2
                               className={`flex flex-row mt-4 md:hidden text-left space-x-1.5 text-subheading font-medium ${
-                                open[protocol.name] ? 'hidden' : ''
+                                open[protocol.name] ? "hidden" : ""
                               }`}
                             >
                               <div>More info</div>
@@ -179,14 +179,15 @@ const Allocation = ({ strategies }: AllocationProps) => {
                             </Typography.Caption2>
                             <div
                               className={`${
-                                open[protocol.name] ? '' : 'hidden md:block'
+                                open[protocol.name] ? "" : "hidden md:block"
                               }`}
                             >
                               <div className="flex flex-col xl:flex-row mt-[22px] xl:mt-3 flex-wrap space-y-2 xl:space-y-0">
                                 {protocol.strategies
                                   .filter(
                                     (s) =>
-                                      protocol.name !== 'Vault' || s.total !== 0
+                                      protocol.name !== "Vault" ||
+                                      s.total !== 0,
                                   )
                                   .map((strategy, i) => {
                                     return (
@@ -197,10 +198,10 @@ const Allocation = ({ strategies }: AllocationProps) => {
                                         <div className="flex flex-row items-center">
                                           <div
                                             className={`relative ${
-                                              strategy?.protocol === 'Convex' ||
-                                              strategy?.protocol === 'Aura'
-                                                ? 'w-[48px] h-[24px]'
-                                                : 'w-[24px] h-[24px]'
+                                              strategy?.protocol === "Convex" ||
+                                              strategy?.protocol === "Aura"
+                                                ? "w-[48px] h-[24px]"
+                                                : "w-[24px] h-[24px]"
                                             }`}
                                           >
                                             <Image
@@ -210,7 +211,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
                                             />
                                           </div>
                                           <Typography.Body3 className="pl-[12px] pr-[16px] font-light text-[12px] md:text-[16px]">
-                                            {protocol.name === 'Vault'
+                                            {protocol.name === "Vault"
                                               ? camelifyLsd(strategy.name)
                                               : strategy.name}
                                           </Typography.Body3>
@@ -220,11 +221,11 @@ const Allocation = ({ strategies }: AllocationProps) => {
                                             protocol.total
                                               ? (strategy.total / total) * 100
                                               : 0,
-                                            2
+                                            2,
                                           )}%`}
                                         </Typography.Body3>
                                       </div>
-                                    )
+                                    );
                                   })}
                               </div>
                               <Typography.Body3 className="mt-4 text-subheading text-left text-[12px] md:text-[14px] leading-[23px]">
@@ -242,7 +243,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
                             </div>
                           </div>
                         </div>
-                      )
+                      );
                     })}
                 </div>
               </div>
@@ -255,9 +256,9 @@ const Allocation = ({ strategies }: AllocationProps) => {
               elementId="btn-allocation-docs"
               onClick={() =>
                 window.open(
-                  ' https://docs.oeth.com/core-concepts/yield-generation',
-                  '_blank',
-                  'noopener,noreferrer'
+                  " https://docs.oeth.com/core-concepts/yield-generation",
+                  "_blank",
+                  "noopener,noreferrer",
                 )
               }
             >
@@ -279,16 +280,16 @@ const Allocation = ({ strategies }: AllocationProps) => {
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 
-export default Allocation
+export default Allocation;
 function deepClone(holdings: {
-  ETH?: number
-  WETH?: number
-  RETH?: number
-  FRXETH?: number
-  STETH?: number
+  ETH?: number;
+  WETH?: number;
+  RETH?: number;
+  FRXETH?: number;
+  STETH?: number;
 }) {
-  throw new Error('Function not implemented.')
+  throw new Error("Function not implemented.");
 }

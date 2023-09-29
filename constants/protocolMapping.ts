@@ -15,7 +15,7 @@ const protocolMapping = {
     color: "#FFFFFF",
     image: "/images/aura-logo.png",
     description:
-      "Aura allows liquidity providers and stakers to reap enhanced rewards from Balancer, an automated market maker (AMM) designed for programmable liquidity. OETH accumulates trading fees and protocol token incentives, including both BAL and AURA. These are distributed back to OETH holders through rebasing.",
+      "Aura allows liquidity providers and stakers to gain enhanced rewards from Balancer, a programmable liquidity AMM. Origin accrues trading fees and protocol token incentives (both BAL and AURA), which are converted to OETH and then distributed to OETH holders.",
   },
   RocketPool: {
     color: "#e4ae89",

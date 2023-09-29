@@ -14,7 +14,6 @@ import { formatEther } from "viem";
 import * as colors from "./colors";
 import { useFinancialStatementQuery } from "./FinancialStatement.generated";
 import { useChainlinkEthUsd } from "../../utils/useChainlinkEthUsd";
-import useIsMobile from "../../hooks/useIsMobile";
 import { useElementSize } from "usehooks-ts";
 
 const calculateChange = (from: number, to: number) => {

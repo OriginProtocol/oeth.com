@@ -9,9 +9,7 @@ const BalanceSheet = () => {
       <Head>
         <title>Analytics | Financial Statement</title>
       </Head>
-      <div className="flex-0 flex flex-col w-full h-screen">
-        <Content />
-      </div>
+      <LiveFinancialStatement />
     </ErrorBoundary>
   );
 };
@@ -21,11 +19,3 @@ export default BalanceSheet;
 BalanceSheet.getLayout = (page, props) => (
   <TwoColumnLayout {...props}>{page}</TwoColumnLayout>
 );
-
-const Content = () => {
-  return (
-    <div className="pb-8">
-      <LiveFinancialStatement />
-    </div>
-  );
-};

@@ -1,5 +1,4 @@
 import { useFeeData } from "wagmi";
-import { formatUnits } from "viem";
 import Image from "next/image";
 import { Typography } from "@originprotocol/origin-storybook";
 

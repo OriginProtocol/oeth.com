@@ -18,7 +18,7 @@ const defaultQueryFn = async ({ queryKey }) => {
   return await fetch(queryKey).then((res) => res.json());
 };
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       queryFn: defaultQueryFn,

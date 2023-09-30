@@ -7,6 +7,7 @@ import {
 } from "./FinancialStatement";
 
 import type { Meta, StoryObj } from "@storybook/react";
+import { queryClient } from "../../pages/_app";
 
 faker.seed(4548);
 

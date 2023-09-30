@@ -48,6 +48,8 @@ module.exports = {
           "linear-gradient(90deg, rgba(140, 102, 252, 0.3) -28.99%, rgba(2, 116, 241, 0.3) 144.97%)",
         gradient2: "linear-gradient(90deg, #8C66FC -28.99%, #0274F1 144.97%)",
         gradient3: "linear-gradient(91.16deg, #FEDBA8 -3.29%, #CF75D5 106.42%)",
+        gradient4:
+          "linear-gradient(90deg, rgb(179, 97, 230) 20.29%, rgb(106, 54, 252) 79.06%)",
       },
       boxShadow: {
         tooltip: "0px 6px 12px #000000",

@@ -1,6 +1,5 @@
 import { createContext, useContext, useState } from "react";
 
-import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import {
   endOfToday,
   intlFormat,
@@ -15,6 +14,7 @@ import * as colors from "./colors";
 import { useFinancialStatementQuery } from "./FinancialStatement.generated";
 import { useChainlinkEthUsd } from "../../utils/useChainlinkEthUsd";
 import { useElementSize } from "usehooks-ts";
+import cn from "classnames";
 
 const calculateChange = (from: number, to: number) => {
   if (from === 0 && to === 0) return 0;
@@ -151,76 +151,53 @@ export const FinancialStatement = (props: {
         isNarrow,
       }}
     >
-      <Stack
+      <div
+        className={"flex flex-col gap-4 text-[#B5BECA] text-xs sm:text-sm"}
+        style={{ fontFamily: "Inter" }}
         ref={ref}
-        gap={2}
-        color={"#B5BECA"}
-        fontFamily={"Inter"}
-        fontSize={{ xs: ".7rem", sm: ".875rem" }}
       >
-        <Stack direction={"row"} justifyContent={"end"}>
-          <Stack
-            direction={"row"}
-            gap={{ xs: 0.25, sm: 0.5, md: 1 }}
-            sx={{
-              height: { xs: 30, sm: 35, md: 40 },
-              borderRadius: 999,
-              overflow: "hidden",
-              backgroundColor: "#1E1F25",
-            }}
+        <div className={"flex justify-end"}>
+          <div
+            className={
+              "flex gap-1 sm:gap-2 md:gap-4 h-6 sm:h-8 md:h-10 rounded-full overflow-hidden bg-[#1E1F25]"
+            }
           >
-            <Button
-              sx={{
-                borderRadius: 999,
-                p: "1px",
-                background: !showUsdPrice
-                  ? "linear-gradient(90deg, rgb(179, 97, 230) 20.29%, rgb(106, 54, 252) 79.06%)"
-                  : "transparent",
-              }}
+            <button
+              className={cn(
+                "rounded-full p-px",
+                !showUsdPrice ? "bg-gradient4" : "hover:bg-gray-300/20"
+              )}
               onClick={() => setShowUsdPrice(false)}
             >
-              <Box
-                sx={{
-                  borderRadius: 999,
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: !showUsdPrice ? "#FAFBFB" : "#B5BECA",
-                  background: "#1E1F25DD",
-                }}
+              <div
+                className={cn(
+                  "px-4 py-2 rounded-full w-full h-full flex items-center justify-center",
+                  !showUsdPrice ? "text-[#FAFBFB]" : "text-[#B5BECA]",
+                  "bg-[#1E1F25DD]"
+                )}
               >
                 ETH
-              </Box>
-            </Button>
-            <Button
-              sx={{
-                borderRadius: 999,
-                p: "1px",
-                background: showUsdPrice
-                  ? "linear-gradient(90deg, rgb(179, 97, 230) 20.29%, rgb(106, 54, 252) 79.06%)"
-                  : "transparent",
-              }}
+              </div>
+            </button>
+            <button
+              className={cn(
+                "rounded-full p-px",
+                showUsdPrice ? "bg-gradient4" : "hover:bg-gray-300/20"
+              )}
               onClick={() => setShowUsdPrice(true)}
             >
-              <Box
-                sx={{
-                  borderRadius: 999,
-                  width: "100%",
-                  height: "100%",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  color: showUsdPrice ? "#FAFBFB" : "#B5BECA",
-                  background: "#1E1F25DD",
-                }}
+              <div
+                className={cn(
+                  "px-4 py-2 rounded-full w-full h-full flex items-center justify-center",
+                  showUsdPrice ? "text-[#FAFBFB]" : "text-[#B5BECA]",
+                  "bg-[#1E1F25DD]"
+                )}
               >
                 USD
-              </Box>
-            </Button>
-          </Stack>
-        </Stack>
+              </div>
+            </button>
+          </div>
+        </div>
         <Header columns={props.columns} />
         <Table
           title={"Assets"}
@@ -233,12 +210,8 @@ export const FinancialStatement = (props: {
           totals={liabilityTotals}
         />
 
-        <Paper
-          sx={{
-            borderRadius: { xs: 1, sm: 2, md: 3 },
-            overflow: "hidden",
-            backgroundColor: "#1E1F25",
-          }}
+        <div
+          className={"sm:rounded-sm md:rounded-md overflow-hidden bg-[#1E1F25]"}
         >
           <Total
             title={"PROTOCOL NET VALUE"}
@@ -246,20 +219,20 @@ export const FinancialStatement = (props: {
               (val, index) => val - liabilityTotals[index]
             )}
           />
-        </Paper>
-        <Box mt={{ xs: 1, sm: 2, md: 3 }} color={"#FAFBFB"}>
-          <Typography fontSize={{ xs: ".75rem" }}>
+        </div>
+        <div className={"mt-2 sm:mt-4 md:mt-6 text-[#FAFBFB]"}>
+          <p className={"text-sm sm:text-base"}>
             {`Last updated ${intlFormat(props.lastUpdated.timestamp)}, `}
             {`block #${props.lastUpdated.blockNumber}`}
-          </Typography>
-          <Typography fontSize={{ xs: ".75rem" }}>
+          </p>
+          <p className={"text-sm sm:text-base"}>
             {props.ethPrice &&
               `Using ETH price of $${intl.formatNumber(props.ethPrice, {
                 maximumFractionDigits: 2,
               })} from Chainlink`}
-          </Typography>
-        </Box>
-      </Stack>
+          </p>
+        </div>
+      </div>
     </FinancialStatementContext.Provider>
   );
 };
@@ -268,44 +241,39 @@ const Header = (props: { columns: string[] }) => {
   const { isNarrow } = useContext(FinancialStatementContext);
   const columnWeight = props.columns.length + 2;
   return (
-    <Paper
-      sx={{
-        borderRadius: { xs: 1, sm: 2, md: 3 },
-        overflow: "hidden",
-        backgroundColor: "#1E1F25",
-      }}
-    >
-      <Stack
-        direction={"row"}
-        alignItems={"center"}
-        justifyContent={"space-between"}
-        color={"#B5BECA"}
-        sx={{ backgroundColor: "#23242A" }}
-        fontSize={{ xs: ".75rem", sm: ".875rem", md: "1rem" }}
-        px={{ xs: 1, sm: 2, md: 4 }}
-        py={{ xs: 2, sm: 3, md: 4 }}
+    <div className={"sm:rounded-sm md:rounded overflow-hidden bg-[#1E1F25]"}>
+      <div
+        className={cn(
+          "flex items-center justify-between text-[#B5BECA] bg-[#23242A] text-xs sm:text-sm md:text-base",
+          "px-2 sm:px-4 md:px-8",
+          "py-2 sm:py-6 md:py-8"
+        )}
       >
-        <Box width={`${(100 / columnWeight) * 1.5}%`} />
+        <div style={{ width: `${(100 / columnWeight) * 1.5}%` }} />
         {props.columns.map((column) => (
-          <Box
+          <div
             key={column}
-            width={`${100 / columnWeight}%`}
-            maxWidth={250}
-            textAlign={"right"}
-            ml={1}
+            className={"ml-4"}
+            style={{
+              width: `${100 / columnWeight}%`,
+              maxWidth: 250,
+              textAlign: "right",
+            }}
           >
             {column}
-          </Box>
+          </div>
         ))}
-        <Box
-          width={`${100 / columnWeight}%`}
-          maxWidth={250}
-          textAlign={"right"}
+        <div
+          style={{
+            width: `${100 / columnWeight}%`,
+            maxWidth: 250,
+            textAlign: "right",
+          }}
         >
           {isNarrow ? "Diff" : "Difference"}
-        </Box>
-      </Stack>
-    </Paper>
+        </div>
+      </div>
+    </div>
   );
 };
 
@@ -315,110 +283,101 @@ const Table = (props: {
   totals: number[];
 }) => {
   return (
-    <Paper
+    <div
       key={props.title}
-      sx={{
-        borderRadius: { xs: 1, sm: 2, md: 3 },
-        overflow: "hidden",
-        backgroundColor: "#1E1F25",
-      }}
+      className={"sm:rounded-sm md:rounded-md overflow-hidden bg-[#1E1F25]"}
     >
-      <Stack>
+      <div className={"flex flex-col"}>
         {/* Header */}
-        <Box
-          pt={{ xs: 1.5, sm: 2, md: 4 }}
-          px={{ xs: 1, sm: 2, md: 4 }}
-          pb={{ xs: 1.5, sm: 2, md: 4 }}
-          color={"#B5BECA"}
-          fontSize={{ xs: ".875rem", sm: "1rem" }}
-          sx={{
-            borderBottomStyle: "solid",
-            borderBottomWidth: 1,
-            borderBottomColor: "#141519",
-          }}
+        <div
+          className={cn(
+            "py-3 sm:py-4 md:py-8",
+            "px-2 sm:px-4 md:px-8",
+            "text-[#B5BECA]",
+            "text-sm sm:text-base",
+            "border-b border-b-[#141519]"
+          )}
         >
           {props.title}
-        </Box>
+        </div>
 
         {/* Body */}
-        <Stack>
+        <div className={"flex flex-col"}>
           {Object.entries(props.data).map(([title, data]) => (
             <Section key={title} title={title} data={data} />
           ))}
-        </Stack>
+        </div>
 
         {/* Total */}
         <Total title={`TOTAL ${props.title}`} totals={props.totals} />
-      </Stack>
-    </Paper>
+      </div>
+    </div>
   );
 };
 
 const Total = (props: { title: string; totals: number[] }) => {
   const columnWeight = props.totals.length + 2;
   return (
-    <Stack
-      direction={"row"}
-      justifyContent={"space-between"}
-      alignItems={"center"}
-      p={{ xs: 1.5, sm: 2, md: 4 }}
-      color={"#FAFBFB"}
-      sx={{ backgroundColor: "#23242A" }}
+    <div
+      className={
+        "flex justify-between items-center p-2 sm:p-4 md:p-8 text-[#FAFBFB] bg-[#23242A]"
+      }
     >
-      <Box width={`${(100 / columnWeight) * 1.5}%`}>
+      <div style={{ width: `${(100 / columnWeight) * 1.5}%` }}>
         {props.title.toUpperCase()}
-      </Box>
+      </div>
       {props.totals.map((value, index) => (
         <DataColumn key={index} columnWeight={columnWeight} value={value} />
       ))}
       <ChangeColumn columnWeight={columnWeight} values={props.totals} />
-    </Stack>
+    </div>
   );
 };
 
 const Section = (props: { title: string; data: Record<string, number[]> }) => {
   return (
-    <Stack
-      sx={{
-        borderBottomStyle: "solid",
-        borderBottomWidth: 1,
-        borderBottomColor: "#141519",
-      }}
-      px={{ xs: 1, sm: 2, md: 4 }}
-      gap={{ xs: 1, sm: 2, md: 4 }}
-      pt={{ xs: 1, sm: 2, md: 4 }}
+    <div
+      className={cn(
+        "flex flex-col",
+        "border-b border-b-[#141519]",
+        "gap-2 sm:gap-4 md:gap-8",
+        "px-2 sm:px-4 md:px-8",
+        "pt-2 sm:pt-4 md:pt-8"
+      )}
     >
-      <Stack direction={"row"} color={"#FAFBFB"}>
-        {props.title}
-      </Stack>
-      <Stack gap={{ xs: 1, sm: 2, md: 4 }} pb={{ xs: 1, sm: 2, md: 4 }}>
+      <div className={"flex text-[#FAFBFB]"}>{props.title}</div>
+      <div
+        className={cn(
+          "flex flex-col",
+          "gap-2 sm:gap-4 md:gap-8",
+          "pb-2 sm:pb-4 md:pb-8"
+        )}
+      >
         {Object.entries(props.data).map(([title, data]) => (
           <Asset key={title} title={title} data={data} />
         ))}
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 
 const Asset = (props: { title: string; data: number[] }) => {
   const columnWeight = props.data.length + 2;
   return (
-    <Stack key={props.title}>
-      <Stack direction={"row"} justifyContent={"space-between"}>
-        <Box
-          pl={2}
-          mr={-2}
-          width={`${(100 / columnWeight) * 1.5}%`}
-          color={"#B5BECA"}
+    <div className={"flex flex-col"} key={props.title}>
+      <div className={"flex justify-between"}>
+        <div
+          className={"pl-4 -mr-4 text-[#B5BECA]"}
+          style={{ width: `${(100 / columnWeight) * 1.5}%` }}
         >
           {props.title}
-        </Box>
+        </div>
         {props.data.map((value, index) => (
           <DataColumn key={index} columnWeight={columnWeight} value={value} />
         ))}
         <ChangeColumn columnWeight={columnWeight} values={props.data} />
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 
@@ -433,25 +392,23 @@ export const DataColumn = ({
   const intl = useIntl();
   const { showUsdPrice, ethPrice } = useContext(FinancialStatementContext);
   return (
-    <Box
-      width={`${100 / columnWeight}%`}
-      maxWidth={250}
-      textAlign={"right"}
-      color={"#FAFBFB"}
-      ml={1}
+    <div
+      className={"ml-0.5"}
+      style={{
+        width: `${100 / columnWeight}%`,
+        maxWidth: 250,
+        textAlign: "right",
+        color: "#FAFBFB",
+      }}
     >
-      <Box
-        component={"span"}
-        color={"#B5BECA"}
-        pr={{ xs: 0.1, sm: 0.15, md: 0.2 }}
-      >
+      <span className={"pr-[1px] sm:pr-[1.5px] md:pr-[2px] text-[#B5BECA]"}>
         {showUsdPrice && ethPrice ? "$" : "Ξ"}
-      </Box>
+      </span>
       {intl.formatNumber(showUsdPrice && ethPrice ? value * ethPrice : value, {
         notation: isNarrow ? "compact" : "standard",
         maximumFractionDigits: isNarrow ? 1 : 2,
       })}
-    </Box>
+    </div>
   );
 };
 
@@ -469,13 +426,18 @@ export const ChangeColumn = ({
     values[values.length - 1]
   );
   return (
-    <Box
-      width={`${100 / columnWeight}%`}
-      maxWidth={250}
-      textAlign={"right"}
-      color={
-        change > 0 ? colors.positive : change < 0 ? colors.negative : "#B5BECA"
-      }
+    <div
+      style={{
+        width: `${100 / columnWeight}%`,
+        maxWidth: 250,
+        textAlign: "right",
+        color:
+          change > 0
+            ? colors.positive
+            : change < 0
+            ? colors.negative
+            : "#B5BECA",
+      }}
     >
       {isFinite(change) && change > 0 && "+"}
       {!isNaN(change) &&
@@ -484,6 +446,6 @@ export const ChangeColumn = ({
           notation: isNarrow ? "compact" : "standard",
           maximumFractionDigits: isNarrow ? 1 : 2,
         })}%`}
-    </Box>
+    </div>
   );
 };

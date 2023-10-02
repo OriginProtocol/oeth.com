@@ -175,7 +175,7 @@ export const FinancialStatement = (props: {
   const intl = useIntl();
   const assetTotals = getTotals(props.data["assets"]);
   const liabilityTotals = getTotals(props.data["liabilities"]);
-  const [showUsdPrice, setShowUsdPrice] = useState(!!props.ethPrice);
+  const [showUsdPrice, setShowUsdPrice] = useState(false);
   const isNarrow = width < 650;
 
   return (
@@ -194,7 +194,7 @@ export const FinancialStatement = (props: {
         <div className={"flex justify-end"}>
           <div
             className={
-              "flex gap-1 sm:gap-2 md:gap-4 h-6 sm:h-8 md:h-10 rounded-full overflow-hidden bg-[#1E1F25]"
+              "flex gap-1 sm:gap-2 md:gap-2 h-6 sm:h-8 md:h-10 rounded-full overflow-hidden bg-[#1E1F25]"
             }
           >
             <button

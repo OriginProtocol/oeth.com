@@ -125,8 +125,10 @@ export const LiveFinancialStatement = () => {
             frxETH: [fsC.vaults[0]?.frxETH, fs.vaults[0]?.frxETH].map(c),
           },
           Curve: {
-            ETH: [fsC.curveLps[0]?.eth, fs.curveLps[0]?.eth].map(c),
-            OETH: [fsC.curveLps[0]?.oeth, fs.curveLps[0]?.oeth].map(c),
+            ETH: [fsC.curveLps[0]?.ethOwned, fs.curveLps[0]?.ethOwned].map(c),
+            OETH: [fsC.curveLps[0]?.oethOwned, fs.curveLps[0]?.oethOwned].map(
+              c
+            ),
           },
           "Frax Staking": {
             frxETH: [

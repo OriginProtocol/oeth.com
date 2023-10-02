@@ -15,6 +15,39 @@ import { useFinancialStatementQuery } from "./FinancialStatement.generated";
 import { useChainlinkEthUsd } from "../../utils/useChainlinkEthUsd";
 import { useElementSize } from "usehooks-ts";
 import cn from "classnames";
+import Image from "next/image";
+
+const links = {
+  Assets: {
+    Vault: {
+      WETH: "https://etherscan.io/token/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2?a=0x39254033945aa2e4809cc2977e7087bee48bd7ab",
+      stETH:
+        "https://etherscan.io/token/0xae7ab96520de3a18e5e111b5eaab095312d7fe84?a=0x39254033945aa2e4809cc2977e7087bee48bd7ab",
+      rETH: "https://etherscan.io/token/0xae78736cd615f374d3085123a210448e74fc6393?a=0x39254033945aa2e4809cc2977e7087bee48bd7ab",
+      frxETH:
+        "https://etherscan.io/token/0x5e8422345238f34275888049021821e8e08caa1f?a=0x39254033945aa2e4809cc2977e7087bee48bd7ab",
+    },
+    Curve: {
+      ETH: "https://etherscan.io/address/0x94b17476a93b3262d87b9a326965d1e91f9c13e7",
+      OETH: "https://etherscan.io/token/0x856c4Efb76C1D1AE02e20CEB03A2A6a08b0b8dC3?a=0x94b17476a93b3262d87b9a326965d1e91f9c13e7",
+    },
+    "Frax Staking": {
+      frxETH:
+        "https://etherscan.io/token/0xac3e018457b222d93114458476f3e3416abbe38f?a=0x3ff8654d633d4ea0fae24c52aec73b4a20d0d0e5",
+    },
+    "Morpho Aave": {
+      WETH: "https://etherscan.io/token/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2?a=0xc1fc9e5ec3058921ea5025d703cbe31764756319",
+    },
+    Dripper: {
+      WETH: "https://etherscan.io/token/0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2?a=0xc0f42f73b8f01849a2dd99753524d4ba14317eb3",
+    },
+  },
+  Liabilities: {
+    "Token Supply": {
+      OETH: "https://etherscan.io/address/0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3#readProxyContract#F19",
+    },
+  },
+};
 
 const calculateChange = (from: number, to: number) => {
   if (from === 0 && to === 0) return 0;
@@ -304,7 +337,12 @@ const Table = (props: {
         {/* Body */}
         <div className={"flex flex-col"}>
           {Object.entries(props.data).map(([title, data]) => (
-            <Section key={title} title={title} data={data} />
+            <Section
+              key={title}
+              table={props.title}
+              title={title}
+              data={data}
+            />
           ))}
         </div>
 
@@ -334,7 +372,11 @@ const Total = (props: { title: string; totals: number[] }) => {
   );
 };
 
-const Section = (props: { title: string; data: Record<string, number[]> }) => {
+const Section = (props: {
+  table: string;
+  title: string;
+  data: Record<string, number[]>;
+}) => {
   return (
     <div
       className={cn(
@@ -354,14 +396,25 @@ const Section = (props: { title: string; data: Record<string, number[]> }) => {
         )}
       >
         {Object.entries(props.data).map(([title, data]) => (
-          <Asset key={title} title={title} data={data} />
+          <Asset
+            key={title}
+            table={props.table}
+            section={props.title}
+            title={title}
+            data={data}
+          />
         ))}
       </div>
     </div>
   );
 };
 
-const Asset = (props: { title: string; data: number[] }) => {
+const Asset = (props: {
+  table: string;
+  section: string;
+  title: string;
+  data: number[];
+}) => {
   const columnWeight = props.data.length + 2;
   return (
     <div className={"flex flex-col"} key={props.title}>
@@ -373,7 +426,15 @@ const Asset = (props: { title: string; data: number[] }) => {
           {props.title}
         </div>
         {props.data.map((value, index) => (
-          <DataColumn key={index} columnWeight={columnWeight} value={value} />
+          <DataColumn
+            key={index}
+            link={
+              index === props.data.length - 1 &&
+              links[props.table]?.[props.section]?.[props.title]
+            }
+            columnWeight={columnWeight}
+            value={value}
+          />
         ))}
         <ChangeColumn columnWeight={columnWeight} values={props.data} />
       </div>
@@ -384,13 +445,26 @@ const Asset = (props: { title: string; data: number[] }) => {
 export const DataColumn = ({
   value,
   columnWeight,
+  link,
 }: {
   value: number;
   columnWeight: number;
+  link?: string;
 }) => {
   const { isNarrow } = useContext(FinancialStatementContext);
   const intl = useIntl();
   const { showUsdPrice, ethPrice } = useContext(FinancialStatementContext);
+  const content = (
+    <>
+      <span className={"pr-[1px] sm:pr-[1.5px] md:pr-[2px] text-[#B5BECA]"}>
+        {showUsdPrice && ethPrice ? "$" : "Ξ"}
+      </span>
+      {intl.formatNumber(showUsdPrice && ethPrice ? value * ethPrice : value, {
+        notation: isNarrow ? "compact" : "standard",
+        maximumFractionDigits: isNarrow ? 1 : 2,
+      })}
+    </>
+  );
   return (
     <div
       className={"ml-0.5"}
@@ -401,13 +475,24 @@ export const DataColumn = ({
         color: "#FAFBFB",
       }}
     >
-      <span className={"pr-[1px] sm:pr-[1.5px] md:pr-[2px] text-[#B5BECA]"}>
-        {showUsdPrice && ethPrice ? "$" : "Ξ"}
-      </span>
-      {intl.formatNumber(showUsdPrice && ethPrice ? value * ethPrice : value, {
-        notation: isNarrow ? "compact" : "standard",
-        maximumFractionDigits: isNarrow ? 1 : 2,
-      })}
+      {link ? (
+        <a
+          href={link}
+          className="hover:font-bold flex items-center justify-end"
+          target="_blank"
+        >
+          {content}
+          <Image
+            className="ml-2"
+            src="/images/ext-link-white.svg"
+            height={8}
+            width={8}
+            alt="External link icon"
+          />
+        </a>
+      ) : (
+        content
+      )}
     </div>
   );
 };

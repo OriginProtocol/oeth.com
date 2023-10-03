@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 
 import {
   endOfToday,
@@ -74,7 +74,7 @@ const getTotals = (data: Record<string, Record<string, number[]>>) => {
 
 export const LiveFinancialStatement = () => {
   const todayEnd = endOfToday();
-  const sevenDaysAgo = startOfDay(subDays(todayEnd, 7));
+  const sevenDaysAgo = startOfDay(subDays(todayEnd, 6));
 
   const { isLoading: fsIsLoading, data: fs } = useFinancialStatementQuery({
     compareDate: todayEnd.toISOString(),
@@ -136,6 +136,15 @@ export const LiveFinancialStatement = () => {
     Date.parse(fs.fraxStakings[0]?.timestamp)
   );
 
+  const timestampC = Math.max(
+    Date.parse(fsC.vaults[0]?.timestamp),
+    Date.parse(fsC.curveLps[0]?.timestamp),
+    Date.parse(fsC.morphoAaves[0]?.timestamp),
+    Date.parse(fsC.drippers[0]?.timestamp),
+    Date.parse(fsC.oeths[0]?.timestamp),
+    Date.parse(fsC.fraxStakings[0]?.timestamp)
+  );
+
   return (
     <FinancialStatement
       ethPrice={ethPrice?.floatUsd}
@@ -144,45 +153,51 @@ export const LiveFinancialStatement = () => {
         timestamp,
       }}
       columns={[
-        intlFormatDistance(sevenDaysAgo, new Date()),
-        intlFormat(todayEnd),
+        <>
+          <div>{intlFormat(timestamp)}</div>
+          <div className="text-[75%]">block {blockNumber}</div>
+        </>,
+        <>
+          <div>{intlFormat(timestampC)}</div>
+          <div className="text-[75%]">block {blockNumberC}</div>
+        </>,
       ]}
       data={{
         assets: {
           Vault: {
-            WETH: [fsC.vaults[0]?.weth, fs.vaults[0]?.weth].map(c("WETH")),
-            stETH: [fsC.vaults[0]?.stETH, fs.vaults[0]?.stETH].map(c("stETH")),
-            rETH: [fsC.vaults[0]?.rETH, fs.vaults[0]?.rETH].map(c("rETH")),
-            frxETH: [fsC.vaults[0]?.frxETH, fs.vaults[0]?.frxETH].map(
+            WETH: [fs.vaults[0]?.weth, fsC.vaults[0]?.weth].map(c("WETH")),
+            stETH: [fs.vaults[0]?.stETH, fsC.vaults[0]?.stETH].map(c("stETH")),
+            rETH: [fs.vaults[0]?.rETH, fsC.vaults[0]?.rETH].map(c("rETH")),
+            frxETH: [fs.vaults[0]?.frxETH, fsC.vaults[0]?.frxETH].map(
               c("frxETH")
             ),
           },
           Curve: {
-            ETH: [fsC.curveLps[0]?.ethOwned, fs.curveLps[0]?.ethOwned].map(
+            ETH: [fs.curveLps[0]?.ethOwned, fsC.curveLps[0]?.ethOwned].map(
               c("ETH")
             ),
-            OETH: [fsC.curveLps[0]?.oethOwned, fs.curveLps[0]?.oethOwned].map(
+            OETH: [fs.curveLps[0]?.oethOwned, fsC.curveLps[0]?.oethOwned].map(
               c("OETH")
             ),
           },
           "Frax Staking": {
             frxETH: [
-              fsC.fraxStakings[0]?.frxETH,
               fs.fraxStakings[0]?.frxETH,
+              fsC.fraxStakings[0]?.frxETH,
             ].map(c("sfrxETH")),
           },
           "Morpho Aave": {
-            WETH: [fsC.morphoAaves[0]?.weth, fs.morphoAaves[0]?.weth].map(
+            WETH: [fs.morphoAaves[0]?.weth, fsC.morphoAaves[0]?.weth].map(
               c("WETH")
             ),
           },
           Dripper: {
-            WETH: [fsC.drippers[0]?.weth, fs.drippers[0]?.weth].map(c("WETH")),
+            WETH: [fs.drippers[0]?.weth, fsC.drippers[0]?.weth].map(c("WETH")),
           },
         },
         liabilities: {
           "Token Supply": {
-            OETH: [fsC.oeths[0]?.totalSupply, fs.oeths[0]?.totalSupply].map(
+            OETH: [fs.oeths[0]?.totalSupply, fsC.oeths[0]?.totalSupply].map(
               c("OETH")
             ),
           },
@@ -204,7 +219,7 @@ export const FinancialStatement = (props: {
     blockNumber: number;
     timestamp: number;
   };
-  columns: string[];
+  columns: ReactNode[];
   data: Record<
     "assets" | "liabilities",
     Record<string, Record<string, number[]>>
@@ -318,7 +333,7 @@ export const FinancialStatement = (props: {
   );
 };
 
-const Header = (props: { columns: string[] }) => {
+const Header = (props: { columns: ReactNode[] }) => {
   const { isNarrow } = useContext(FinancialStatementContext);
   const columnWeight = props.columns.length + 2;
   return (
@@ -331,9 +346,9 @@ const Header = (props: { columns: string[] }) => {
         )}
       >
         <div style={{ width: `${(100 / columnWeight) * 1.5}%` }} />
-        {props.columns.map((column) => (
+        {props.columns.map((column, i) => (
           <div
-            key={column}
+            key={i}
             className={"ml-4"}
             style={{
               width: `${100 / columnWeight}%`,
@@ -477,8 +492,7 @@ const Asset = (props: {
           <DataColumn
             key={index}
             link={
-              index === props.data.length - 1 &&
-              links[props.table]?.[props.section]?.[props.title]
+              index === 0 && links[props.table]?.[props.section]?.[props.title]
             }
             columnWeight={columnWeight}
             value={value}
@@ -556,8 +570,8 @@ export const ChangeColumn = ({
   const { isNarrow } = useContext(FinancialStatementContext);
   const intl = useIntl();
   const change = calculateChange(
-    values[values.length - 2],
-    values[values.length - 1]
+    values[values.length - 1],
+    values[values.length - 2]
   );
   return (
     <div

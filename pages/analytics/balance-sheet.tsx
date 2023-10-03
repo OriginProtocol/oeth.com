@@ -7,7 +7,7 @@ const BalanceSheet = () => {
   return (
     <ErrorBoundary>
       <Head>
-        <title>Analytics | Financial Statement</title>
+        <title>Analytics | Balance Sheet</title>
       </Head>
       <LiveFinancialStatement />
     </ErrorBoundary>

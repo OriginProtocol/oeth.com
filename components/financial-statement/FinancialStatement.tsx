@@ -16,6 +16,8 @@ import { useChainlinkEthUsd } from "../../utils/useChainlinkEthUsd";
 import { useElementSize } from "usehooks-ts";
 import cn from "classnames";
 import Image from "next/image";
+import { TailSpin } from "react-loader-spinner";
+import { useRatesOETH } from "../../utils/useRatesOETH";
 
 const links = {
   Assets: {
@@ -82,20 +84,49 @@ export const LiveFinancialStatement = () => {
   });
   const { isLoading: ethPriceIsLoading, data: ethPrice } = useChainlinkEthUsd();
 
-  if (fsIsLoading || !fs) return null;
-  if (fsCIsLoading || !fsC) return null;
-  if (ethPriceIsLoading || !ethPrice) return null;
-
-  const c = (n?: string) => Number(formatEther(BigInt(n ?? 0)));
+  const loading = (
+    <div className="flex items-center justify-center h-48">
+      <TailSpin
+        height="100"
+        width="100"
+        color="#0074F0"
+        ariaLabel="tail-spin-loading"
+        radius="1"
+      />
+    </div>
+  );
 
   const blockNumber = Math.max(
-    fs.vaults[0]?.blockNumber,
-    fs.curveLps[0]?.blockNumber,
-    fs.morphoAaves[0]?.blockNumber,
-    fs.drippers[0]?.blockNumber,
-    fs.oeths[0]?.blockNumber,
-    fs.fraxStakings[0]?.blockNumber
+    fs?.vaults[0]?.blockNumber,
+    fs?.curveLps[0]?.blockNumber,
+    fs?.morphoAaves[0]?.blockNumber,
+    fs?.drippers[0]?.blockNumber,
+    fs?.oeths[0]?.blockNumber,
+    fs?.fraxStakings[0]?.blockNumber
   );
+
+  const blockNumberC = Math.max(
+    fsC?.vaults[0]?.blockNumber,
+    fsC?.curveLps[0]?.blockNumber,
+    fsC?.morphoAaves[0]?.blockNumber,
+    fsC?.drippers[0]?.blockNumber,
+    fsC?.oeths[0]?.blockNumber,
+    fsC?.fraxStakings[0]?.blockNumber
+  );
+
+  const rates = useRatesOETH(blockNumber, !!blockNumber);
+  const ratesC = useRatesOETH(blockNumberC, !!blockNumber);
+
+  if (fsIsLoading || !fs) return loading;
+  if (fsCIsLoading || !fsC) return loading;
+  if (ethPriceIsLoading || !ethPrice) return loading;
+  if (rates.isLoading || !rates.data) return loading;
+  if (ratesC.isLoading || !ratesC.data) return loading;
+
+  const c =
+    (rate: keyof ReturnType<typeof useRatesOETH>["data"]) => (n?: string) =>
+      Number(formatEther(BigInt(Number(n ?? 0) * rates.data[rate].float)));
+
   const timestamp = Math.max(
     Date.parse(fs.vaults[0]?.timestamp),
     Date.parse(fs.curveLps[0]?.timestamp),
@@ -119,33 +150,41 @@ export const LiveFinancialStatement = () => {
       data={{
         assets: {
           Vault: {
-            WETH: [fsC.vaults[0]?.weth, fs.vaults[0]?.weth].map(c),
-            stETH: [fsC.vaults[0]?.stETH, fs.vaults[0]?.stETH].map(c),
-            rETH: [fsC.vaults[0]?.rETH, fs.vaults[0]?.rETH].map(c),
-            frxETH: [fsC.vaults[0]?.frxETH, fs.vaults[0]?.frxETH].map(c),
+            WETH: [fsC.vaults[0]?.weth, fs.vaults[0]?.weth].map(c("WETH")),
+            stETH: [fsC.vaults[0]?.stETH, fs.vaults[0]?.stETH].map(c("stETH")),
+            rETH: [fsC.vaults[0]?.rETH, fs.vaults[0]?.rETH].map(c("rETH")),
+            frxETH: [fsC.vaults[0]?.frxETH, fs.vaults[0]?.frxETH].map(
+              c("frxETH")
+            ),
           },
           Curve: {
-            ETH: [fsC.curveLps[0]?.ethOwned, fs.curveLps[0]?.ethOwned].map(c),
+            ETH: [fsC.curveLps[0]?.ethOwned, fs.curveLps[0]?.ethOwned].map(
+              c("ETH")
+            ),
             OETH: [fsC.curveLps[0]?.oethOwned, fs.curveLps[0]?.oethOwned].map(
-              c
+              c("OETH")
             ),
           },
           "Frax Staking": {
             frxETH: [
               fsC.fraxStakings[0]?.frxETH,
               fs.fraxStakings[0]?.frxETH,
-            ].map(c),
+            ].map(c("sfrxETH")),
           },
           "Morpho Aave": {
-            WETH: [fsC.morphoAaves[0]?.weth, fs.morphoAaves[0]?.weth].map(c),
+            WETH: [fsC.morphoAaves[0]?.weth, fs.morphoAaves[0]?.weth].map(
+              c("WETH")
+            ),
           },
           Dripper: {
-            WETH: [fsC.drippers[0]?.weth, fs.drippers[0]?.weth].map(c),
+            WETH: [fsC.drippers[0]?.weth, fs.drippers[0]?.weth].map(c("WETH")),
           },
         },
         liabilities: {
           "Token Supply": {
-            OETH: [fsC.oeths[0]?.totalSupply, fs.oeths[0]?.totalSupply].map(c),
+            OETH: [fsC.oeths[0]?.totalSupply, fs.oeths[0]?.totalSupply].map(
+              c("OETH")
+            ),
           },
         },
       }}
@@ -173,10 +212,13 @@ export const FinancialStatement = (props: {
 }) => {
   const [ref, { width }] = useElementSize<HTMLDivElement>();
   const intl = useIntl();
+  const isNarrow = width < 650;
   const assetTotals = getTotals(props.data["assets"]);
   const liabilityTotals = getTotals(props.data["liabilities"]);
   const [showUsdPrice, setShowUsdPrice] = useState(false);
-  const isNarrow = width < 650;
+  const netValueTotals = assetTotals.map(
+    (val, index) => val - liabilityTotals[index]
+  );
 
   return (
     <FinancialStatementContext.Provider
@@ -245,16 +287,20 @@ export const FinancialStatement = (props: {
           totals={liabilityTotals}
         />
 
-        <div
-          className={"sm:rounded-sm md:rounded-md overflow-hidden bg-[#1E1F25]"}
-        >
-          <Total
-            title={"PROTOCOL NET VALUE"}
-            totals={assetTotals.map(
-              (val, index) => val - liabilityTotals[index]
-            )}
-          />
-        </div>
+        {netValueTotals.find((n) => n < 0) ? null : (
+          <div
+            className={
+              "sm:rounded-sm md:rounded-md overflow-hidden bg-[#1E1F25]"
+            }
+          >
+            <Total
+              title={"PROTOCOL NET VALUE"}
+              totals={assetTotals.map(
+                (val, index) => val - liabilityTotals[index]
+              )}
+            />
+          </div>
+        )}
         <div className={"mt-2 sm:mt-4 md:mt-6 text-[#FAFBFB]"}>
           <p className={"text-sm sm:text-base"}>
             {`Last updated ${intlFormat(props.lastUpdated.timestamp)}, `}
@@ -422,10 +468,10 @@ const Asset = (props: {
     <div className={"flex flex-col"} key={props.title}>
       <div className={"flex justify-between"}>
         <div
-          className={"pl-4 -mr-4 text-[#B5BECA]"}
+          className={"text-[#B5BECA]"}
           style={{ width: `${(100 / columnWeight) * 1.5}%` }}
         >
-          {props.title}
+          <span className="ml-4">{props.title}</span>
         </div>
         {props.data.map((value, index) => (
           <DataColumn
@@ -463,7 +509,8 @@ export const DataColumn = ({
       </span>
       {intl.formatNumber(showUsdPrice && ethPrice ? value * ethPrice : value, {
         notation: isNarrow ? "compact" : "standard",
-        maximumFractionDigits: isNarrow ? 1 : 2,
+        minimumFractionDigits: isNarrow ? 0 : showUsdPrice ? 0 : 3,
+        maximumFractionDigits: isNarrow ? 1 : showUsdPrice ? 0 : 3,
       })}
     </>
   );
@@ -480,12 +527,12 @@ export const DataColumn = ({
       {link ? (
         <a
           href={link}
-          className="hover:font-bold flex items-center justify-end"
+          className="group relative flex items-center justify-end"
           target="_blank"
         >
           {content}
           <Image
-            className="ml-2"
+            className="absolute r-0 -mr-3 opacity-40 group-hover:opacity-100"
             src="/images/ext-link-white.svg"
             height={8}
             width={8}

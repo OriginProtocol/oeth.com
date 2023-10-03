@@ -54,6 +54,14 @@ const strategyMapping: {
     icon: "/images/sfrax-icon.svg",
     tokens: ["frxeth"],
   },
+  oeth_balancer_reth_strat: {
+    protocol: "Aura",
+    short_name: "Aura OETH",
+    name: "WETH + Rocket Pool Ether (rETH)",
+    address: "0x49109629ac1deb03f2e9b2fe2ac4a623e0e7dfdc",
+    icon: "/images/convex-reth.svg",
+    tokens: ["reth", "weth"],
+  },
   oeth_curve_amo: {
     protocol: "Convex",
     short_name: "Convex OETH",

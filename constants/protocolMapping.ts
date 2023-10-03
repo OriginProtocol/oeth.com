@@ -11,6 +11,12 @@ const protocolMapping = {
     description:
       "Lido is a liquid staking solution for Ethereum that staking ETH without locking tokens or maintaining infrastructure. OETH holds stETH to earn staking rewards for participating in the Ethereum network and adds a layer of auto-compounding.",
   },
+  Aura: {
+    color: "#FFFFFF",
+    image: "/images/aura-logo.png",
+    description:
+      "Aura allows liquidity providers and stakers to gain enhanced rewards from Balancer, a programmable liquidity AMM. Origin accrues trading fees and protocol token incentives (both BAL and AURA), which are converted to OETH and then distributed to OETH holders.",
+  },
   RocketPool: {
     color: "#e4ae89",
     image: "/images/rocketpool-strategy.svg",

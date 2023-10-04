@@ -12,7 +12,6 @@ import { GTM_ID, pageview } from "../utils/gtm";
 import { useContracts, usePreviousRoute } from "../hooks";
 import "../styles/globals.css";
 import { InjectedConnector } from "@wagmi/connectors/injected";
-import { IntlProvider } from "react-intl";
 
 const defaultQueryFn = async ({ queryKey }) => {
   return await fetch(queryKey).then((res) => res.json());
@@ -37,7 +36,7 @@ export const NavigationContext = createContext({
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet],
-  [publicProvider()]
+  [publicProvider()],
 );
 const config = createConfig({
   autoConnect: true,
@@ -112,20 +111,17 @@ function MyApp({ Component, pageProps }: AppProps) {
           `,
         }}
       />
-      {/* @ts-ignore */}
-      <IntlProvider messages={{}} locale="en" defaultLocale="en">
-        <QueryClientProvider client={queryClient}>
-          <WagmiConfig config={config}>
-            <NavigationContext.Provider
-              value={{
-                links,
-              }}
-            >
-              {getLayout(<Component {...pageProps} />)}
-            </NavigationContext.Provider>
-          </WagmiConfig>
-        </QueryClientProvider>
-      </IntlProvider>
+      <QueryClientProvider client={queryClient}>
+        <WagmiConfig config={config}>
+          <NavigationContext.Provider
+            value={{
+              links,
+            }}
+          >
+            {getLayout(<Component {...pageProps} />)}
+          </NavigationContext.Provider>
+        </WagmiConfig>
+      </QueryClientProvider>
     </>
   );
 }

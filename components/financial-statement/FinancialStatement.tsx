@@ -1,13 +1,6 @@
 import React, { createContext, ReactNode, useContext, useState } from "react";
 
-import {
-  endOfToday,
-  intlFormat,
-  intlFormatDistance,
-  startOfDay,
-  subDays,
-} from "date-fns";
-import { useIntl } from "react-intl";
+import { endOfToday, intlFormat, startOfDay, subDays } from "date-fns";
 import { formatEther } from "viem";
 
 import * as colors from "./colors";
@@ -102,7 +95,7 @@ export const LiveFinancialStatement = () => {
     fs?.morphoAaves[0]?.blockNumber,
     fs?.drippers[0]?.blockNumber,
     fs?.oeths[0]?.blockNumber,
-    fs?.fraxStakings[0]?.blockNumber
+    fs?.fraxStakings[0]?.blockNumber,
   );
 
   const blockNumberC = Math.max(
@@ -111,7 +104,7 @@ export const LiveFinancialStatement = () => {
     fsC?.morphoAaves[0]?.blockNumber,
     fsC?.drippers[0]?.blockNumber,
     fsC?.oeths[0]?.blockNumber,
-    fsC?.fraxStakings[0]?.blockNumber
+    fsC?.fraxStakings[0]?.blockNumber,
   );
 
   const rates = useRatesOETH(blockNumber, !!blockNumber);
@@ -133,7 +126,7 @@ export const LiveFinancialStatement = () => {
     Date.parse(fs.morphoAaves[0]?.timestamp),
     Date.parse(fs.drippers[0]?.timestamp),
     Date.parse(fs.oeths[0]?.timestamp),
-    Date.parse(fs.fraxStakings[0]?.timestamp)
+    Date.parse(fs.fraxStakings[0]?.timestamp),
   );
 
   const timestampC = Math.max(
@@ -142,7 +135,7 @@ export const LiveFinancialStatement = () => {
     Date.parse(fsC.morphoAaves[0]?.timestamp),
     Date.parse(fsC.drippers[0]?.timestamp),
     Date.parse(fsC.oeths[0]?.timestamp),
-    Date.parse(fsC.fraxStakings[0]?.timestamp)
+    Date.parse(fsC.fraxStakings[0]?.timestamp),
   );
 
   return (
@@ -169,15 +162,15 @@ export const LiveFinancialStatement = () => {
             stETH: [fs.vaults[0]?.stETH, fsC.vaults[0]?.stETH].map(c("stETH")),
             rETH: [fs.vaults[0]?.rETH, fsC.vaults[0]?.rETH].map(c("rETH")),
             frxETH: [fs.vaults[0]?.frxETH, fsC.vaults[0]?.frxETH].map(
-              c("frxETH")
+              c("frxETH"),
             ),
           },
           Curve: {
             ETH: [fs.curveLps[0]?.ethOwned, fsC.curveLps[0]?.ethOwned].map(
-              c("ETH")
+              c("ETH"),
             ),
             OETH: [fs.curveLps[0]?.oethOwned, fsC.curveLps[0]?.oethOwned].map(
-              c("OETH")
+              c("OETH"),
             ),
           },
           "Frax Staking": {
@@ -188,7 +181,7 @@ export const LiveFinancialStatement = () => {
           },
           "Morpho Aave": {
             WETH: [fs.morphoAaves[0]?.weth, fsC.morphoAaves[0]?.weth].map(
-              c("WETH")
+              c("WETH"),
             ),
           },
           Dripper: {
@@ -198,7 +191,7 @@ export const LiveFinancialStatement = () => {
         liabilities: {
           "Token Supply": {
             OETH: [fs.oeths[0]?.totalSupply, fsC.oeths[0]?.totalSupply].map(
-              c("OETH")
+              c("OETH"),
             ),
           },
         },
@@ -226,13 +219,12 @@ export const FinancialStatement = (props: {
   >;
 }) => {
   const [ref, { width }] = useElementSize<HTMLDivElement>();
-  const intl = useIntl();
   const isNarrow = width < 650;
   const assetTotals = getTotals(props.data["assets"]);
   const liabilityTotals = getTotals(props.data["liabilities"]);
   const [showUsdPrice, setShowUsdPrice] = useState(false);
   const netValueTotals = assetTotals.map(
-    (val, index) => val - liabilityTotals[index]
+    (val, index) => val - liabilityTotals[index],
   );
 
   return (
@@ -257,7 +249,7 @@ export const FinancialStatement = (props: {
             <button
               className={cn(
                 "rounded-full p-px",
-                !showUsdPrice ? "bg-gradient4" : "hover:bg-gray-300/20"
+                !showUsdPrice ? "bg-gradient4" : "hover:bg-gray-300/20",
               )}
               onClick={() => setShowUsdPrice(false)}
             >
@@ -265,7 +257,7 @@ export const FinancialStatement = (props: {
                 className={cn(
                   "px-4 py-2 rounded-full w-full h-full flex items-center justify-center",
                   !showUsdPrice ? "text-[#FAFBFB]" : "text-[#B5BECA]",
-                  "bg-[#1E1F25DD]"
+                  "bg-[#1E1F25DD]",
                 )}
               >
                 ETH
@@ -274,7 +266,7 @@ export const FinancialStatement = (props: {
             <button
               className={cn(
                 "rounded-full p-px",
-                showUsdPrice ? "bg-gradient4" : "hover:bg-gray-300/20"
+                showUsdPrice ? "bg-gradient4" : "hover:bg-gray-300/20",
               )}
               onClick={() => setShowUsdPrice(true)}
             >
@@ -282,7 +274,7 @@ export const FinancialStatement = (props: {
                 className={cn(
                   "px-4 py-2 rounded-full w-full h-full flex items-center justify-center",
                   showUsdPrice ? "text-[#FAFBFB]" : "text-[#B5BECA]",
-                  "bg-[#1E1F25DD]"
+                  "bg-[#1E1F25DD]",
                 )}
               >
                 USD
@@ -311,7 +303,7 @@ export const FinancialStatement = (props: {
             <Total
               title={"PROTOCOL NET VALUE"}
               totals={assetTotals.map(
-                (val, index) => val - liabilityTotals[index]
+                (val, index) => val - liabilityTotals[index],
               )}
             />
           </div>
@@ -323,7 +315,7 @@ export const FinancialStatement = (props: {
           </p>
           <p className={"text-sm sm:text-base"}>
             {props.ethPrice &&
-              `Using ETH price of $${intl.formatNumber(props.ethPrice, {
+              `Using ETH price of $${props.ethPrice.toLocaleString(undefined, {
                 maximumFractionDigits: 2,
               })} from Chainlink`}
           </p>
@@ -342,7 +334,7 @@ const Header = (props: { columns: ReactNode[] }) => {
         className={cn(
           "flex items-center justify-between text-[#B5BECA] bg-[#23242A] text-xs sm:text-sm md:text-base",
           "px-2 sm:px-4 md:px-8",
-          "py-2 sm:py-6 md:py-8"
+          "py-2 sm:py-6 md:py-8",
         )}
       >
         <div style={{ width: `${(100 / columnWeight) * 1.5}%` }} />
@@ -391,7 +383,7 @@ const Table = (props: {
             "px-2 sm:px-4 md:px-8",
             "text-[#B5BECA]",
             "text-sm sm:text-base",
-            "border-b border-b-[#141519]"
+            "border-b border-b-[#141519]",
           )}
         >
           {props.title}
@@ -447,7 +439,7 @@ const Section = (props: {
         "border-b border-b-[#141519]",
         "gap-2 sm:gap-4 md:gap-8",
         "px-2 sm:px-4 md:px-8",
-        "pt-2 sm:pt-4 md:pt-8"
+        "pt-2 sm:pt-4 md:pt-8",
       )}
     >
       <div className={"flex text-[#FAFBFB]"}>{props.title}</div>
@@ -455,7 +447,7 @@ const Section = (props: {
         className={cn(
           "flex flex-col",
           "gap-2 sm:gap-4 md:gap-8",
-          "pb-2 sm:pb-4 md:pb-8"
+          "pb-2 sm:pb-4 md:pb-8",
         )}
       >
         {Object.entries(props.data).map(([title, data]) => (
@@ -514,18 +506,20 @@ export const DataColumn = ({
   link?: string;
 }) => {
   const { isNarrow } = useContext(FinancialStatementContext);
-  const intl = useIntl();
   const { showUsdPrice, ethPrice } = useContext(FinancialStatementContext);
   const content = (
     <>
       <span className={"pr-[1px] sm:pr-[1.5px] md:pr-[2px] text-[#B5BECA]"}>
         {showUsdPrice && ethPrice ? "$" : "Ξ"}
       </span>
-      {intl.formatNumber(showUsdPrice && ethPrice ? value * ethPrice : value, {
-        notation: isNarrow ? "compact" : "standard",
-        minimumFractionDigits: isNarrow ? 0 : showUsdPrice ? 0 : 3,
-        maximumFractionDigits: isNarrow ? 1 : showUsdPrice ? 0 : 3,
-      })}
+      {(showUsdPrice && ethPrice ? value * ethPrice : value).toLocaleString(
+        undefined,
+        {
+          notation: isNarrow ? "compact" : "standard",
+          minimumFractionDigits: isNarrow ? 0 : showUsdPrice ? 0 : 3,
+          maximumFractionDigits: isNarrow ? 1 : showUsdPrice ? 0 : 3,
+        },
+      )}
     </>
   );
   return (
@@ -568,10 +562,9 @@ export const ChangeColumn = ({
   columnWeight: number;
 }) => {
   const { isNarrow } = useContext(FinancialStatementContext);
-  const intl = useIntl();
   const change = calculateChange(
     values[values.length - 1],
-    values[values.length - 2]
+    values[values.length - 2],
   );
   return (
     <div
@@ -590,7 +583,7 @@ export const ChangeColumn = ({
       {isFinite(change) && change > 0 && "+"}
       {!isNaN(change) &&
         isFinite(change) &&
-        `${intl.formatNumber(change, {
+        `${change.toLocaleString(undefined, {
           notation: isNarrow ? "compact" : "standard",
           maximumFractionDigits: isNarrow ? 1 : 2,
         })}%`}

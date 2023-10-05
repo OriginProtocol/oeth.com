@@ -42,14 +42,16 @@ const getRateSfrxETH = async (block?: number) => {
 
 export const useRatesOETH = (block: number, enabled: boolean) => {
   return useQuery({
-    enabled,
+    enabled: enabled && block >= 18032298, // 0xbE19cC5654e30dAF04AD3B5E06213D70F4e882eE deploy block
     queryKey: ["useRatesOETH", block],
     queryFn: async () => {
-      const WETH = await getRateOETH(addresses.WETH, block);
-      const stETH = await getRateOETH(addresses.stETH, block);
-      const rETH = await getRateOETH(addresses.rETH, block);
-      const frxETH = await getRateOETH(addresses.frxETH, block);
-      const sfrxETH = await getRateSfrxETH(block);
+      const [WETH, stETH, rETH, frxETH, sfrxETH] = await Promise.all([
+        getRateOETH(addresses.WETH, block),
+        getRateOETH(addresses.stETH, block),
+        getRateOETH(addresses.rETH, block),
+        getRateOETH(addresses.frxETH, block),
+        getRateSfrxETH(block),
+      ]);
       return {
         OETH: { raw: BigInt("1000000000000000000"), float: 1 },
         ETH: { raw: BigInt("1000000000000000000"), float: 1 },

@@ -37,4 +37,11 @@ query FinancialStatement($compareDate: DateTime) {
     stETH
     frxETH
   }
+  balancerMetaPoolStrategies(limit: 1, orderBy: id_DESC, where: {timestamp_lt: $compareDate}) {
+    blockNumber
+    timestamp
+    total
+    rETH
+    weth
+  }
 }

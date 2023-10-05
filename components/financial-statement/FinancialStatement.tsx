@@ -22,7 +22,7 @@ const links = {
       frxETH:
         "https://etherscan.io/token/0x5e8422345238f34275888049021821e8e08caa1f?a=0x39254033945aa2e4809cc2977e7087bee48bd7ab",
     },
-    Curve: {
+    Convex: {
       ETH: "https://etherscan.io/address/0x94b17476a93b3262d87b9a326965d1e91f9c13e7",
       OETH: "https://etherscan.io/token/0x856c4Efb76C1D1AE02e20CEB03A2A6a08b0b8dC3?a=0x94b17476a93b3262d87b9a326965d1e91f9c13e7",
     },
@@ -90,52 +90,80 @@ export const LiveFinancialStatement = () => {
   );
 
   const blockNumber = Math.max(
-    fs?.vaults[0]?.blockNumber,
-    fs?.curveLps[0]?.blockNumber,
-    fs?.morphoAaves[0]?.blockNumber,
-    fs?.drippers[0]?.blockNumber,
-    fs?.oeths[0]?.blockNumber,
-    fs?.fraxStakings[0]?.blockNumber,
+    fs?.vaults[0]?.blockNumber ?? 0,
+    fs?.curveLps[0]?.blockNumber ?? 0,
+    fs?.morphoAaves[0]?.blockNumber ?? 0,
+    fs?.balancerMetaPoolStrategies[0]?.blockNumber ?? 0,
+    fs?.drippers[0]?.blockNumber ?? 0,
+    fs?.oeths[0]?.blockNumber ?? 0,
+    fs?.fraxStakings[0]?.blockNumber ?? 0,
   );
 
   const blockNumberC = Math.max(
-    fsC?.vaults[0]?.blockNumber,
-    fsC?.curveLps[0]?.blockNumber,
-    fsC?.morphoAaves[0]?.blockNumber,
-    fsC?.drippers[0]?.blockNumber,
-    fsC?.oeths[0]?.blockNumber,
-    fsC?.fraxStakings[0]?.blockNumber,
+    fsC?.vaults[0]?.blockNumber ?? 0,
+    fsC?.curveLps[0]?.blockNumber ?? 0,
+    fsC?.morphoAaves[0]?.blockNumber ?? 0,
+    fsC?.balancerMetaPoolStrategies[0]?.blockNumber ?? 0,
+    fsC?.drippers[0]?.blockNumber ?? 0,
+    fsC?.oeths[0]?.blockNumber ?? 0,
+    fsC?.fraxStakings[0]?.blockNumber ?? 0,
   );
 
   const rates = useRatesOETH(blockNumber, !!blockNumber);
   const ratesC = useRatesOETH(blockNumberC, !!blockNumber);
 
-  if (fsIsLoading || !fs) return loading;
-  if (fsCIsLoading || !fsC) return loading;
-  if (ethPriceIsLoading || !ethPrice) return loading;
-  if (rates.isLoading || !rates.data) return loading;
-  if (ratesC.isLoading || !ratesC.data) return loading;
+  if (fsIsLoading || !fs) {
+    console.log("fsIsLoading || !fs");
+    return loading;
+  }
+  if (fsCIsLoading || !fsC) {
+    console.log("fsCIsLoading || !fsC");
+    return loading;
+  }
+  if (ethPriceIsLoading || !ethPrice) {
+    console.log("ethPriceIsLoading || !ethPrice");
+    return loading;
+  }
+  if (rates.isLoading || !rates.data) {
+    console.log("rates.isLoading || !rates.data");
+    return loading;
+  }
+  if (ratesC.isLoading || !ratesC.data) {
+    console.log("ratesC.isLoading || !ratesC.data");
+    return loading;
+  }
 
   const c =
     (rate: keyof ReturnType<typeof useRatesOETH>["data"]) => (n?: string) =>
       Number(formatEther(BigInt(Number(n ?? 0) * rates.data[rate].float)));
 
+  // If any date is missing, default to a date earlier than would show up.
   const timestamp = Math.max(
-    Date.parse(fs.vaults[0]?.timestamp),
-    Date.parse(fs.curveLps[0]?.timestamp),
-    Date.parse(fs.morphoAaves[0]?.timestamp),
-    Date.parse(fs.drippers[0]?.timestamp),
-    Date.parse(fs.oeths[0]?.timestamp),
-    Date.parse(fs.fraxStakings[0]?.timestamp),
+    ...[
+      fs.vaults[0],
+      fs.curveLps[0],
+      fs.morphoAaves[0],
+      fs.drippers[0],
+      fs.balancerMetaPoolStrategies[0],
+      fs.oeths[0],
+      fs.fraxStakings[0],
+    ]
+      .map((v) => Date.parse(v?.timestamp))
+      .filter((x) => x),
   );
 
   const timestampC = Math.max(
-    Date.parse(fsC.vaults[0]?.timestamp),
-    Date.parse(fsC.curveLps[0]?.timestamp),
-    Date.parse(fsC.morphoAaves[0]?.timestamp),
-    Date.parse(fsC.drippers[0]?.timestamp),
-    Date.parse(fsC.oeths[0]?.timestamp),
-    Date.parse(fsC.fraxStakings[0]?.timestamp),
+    ...[
+      fsC.vaults[0],
+      fsC.curveLps[0],
+      fsC.morphoAaves[0],
+      fsC.drippers[0],
+      fsC.balancerMetaPoolStrategies[0],
+      fsC.oeths[0],
+      fsC.fraxStakings[0],
+    ]
+      .map((v) => Date.parse(v?.timestamp))
+      .filter((x) => x),
   );
 
   return (
@@ -165,7 +193,7 @@ export const LiveFinancialStatement = () => {
               c("frxETH"),
             ),
           },
-          Curve: {
+          Convex: {
             ETH: [fs.curveLps[0]?.ethOwned, fsC.curveLps[0]?.ethOwned].map(
               c("ETH"),
             ),
@@ -183,6 +211,16 @@ export const LiveFinancialStatement = () => {
             WETH: [fs.morphoAaves[0]?.weth, fsC.morphoAaves[0]?.weth].map(
               c("WETH"),
             ),
+          },
+          Aura: {
+            rETH: [
+              fs.balancerMetaPoolStrategies[0]?.rETH,
+              fsC.balancerMetaPoolStrategies[0]?.rETH,
+            ].map(c("rETH")),
+            WETH: [
+              fs.balancerMetaPoolStrategies[0]?.weth,
+              fsC.balancerMetaPoolStrategies[0]?.weth,
+            ].map(c("WETH")),
           },
           Dripper: {
             WETH: [fs.drippers[0]?.weth, fsC.drippers[0]?.weth].map(c("WETH")),

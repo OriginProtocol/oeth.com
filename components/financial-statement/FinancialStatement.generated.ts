@@ -54,10 +54,18 @@ export type FinancialStatementQuery = {
     stETH: string;
     frxETH: string;
   }>;
+  balancerMetaPoolStrategies: Array<{
+    __typename?: "BalancerMetaPoolStrategy";
+    blockNumber: number;
+    timestamp: string;
+    total: string;
+    rETH: string;
+    weth: string;
+  }>;
 };
 
 export const FinancialStatementDocument = `
-    query FinancialStatement($compareDate: DateTime) {
+query FinancialStatement($compareDate: DateTime) {
   oeths(limit: 1, orderBy: id_DESC, where: {timestamp_lt: $compareDate}) {
     blockNumber
     timestamp
@@ -96,14 +104,21 @@ export const FinancialStatementDocument = `
     stETH
     frxETH
   }
+  balancerMetaPoolStrategies(limit: 1, orderBy: id_DESC, where: {timestamp_lt: $compareDate}) {
+    blockNumber
+    timestamp
+    total
+    rETH
+    weth
+  }
 }
     `;
 export const useFinancialStatementQuery = <
   TData = FinancialStatementQuery,
-  TError = unknown
+  TError = unknown,
 >(
   variables?: FinancialStatementQueryVariables,
-  options?: UseQueryOptions<FinancialStatementQuery, TError, TData>
+  options?: UseQueryOptions<FinancialStatementQuery, TError, TData>,
 ) =>
   useQuery<FinancialStatementQuery, TError, TData>(
     variables === undefined
@@ -111,23 +126,23 @@ export const useFinancialStatementQuery = <
       : ["FinancialStatement", variables],
     graphqlClient<FinancialStatementQuery, FinancialStatementQueryVariables>(
       FinancialStatementDocument,
-      variables
+      variables,
     ),
-    options
+    options,
   );
 
 useFinancialStatementQuery.getKey = (
-  variables?: FinancialStatementQueryVariables
+  variables?: FinancialStatementQueryVariables,
 ) =>
   variables === undefined
     ? ["FinancialStatement"]
     : ["FinancialStatement", variables];
 useFinancialStatementQuery.fetcher = (
   variables?: FinancialStatementQueryVariables,
-  options?: RequestInit["headers"]
+  options?: RequestInit["headers"],
 ) =>
   graphqlClient<FinancialStatementQuery, FinancialStatementQueryVariables>(
     FinancialStatementDocument,
     variables,
-    options
+    options,
   );

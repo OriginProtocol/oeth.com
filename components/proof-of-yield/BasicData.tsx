@@ -18,7 +18,7 @@ const BasicData = ({
   return (
     <div
       className={twMerge(
-        `flex justify-start w-full items-center px-4 lg:px-8 py-4 lg:py-6 bg-origin-bg-grey mr-0.5 truncate`,
+        `flex justify-start w-full items-center px-4 lg:px-8 py-4 lg:py-6 bg-origin-bg-grey mr-0.5`,
         className
       )}
     >

@@ -6,7 +6,12 @@ import { useRouter } from "next/router";
 import { DayBasicData } from "../../sections";
 import { DailyStat, YieldOnDayProps } from "../../types";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
-import { fetchAPI, fetchDailyStats, transformLinks } from "../../utils";
+import {
+  fetchAPI,
+  fetchDailyStats,
+  fetchProofOfYieldByDay,
+  transformLinks,
+} from "../../utils";
 import { Header, Footer } from "../../components";
 import Error from "../404";
 
@@ -57,7 +62,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const dates = Array.from({ length: 30 }, (_, i) =>
     moment(today)
       .subtract(i + 1, "days")
-      .format("YYYY-MM-DD")
+      .format("YYYY-MM-DD"),
   );
 
   const paths = dates.map((date) => ({
@@ -68,7 +73,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (
-  context: GetStaticPropsContext<{ timestamp: string }>
+  context: GetStaticPropsContext<{ timestamp: string }>,
 ): Promise<{
   props: YieldOnDayProps;
   revalidate: number;
@@ -90,7 +95,11 @@ export const getStaticProps: GetStaticProps = async (
 
   if (timestamp && typeof timestamp === "string") {
     const daysAgo = moment().diff(moment(timestamp), "days");
-    const dailyStats = await fetchDailyStats(daysAgo, daysAgo - 1);
+    const dailyStatsOld = await fetchDailyStats(daysAgo, daysAgo - 1);
+    const dailyStats = await fetchProofOfYieldByDay(timestamp);
+    console.log(
+      JSON.stringify({ dailyStats, timestamp, dailyStatsOld }, null, 4),
+    );
     if (Array.isArray(dailyStats) && dailyStats.length > 0) {
       dailyStat = get(dailyStats, `[${dailyStats?.length - 1}]`); // At daysAgo = 1, the array returns both current day and last day
     }

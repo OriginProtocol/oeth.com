@@ -2,10 +2,11 @@ import Head from "next/head";
 import React from "react";
 import { Header, Seo } from "../../components";
 import { GetStaticProps } from "next";
-import { fetchAPI, fetchDailyStats, transformLinks } from "../../utils";
+import { fetchAPI, fetchProofOfYield, transformLinks } from "../../utils";
 import { Heading, DailyYield } from "../../sections";
 import { Footer } from "../../components";
 import { DailyStat, Link } from "../../types";
+import { formatEther } from "viem";
 
 interface ProofOfYieldProps {
   navLinks: Link[];
@@ -42,7 +43,7 @@ export const getStaticProps: GetStaticProps = async (): Promise<{
       },
     },
   });
-  const dailyStats = await fetchDailyStats(30);
+  const dailyStats = await fetchProofOfYield();
 
   const navLinks = transformLinks(navRes.data);
   return {

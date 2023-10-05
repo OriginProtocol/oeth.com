@@ -11,7 +11,7 @@ import { smSize } from "../../constants";
 import { useViewWidth } from "../../hooks";
 import { useRouter } from "next/router";
 import { DailyStat } from "../../types";
-import { commifyToDecimalPlaces, fetchDailyStats } from "../../utils";
+import { commifyToDecimalPlaces, fetchProofOfYield } from "../../utils";
 import moment from "moment";
 
 interface DailyYieldProps {
@@ -29,8 +29,8 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
     router.push(`/proof-of-yield/${date}`, undefined, { scroll: true });
   };
 
-  const moreDays = async (begin: number, end: number) => {
-    const moreStats = await fetchDailyStats(end, begin);
+  const moreDays = async (offset: number) => {
+    const moreStats = await fetchProofOfYield(offset);
     setStats((prevStats) => prevStats.concat(moreStats));
   };
 
@@ -105,7 +105,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
                       <div className="flex items-center">
                         {commifyToDecimalPlaces(
                           parseFloat(item.rebasing_supply),
-                          2
+                          2,
                         )}
                       </div>
                     </TableData>
@@ -114,7 +114,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
                     <ChartDetailsButton
                       onClick={() =>
                         routeToYieldOnDay(
-                          moment(item.date).format("YYYY-MM-DD")
+                          moment(item.date).format("YYYY-MM-DD"),
                         )
                       }
                     >
@@ -132,7 +132,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
         <GradientButton
           outerDivClassName="mx-auto mt-6 mb-10 md:mb-0"
           className="bg-transparent hover:bg-transparent text-base px-8 py-[6px] md:px-10 md:py-3"
-          onClick={() => moreDays(stats.length, stats.length + viewMoreAmount)}
+          onClick={() => moreDays(stats.length + viewMoreAmount)}
         >
           View more
         </GradientButton>

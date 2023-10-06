@@ -611,20 +611,20 @@ export const ChangeColumn = ({
         maxWidth: 250,
         textAlign: "right",
         color:
-          change > 0
+          isNaN(change) || !isFinite(change) || change === 0
+            ? "#B5BECA"
+            : change > 0
             ? colors.positive
-            : change < 0
-            ? colors.negative
-            : "#B5BECA",
+            : colors.negative,
       }}
     >
       {isFinite(change) && change > 0 && "+"}
-      {!isNaN(change) &&
-        isFinite(change) &&
-        `${change.toLocaleString(undefined, {
-          notation: isNarrow ? "compact" : "standard",
-          maximumFractionDigits: isNarrow ? 1 : 2,
-        })}%`}
+      {isNaN(change) || !isFinite(change) || change === 0
+        ? "-"
+        : `${change.toLocaleString(undefined, {
+            notation: isNarrow ? "compact" : "standard",
+            maximumFractionDigits: isNarrow ? 1 : 2,
+          })}%`}
     </div>
   );
 };

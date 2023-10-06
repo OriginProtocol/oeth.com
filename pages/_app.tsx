@@ -5,18 +5,19 @@ import { AppProps } from "next/app";
 import Script from "next/script";
 import { QueryClient, QueryClientProvider } from "react-query";
 import Head from "next/head";
-import { WagmiConfig, createClient, configureChains, mainnet } from "wagmi";
+import { WagmiConfig, configureChains, mainnet, createConfig } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
 import { assetRootPath } from "../utils";
 import { GTM_ID, pageview } from "../utils/gtm";
 import { useContracts, usePreviousRoute } from "../hooks";
 import "../styles/globals.css";
+import { InjectedConnector } from "@wagmi/connectors/injected";
 
 const defaultQueryFn = async ({ queryKey }) => {
   return await fetch(queryKey).then((res) => res.json());
 };
 
-const queryClient = new QueryClient({
+export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       queryFn: defaultQueryFn,
@@ -33,15 +34,15 @@ export const NavigationContext = createContext({
   links: [],
 });
 
-const { provider, webSocketProvider } = configureChains(
+const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet],
-  [publicProvider()]
+  [publicProvider()],
 );
-
-const wagmiClient = createClient({
-  autoConnect: false,
-  provider,
-  webSocketProvider,
+const config = createConfig({
+  autoConnect: true,
+  connectors: [new InjectedConnector({ chains })],
+  publicClient,
+  webSocketPublicClient,
 });
 
 const useNavigationLinks = () => {
@@ -111,7 +112,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         }}
       />
       <QueryClientProvider client={queryClient}>
-        <WagmiConfig client={wagmiClient}>
+        <WagmiConfig config={config}>
           <NavigationContext.Provider
             value={{
               links,

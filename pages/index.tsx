@@ -92,7 +92,13 @@ const IndexPage = ({
   );
 };
 
-export async function getStaticProps() {
+export async function getStaticProps({ locale }) {
+  if (locale !== "en") {
+    return {
+      notFound: true,
+    };
+  }
+
   const apyHistoryData = await fetchApyHistory();
   const allocation = await fetchAllocation();
   const apy = await fetchApy();
@@ -106,6 +112,7 @@ export async function getStaticProps() {
       },
     },
   });
+
   const seoRes = await fetchAPI("/oeth/page/en/%2F");
 
   let apyHistory = {};

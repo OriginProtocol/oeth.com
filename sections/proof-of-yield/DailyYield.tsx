@@ -82,9 +82,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
                 <tr
                   className="group border-t md:border-t-2 hover:bg-hover-bg border-origin-bg-black cursor-pointer"
                   key={item.date}
-                  onClick={() =>
-                    routeToYieldOnDay(moment(item.date).format("YYYY-MM-DD"))
-                  }
+                  onClick={() => routeToYieldOnDay(item.date.substring(0, 10))}
                 >
                   <TableData align="left" className="pl-4 md:pl-8">
                     {moment.utc(item.date).format("MMM D, YYYY")}
@@ -113,9 +111,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
                   <TableData className="px-6" align="center">
                     <ChartDetailsButton
                       onClick={() =>
-                        routeToYieldOnDay(
-                          moment(item.date).format("YYYY-MM-DD"),
-                        )
+                        routeToYieldOnDay(item.date.substring(0, 10))
                       }
                     >
                       Proof of yield

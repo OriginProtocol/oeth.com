@@ -6,12 +6,7 @@ import { useRouter } from "next/router";
 import { DayBasicData } from "../../sections";
 import { DailyStat, YieldOnDayProps } from "../../types";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
-import {
-  fetchAPI,
-  fetchDailyStats,
-  fetchProofOfYieldByDay,
-  transformLinks,
-} from "../../utils";
+import { fetchAPI, fetchProofOfYieldByDay, transformLinks } from "../../utils";
 import { Header, Footer } from "../../components";
 import Error from "../404";
 
@@ -95,11 +90,7 @@ export const getStaticProps: GetStaticProps = async (
 
   if (timestamp && typeof timestamp === "string") {
     const daysAgo = moment().diff(moment(timestamp), "days");
-    const dailyStatsOld = await fetchDailyStats(daysAgo, daysAgo - 1);
     const dailyStats = await fetchProofOfYieldByDay(timestamp);
-    console.log(
-      JSON.stringify({ dailyStats, timestamp, dailyStatsOld }, null, 4),
-    );
     if (Array.isArray(dailyStats) && dailyStats.length > 0) {
       dailyStat = get(dailyStats, `[${dailyStats?.length - 1}]`); // At daysAgo = 1, the array returns both current day and last day
     }

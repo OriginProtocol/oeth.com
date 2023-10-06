@@ -6,7 +6,6 @@ import { fetchAPI, fetchProofOfYield, transformLinks } from "../../utils";
 import { Heading, DailyYield } from "../../sections";
 import { Footer } from "../../components";
 import { DailyStat, Link } from "../../types";
-import { formatEther } from "viem";
 
 interface ProofOfYieldProps {
   navLinks: Link[];

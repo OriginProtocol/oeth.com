@@ -117,12 +117,6 @@ export async function getStaticProps({ locale }) {
 
   let apyHistory = {};
 
-  Object.keys(apyHistoryData).map((key) => {
-    apyHistory[key] = apyHistoryData[key].filter((item) =>
-      moment(item.day).isAfter(moment().subtract(14, "days"))
-    );
-  });
-
   const auditsRes = await fetchAPI("/oeth-audits");
 
   const navLinks = transformLinks(navRes.data);

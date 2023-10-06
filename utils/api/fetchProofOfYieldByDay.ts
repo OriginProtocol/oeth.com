@@ -1,9 +1,16 @@
 import { DailyStat } from "../../types";
 import { formatEther } from "viem";
 
+function addOneDay(dateStr: string): string {
+  const date = new Date(dateStr);
+  date.setDate(date.getDate() + 1);
+  return date.toISOString().split("T")[0];
+}
+
 async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
   try {
-    const gres = await fetch(process.env.NEXT_PUBLIC_SUBSQUID_URL, {
+    const oneDayLater = addOneDay(timestamp);
+    const res = await fetch(process.env.NEXT_PUBLIC_SUBSQUID_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -18,7 +25,7 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
             totalSupply
             nonRebasingSupply
           }
-          rebases(orderBy: timestamp_DESC, where: {timestamp_gte: "${timestamp}T00:00:00.000Z", timestamp_lt: "2023-10-01T00:00:00.000Z"}) {
+          rebases(orderBy: timestamp_DESC, where: {timestamp_gte: "${timestamp}T00:00:00.000Z", timestamp_lt: "${oneDayLater}T00:00:00.000Z"}) {
             blockNumber
             fee
             totalSupply
@@ -31,7 +38,7 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
         operationName: "ProofOfYieldByDay",
       }),
     });
-    const json = await gres.json();
+    const json = await res.json();
 
     const item = json.data.proofOfYieldById;
     const rebaseEvents = json.data.rebases;

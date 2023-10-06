@@ -1,23 +1,39 @@
-async function fetchApyHistory() {
-  const apyDayOptions = [7, 30, 365];
-  const apyHistory = await Promise.all(
-    apyDayOptions.map(async (days) => {
-      const endpoint = `${process.env.NEXT_PUBLIC_ANALYTICS_ENDPOINT}/api/v2/oeth/apr/trailing_history/${days}`;
-      const response = await fetch(endpoint);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch ${days}-day trailing APY history`);
-      }
-      const json = await response.json();
-      return json.trailing_history;
-    })
-  ).catch(function (err) {
-    console.log(err.message);
-  });
-  const data = {};
-  apyDayOptions.map((days, i) => {
-    data[`apy${days}`] = apyHistory ? apyHistory[i] : [];
-  });
-  return data;
+async function fetchApy(days: number = 14) {
+  try {
+    const res = await fetch(process.env.NEXT_PUBLIC_SUBSQUID_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `query APY {
+          apies(orderBy: blockNumber_DESC, limit: ${days}, where: {timestamp_gte: "2023-06-01T00:00:00.000000Z"}) {
+            apy7DayAvg
+            apy30DayAvg
+            id
+          }
+        }`,
+        variables: null,
+        operationName: "APY",
+      }),
+    });
+    const json = await res.json();
+
+    return {
+      apy7: json.data.apies
+        .map((item) => ({
+          day: item.id,
+          trailing_apy: item.apy7DayAvg,
+        }))
+        .reverse(),
+      apy30: json.data.apies
+        .map((item) => ({
+          day: item.id,
+          trailing_apy: item.apy30DayAvg,
+        }))
+        .reverse(),
+    };
+  } catch (err) {
+    console.log(`Failed to fetch daily stats: ${err}`);
+  }
 }
 
-export default fetchApyHistory;
+export default fetchApy;

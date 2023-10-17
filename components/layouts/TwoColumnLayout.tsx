@@ -303,7 +303,7 @@ const TwoColumnLayout = ({ sidebarWidth = 316, children }) => {
       enabled: true,
     },
     {
-      label: "Balance Sheet",
+      label: "Balance sheet",
       href: "/analytics/balance-sheet",
       enabled: true,
     },

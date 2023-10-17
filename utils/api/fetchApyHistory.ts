@@ -21,13 +21,13 @@ async function fetchApy(days: number = 14) {
       apy7: json.data.apies
         .map((item) => ({
           day: item.id,
-          trailing_apy: item.apy7DayAvg,
+          trailing_apy: item.apy7DayAvg * 100,
         }))
         .reverse(),
       apy30: json.data.apies
         .map((item) => ({
           day: item.id,
-          trailing_apy: item.apy30DayAvg,
+          trailing_apy: item.apy30DayAvg * 100,
         }))
         .reverse(),
     };

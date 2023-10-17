@@ -89,10 +89,9 @@ export const getStaticProps: GetStaticProps = async (
   };
 
   if (timestamp && typeof timestamp === "string") {
-    const daysAgo = moment().diff(moment(timestamp), "days");
     const dailyStats = await fetchProofOfYieldByDay(timestamp);
     if (Array.isArray(dailyStats) && dailyStats.length > 0) {
-      dailyStat = get(dailyStats, `[${dailyStats?.length - 1}]`); // At daysAgo = 1, the array returns both current day and last day
+      dailyStat = get(dailyStats, `[${dailyStats?.length - 1}]`);
     }
   }
 

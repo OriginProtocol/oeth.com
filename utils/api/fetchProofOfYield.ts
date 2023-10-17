@@ -25,7 +25,7 @@ async function fetchProofOfYield(offset: number = 0): Promise<DailyStat[]> {
       return {
         date: item.timestamp,
         yield: formatEther(item.yield),
-        apy: item.apy.toString(),
+        apy: (item.apy * 100).toString(),
         rebasing_supply: formatEther(item.rebasingSupply),
       };
     });

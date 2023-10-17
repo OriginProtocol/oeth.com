@@ -46,7 +46,7 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
     const rawApr =
       (Number(BigInt(item.totalSupply) - BigInt(item.nonRebasingSupply)) /
         Number(BigInt(item.totalSupply) - BigInt(item.amoSupply))) *
-      item.apy;
+      item.apy * 100;
 
     const rawApy = ((1 + rawApr / 365.25 / 100) ** 365.25 - 1) * 100;
 
@@ -62,7 +62,7 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
         backing_supply: formatEther(item.totalSupply),
         rebasing_supply: formatEther(item.rebasingSupply),
         non_rebasing_supply: formatEther(item.nonRebasingSupply),
-        apy: item.apy.toString(),
+        apy: (item.apy * 100).toString(),
         raw_apy: rawApy.toFixed(3),
         apy_boost: apyBoost.toFixed(3),
         rebase_events: rebaseEvents.map((event) => {

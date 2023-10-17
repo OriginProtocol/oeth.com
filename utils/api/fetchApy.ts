@@ -24,6 +24,8 @@ async function fetchApy() {
   } catch (err) {
     console.log(`Failed to fetch daily stats: ${err}`);
   }
+
+  return null
 }
 
 export default fetchApy;

@@ -18,8 +18,8 @@ async function fetchApy() {
     const json = await res.json();
 
     return [
-      json.data.apies[0].apy7DayAvg / 100,
-      json.data.apies[0].apy30DayAvg / 100,
+      json.data.apies[0].apy7DayAvg,
+      json.data.apies[0].apy30DayAvg,
     ];
   } catch (err) {
     console.log(`Failed to fetch daily stats: ${err}`);

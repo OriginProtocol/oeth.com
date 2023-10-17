@@ -339,7 +339,7 @@ export const FinancialStatement = (props: {
             }
           >
             <Total
-              title={"PROTOCOL NET VALUE"}
+              title={"SURPLUS VALUE"}
               totals={assetTotals.map(
                 (val, index) => val - liabilityTotals[index],
               )}

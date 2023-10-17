@@ -44,7 +44,7 @@ const YieldBoostMultiplier = ({
           <Typography.Body2 className="inline">Multiplier</Typography.Body2>
         </div>
         <div>
-          <Typography.Body3 className="text-table-title text-sm text-left 2xl:text-right">
+          <Typography.Body3 className="text-table-title text-sm text-left 2xl:text-right balance">
             Circulating supply / yield-earning supply
           </Typography.Body3>
         </div>

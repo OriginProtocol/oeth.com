@@ -65,10 +65,6 @@ export const typeOptions = [
     label: "7-Day MA",
   },
   {
-    value: "_14_day",
-    label: "14-Day MA",
-  },
-  {
     value: "_30_day",
     label: "30-Day MA",
   },

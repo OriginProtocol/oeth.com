@@ -1,4 +1,3 @@
-import moment from "moment";
 import { Header, Seo } from "../components";
 import {
   Faq,
@@ -15,7 +14,6 @@ import {
   fetchAPI,
   fetchAllocation,
   fetchApy,
-  fetchApyHistory,
   fetchCollateral,
   fetchOgvStats,
   formatSeo,
@@ -59,8 +57,6 @@ const IndexPage = ({
   faq,
   stats,
   strategies,
-  strategiesCollateral,
-  collateral,
   seo,
   navLinks,
 }: IndexPageProps) => {
@@ -99,7 +95,6 @@ export async function getStaticProps({ locale }) {
     };
   }
 
-  const apyHistoryData = await fetchApyHistory();
   const allocation = await fetchAllocation();
   const apy = await fetchApy();
   const collateral = await fetchCollateral();
@@ -114,14 +109,6 @@ export async function getStaticProps({ locale }) {
   });
 
   const seoRes = await fetchAPI("/oeth/page/en/%2F");
-
-  let apyHistory = {};
-
-  Object.keys(apyHistoryData).map((key) => {
-    apyHistory[key] = apyHistoryData[key].filter((item) =>
-      moment(item.day).isAfter(moment().subtract(14, "days"))
-    );
-  });
 
   const auditsRes = await fetchAPI("/oeth-audits");
 
@@ -178,7 +165,7 @@ export async function getStaticProps({ locale }) {
       apy,
       tvl: allocation.total_supply,
       tvlUsd: allocation.total_value_usd,
-      apyHistory,
+      apyHistory: {},
       faq: faqData,
       stats: ogvStats,
       strategies,

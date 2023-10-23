@@ -122,7 +122,7 @@ const AnalyticsNavigation = ({
     />
     <a
       className="mt-8"
-      href="https://www.oeth.com/ogv-dashboard"
+      href={process.env.NEXT_PUBLIC_DAPP_URL}
       target="_blank"
       rel="noreferrer"
     >

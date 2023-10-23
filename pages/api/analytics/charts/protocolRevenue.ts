@@ -1,92 +1,60 @@
-import { last, takeRight } from "lodash";
-import DuneClient, { toChartData, jobsLookup } from "../../../../lib/dune";
-import { createGradient, sumOf } from "../../../../utils/analytics";
+import { formatEther } from "viem";
 
 export const getProtocolRevenue = async () => {
   try {
-    const client = new DuneClient(process.env.DUNE_API_KEY);
-
-    const {
-      result: { rows },
-    } = await client.refresh(jobsLookup.protocolRevenue.queryId);
-
-    rows.reverse();
-
-    const {
-      revenue_daily,
-      yield_daily,
-      revenue_total,
-      yield_total,
-      _7_day,
-      _14_day,
-      _30_day,
-      _7_yield_day,
-      _14_yield_day,
-      _30_yield_day,
-      labels,
-    } = toChartData(rows, {
-      amount: "revenue_daily",
-      _7_day_avg_yield_generated: "_7_yield_day",
-      _14_day_avg_yield_generated: "_14_yield_day",
-      _30_day_avg_yield_generated: "_30_yield_day",
-      _7_day_avg_amount: "_7_day",
-      _14_day_avg_amount: "_14_day",
-      _30_day_avg_amount: "_30_day",
-      yield_generated: "yield_daily",
-      sum_amount: "revenue_total",
-      sum_yield_generated: "yield_total",
-      day: "labels",
+    const res = await fetch(process.env.NEXT_PUBLIC_SUBSQUID_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `query TotalSupply {
+          oethDailyStats(orderBy: blockNumber_DESC, limit: 360) {
+            id
+            timestamp
+            yield
+            fees
+            revenue
+            revenueAllTime
+            revenue7DayTotal
+            revenue7DayAvg
+          }
+        }`,
+        variables: null,
+        operationName: "TotalSupply",
+      }),
     });
 
+    const json = await res.json();
+    const dailyStats = json.data.oethDailyStats.reverse();
+    const today = dailyStats[dailyStats.length - 1];
+
     return {
-      labels,
+      labels: dailyStats.map((d) => new Date(d.timestamp)),
       datasets: [
         {
           id: "_7_day",
           label: "7-day trailing avg",
-          data: _7_day.map(
-            (value, index) => (_7_yield_day[index] || 0) + value
-          ),
-          type: "line",
-          backgroundColor: "#FFFFFF",
-        },
-        {
-          id: "_14_day",
-          label: "14-day trailing avg",
-          data: _14_day.map(
-            (value, index) => (_14_yield_day[index] || 0) + value
-          ),
-          type: "line",
-          backgroundColor: "#FFFFFF",
-        },
-        {
-          id: "_30_day",
-          label: "30-day trailing avg",
-          data: _30_day.map(
-            (value, index) => (_30_yield_day[index] || 0) + value
-          ),
+          data: dailyStats.map((d) => formatEther(d.revenue7DayAvg)),
           type: "line",
           backgroundColor: "#FFFFFF",
         },
         {
           id: "yield_daily",
           label: "Yield Distributed",
-          data: yield_daily,
+          data: dailyStats.map((d) => formatEther(d.yield)),
           backgroundColor: "#426EF7",
         },
         {
           id: "revenue_daily",
           label: "Fees Collected",
-          data: revenue_daily,
+          data: dailyStats.map((d) => formatEther(d.fees)),
           backgroundColor: "#E7A9BF",
         },
       ],
       aggregations: {
         // Revenue agg
-        dailyRevenue: Number(last(revenue_daily)) + Number(last(yield_daily)),
-        weeklyRevenue:
-          sumOf(takeRight(revenue_daily, 7)) + sumOf(takeRight(yield_daily, 7)),
-        allTimeRevenue: Number(last(revenue_total)) + Number(last(yield_total)),
+        dailyRevenue: formatEther(today.revenue),
+        weeklyRevenue: formatEther(today.revenue7DayTotal),
+        allTimeRevenue: formatEther(today.revenueAllTime),
       },
     };
   } catch (e) {

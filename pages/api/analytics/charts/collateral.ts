@@ -1,20 +1,62 @@
 import { orderBy } from "lodash";
-import { aggregateCollateral } from "../../../../utils/analytics";
-import { fetchAllocation, fetchCollateral } from "../../../../utils";
+import { backingTokens } from "../../../../utils/analytics";
+import { formatEther } from "viem";
 
 export const getCollateral = async () => {
   try {
-    const [allocation, { collateral }] = await Promise.all([
-      fetchAllocation(),
-      fetchCollateral(),
-    ]);
+    const res = await fetch(process.env.NEXT_PUBLIC_SUBSQUID_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `query TotalSupply {
+          oethDailyStats(orderBy: timestamp_DESC, limit: 1) {
+            id
+            timestamp
+            totalSupply
+            amoSupply
+            collateral {
+              value
+              symbol
+              price
+              id
+              amount
+            }
+          }
+          exchangeRates(limit: 1, orderBy: timestamp_DESC, where: {pair_eq: "ETH_USD"}) {
+            rate
+            timestamp
+          }
+        }`,
+        variables: null,
+        operationName: "TotalSupply",
+      }),
+    });
+    const json = await res.json();
+    const dailyStats = json.data.oethDailyStats.reverse();
+    const today = dailyStats[0];
+    const circulatingSupply = Number(
+      formatEther(BigInt(today.totalSupply) - BigInt(today.amoSupply)),
+    );
+    const exchangeRate = json.data.exchangeRates[0].rate;
+
+    const totalSupplyUSD = formatEther(
+      (BigInt(today.totalSupply) * BigInt(exchangeRate)) / BigInt("100000000"),
+    );
+
     return {
-      tvl: allocation.total_supply,
-      tvlUsd: allocation.total_value_usd,
+      tvl: Number(formatEther(today.totalSupply)),
+      tvlUsd: Number(totalSupplyUSD),
       collateral: orderBy(
-        aggregateCollateral({ collateral, allocation }),
+        today.collateral.map((c) => {
+          const total = Number(formatEther(c.amount));
+          return {
+            total,
+            percentage: total / circulatingSupply,
+            ...backingTokens[c.symbol],
+          };
+        }),
         "total",
-        "desc"
+        "desc",
       ),
     };
   } catch (e) {

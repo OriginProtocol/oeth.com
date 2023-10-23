@@ -28,7 +28,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Filler,
-  Legend
+  Legend,
 );
 
 const TotalSupplyChart = () => {
@@ -54,7 +54,7 @@ const TotalSupplyChart = () => {
             </Typography.Caption>
             <Typography.H4 className="mt-3">{`${formatCurrency(
               lastTotalSupplyValue,
-              2
+              2,
             )} OETH`}</Typography.H4>
             <div className="flex flex-col text-sm space-y-1">
               {labelSetDisplay.map((dataset) => {

@@ -54,9 +54,9 @@ class DuneClient {
     this.apiKey = apiKey;
     if (process.env.REDIS_URL) {
       this.cacheClient = new Redis(process.env.REDIS_URL, {
-        tls: {
-          rejectUnauthorized: false,
-        },
+        // tls: {
+        //   rejectUnauthorized: false,
+        // },
         connectTimeout: 10000,
         lazyConnect: true,
         retryStrategy(times) {

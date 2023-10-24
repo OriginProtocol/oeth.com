@@ -98,22 +98,15 @@ export async function getStaticProps({ locale }) {
   const allocation = await fetchAllocation();
   const apy = await fetchApy();
   const collateral = await fetchCollateral();
-  const faqRes: { data: FaqData[] } = await fetchAPI("/oeth-faqs");
+
   const ogvStats = await fetchOgvStats();
+  const faqRes: { data: FaqData[] } = await fetchAPI("/oeth-faqs");
   const navRes = await fetchAPI("/oeth-nav-links", {
-    populate: {
-      links: {
-        populate: "*",
-      },
-    },
+    populate: { links: { populate: "*" } },
   });
-
   const seoRes = await fetchAPI("/oeth/page/en/%2F");
-
   const auditsRes = await fetchAPI("/oeth-audits");
-
   const navLinks = transformLinks(navRes.data);
-
   const faqData = faqRes?.data.sort((a, b) => a.id - b.id) || [];
 
   //Extract rETH and stETH from vault holdings

@@ -1,5 +1,36 @@
 import { formatEther, formatUnits } from "viem";
 
+interface Holding {
+  name: string;
+  address?: string;
+  _address?: string;
+  icon_file?: string;
+  total: number;
+  tvl?: number;
+  holdings: Record<string, number>;
+  holdings_value: Record<string, number>;
+}
+
+interface Allocation {
+  block_time: number;
+  block_number: number;
+  strategies: {
+    vault_holding: Holding;
+    frax_eth_strat: Holding;
+    oeth_curve_amo: Holding;
+    oeth_morpho_aave_strat: Holding;
+    oeth_balancer_reth_strat: Holding;
+    r_eth_strat?: Holding;
+    st_eth_strat?: Holding;
+  };
+  total_value: number;
+  total_value_usd: number;
+  eth_price: number;
+  total_supply: number;
+  circulating_supply: number;
+  protocol_owned_supply: number;
+}
+
 async function fetchAllocation() {
   const res = await fetch(process.env.NEXT_PUBLIC_SUBSQUID_URL, {
     method: "POST",
@@ -106,7 +137,7 @@ async function fetchAllocation() {
     total_supply: Number(formatEther(today.totalSupply)),
     circulating_supply: circulatingSupply,
     protocol_owned_supply: Number(formatEther(today.amoSupply)),
-  };
+  } as Allocation;
 
   return allocation;
 }

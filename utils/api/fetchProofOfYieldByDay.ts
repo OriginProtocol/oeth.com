@@ -15,7 +15,7 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         query: `query ProofOfYieldByDay {
-          proofOfYieldById(id: "${timestamp}") {
+          oethDailyStatById(id: "${timestamp}") {
             rebasingSupply
             timestamp
             yield
@@ -25,7 +25,7 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
             totalSupply
             nonRebasingSupply
           }
-          rebases(orderBy: timestamp_DESC, where: {timestamp_gte: "${timestamp}T00:00:00.000Z", timestamp_lt: "${oneDayLater}T00:00:00.000Z"}) {
+          oethRebases(orderBy: timestamp_DESC, where: {timestamp_gte: "${timestamp}T00:00:00.000Z", timestamp_lt: "${oneDayLater}T00:00:00.000Z"}) {
             blockNumber
             fee
             totalSupply
@@ -40,8 +40,10 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
     });
     const json = await res.json();
 
-    const item = json.data.proofOfYieldById;
-    const rebaseEvents = json.data.rebases;
+    console.log(json)
+
+    const item = json.data.oethDailyStatById;
+    const rebaseEvents = json.data.oethRebases;
 
     const rawApr =
       (Number(BigInt(item.totalSupply) - BigInt(item.nonRebasingSupply)) /

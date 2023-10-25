@@ -40,8 +40,6 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
     });
     const json = await res.json();
 
-    console.log(json)
-
     const item = json.data.oethDailyStatById;
     const rebaseEvents = json.data.oethRebases;
 

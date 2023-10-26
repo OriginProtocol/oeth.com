@@ -48,9 +48,9 @@ async function fetchAllocation() {
               total
               tvl
               holdings {
-                value
                 symbol
                 amount
+                value
               }
             }
           }

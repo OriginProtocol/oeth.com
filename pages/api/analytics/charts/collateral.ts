@@ -15,11 +15,10 @@ export const getCollateral = async () => {
             totalSupply
             amoSupply
             collateral {
-              value
               symbol
               price
-              id
               amount
+              value
             }
           }
           exchangeRates(limit: 1, orderBy: timestamp_DESC, where: {pair_eq: "ETH_USD"}) {
@@ -49,9 +48,10 @@ export const getCollateral = async () => {
       collateral: orderBy(
         today.collateral.map((c) => {
           const total = Number(formatEther(c.amount));
+          const totalValue = Number(formatEther(c.value));
           return {
             total,
-            percentage: total / circulatingSupply,
+            percentage: totalValue / circulatingSupply,
             ...backingTokens[c.symbol],
           };
         }),

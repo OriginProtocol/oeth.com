@@ -9,11 +9,12 @@ async function fetchProofOfYield(offset: number = 0): Promise<DailyStat[]> {
       body: JSON.stringify({
         query: `query ProofOfYields {
             oethDailyStats(orderBy: timestamp_DESC, limit: 30, offset: ${offset}) {
-              yield
+              id
               timestamp
               rebasingSupply
+              yield
+              fees
               apy
-              id
             }
           }`,
         variables: null,
@@ -24,7 +25,7 @@ async function fetchProofOfYield(offset: number = 0): Promise<DailyStat[]> {
     return json.data.oethDailyStats.map((item) => {
       return {
         date: item.timestamp,
-        yield: formatEther(item.yield),
+        yield: formatEther(BigInt(item.yield) - BigInt(item.fees)),
         apy: (item.apy * 100).toString(),
         rebasing_supply: formatEther(item.rebasingSupply),
       };

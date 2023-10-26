@@ -57,7 +57,7 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
     return [
       {
         date: item.timestamp,
-        yield: formatEther(item.yield),
+        yield: formatEther(BigInt(item.yield) - BigInt(item.fees)),
         fees: formatEther(item.fees),
         backing_supply: formatEther(item.totalSupply),
         rebasing_supply: formatEther(item.rebasingSupply),

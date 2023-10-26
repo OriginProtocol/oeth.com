@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, {
   createContext,
   ReactNode,
@@ -48,6 +47,30 @@ const links = {
   },
 };
 
+interface DailyStat {
+  id: string;
+  blockNumber: number;
+  timestamp: string;
+  totalSupply: string;
+  dripperWETH: string;
+  strategies: {
+    name: string;
+    holdings: {
+      symbol: string;
+      value: string;
+    }[];
+  }[];
+}
+
+interface StatementResponse {
+  today: DailyStat;
+  lastWeek: DailyStat;
+  exchangeRates: {
+    rate: string;
+    timestamp: string;
+  };
+}
+
 const calculateChange = (from: number, to: number) => {
   if (from === 0 && to === 0) return 0;
   const change = -(1 - to / from);
@@ -70,18 +93,19 @@ const getTotals = (data: Record<string, Record<string, number[]>>) => {
 };
 
 export const LiveFinancialStatement = () => {
-  const [gqlData, setGqlData] = useState();
+  const [gqlData, setGqlData] = useState<StatementResponse>();
   useEffect(() => {
     fetch(process.env.NEXT_PUBLIC_SUBSQUID_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         query: `query BalanceSheet {
-          today: oethDailyStatById(id: "2023-10-25") {
+          today: oethDailyStats(orderBy: timestamp_DESC, limit: 1) {
             id
             blockNumber
             timestamp
             totalSupply
+            dripperWETH
             strategies {
               name
               holdings {
@@ -90,11 +114,12 @@ export const LiveFinancialStatement = () => {
               }
             }
           }
-          lastWeek: oethDailyStatById(id: "2023-10-18") {
+          lastWeek: oethDailyStats(orderBy: timestamp_DESC, limit: 1, offset: 7) {
             id
             blockNumber
             timestamp
             totalSupply
+            dripperWETH
             strategies {
               name
               holdings {
@@ -136,13 +161,17 @@ export const LiveFinancialStatement = () => {
   //   (rate: keyof ReturnType<typeof useRatesOETH>["data"]) => (n?: string) =>
   //     Number(formatEther(BigInt(Number(n ?? 0) * rates.data[rate].float)));
 
-  const { today, lastWeek } = gqlData;
+  const today = gqlData.today[0];
+  const lastWeek = gqlData.lastWeek[0];
 
   function holding(day: typeof today, strategy: string, symbol?: string) {
     if (strategy === "TOTAL") {
       return Number(formatEther(day.totalSupply));
     }
-    const strategyData = day.strategies.find((s) => s.name === strategy);
+    if (strategy === "DRIPPER") {
+      return Number(formatEther(day.dripperWETH));
+    }
+    const strategyData = day.strategies?.find((s) => s.name === strategy);
     if (!strategyData) return 0;
     const holding = strategyData.holdings.find((h) => h.symbol === symbol);
     if (!holding) return 0;

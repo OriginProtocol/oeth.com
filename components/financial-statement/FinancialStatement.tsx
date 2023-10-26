@@ -218,7 +218,7 @@ export const LiveFinancialStatement = () => {
       ethPrice={ethPrice}
       lastUpdated={{
         blockNumber: today.blockNumber,
-        timestamp,
+        timestamp: timestamp.getTime(),
       }}
       columns={[
         <>

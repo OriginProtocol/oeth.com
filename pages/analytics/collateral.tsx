@@ -45,33 +45,37 @@ const AnalyticsCollateral = ({ strategies, collateral }) => {
 
 const CollateralAggregate = ({ data = [] }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 items-center w-full">
-      {data.map(({ label, logoSrc, percentage, total }) => (
-        <LayoutBox key={label} className="flex flex-shrink-0 w-full">
-          <div className="flex flex-row w-full h-[150px] md:h-[150px] items-center px-6">
-            <Image
-              className="flex flex-shrink-0 mr-3"
-              src={logoSrc}
-              width={42}
-              height={42}
-              alt={label}
-            />
-            <div className="flex flex-col space-y-1">
-              <Typography.Caption2 className="text-subheading text-base">
-                {label}
-              </Typography.Caption2>
-              <Typography.Body2 className="flex flex-row text-2xl">{`${formatCurrency(
-                total,
-                2,
-              )}`}</Typography.Body2>
-              <Typography.Caption className="text-xl text-subheading">
-                {formatCurrency(percentage * 100, 2)}%
-              </Typography.Caption>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 items-center w-full">
+        {data.map(({ label, logoSrc, percentage, total }) => (
+          <LayoutBox key={label} className="flex flex-shrink-0 w-full">
+            <div className="flex flex-row w-full h-[150px] md:h-[150px] items-center px-6">
+              <Image
+                className="flex flex-shrink-0 mr-3"
+                src={logoSrc}
+                width={42}
+                height={42}
+                alt={label}
+              />
+              <div className="flex flex-col space-y-1">
+                <Typography.Caption2 className="text-subheading text-base">
+                  {label}
+                </Typography.Caption2>
+                <Typography.Body2 className="flex flex-row text-2xl">
+                  {`Ξ${formatCurrency(total, 2)}`}
+                </Typography.Body2>
+                <Typography.Caption className="text-xl text-subheading">
+                  {formatCurrency(percentage * 100, 2)}%
+                </Typography.Caption>
+              </div>
             </div>
-          </div>
-        </LayoutBox>
-      ))}
-    </div>
+          </LayoutBox>
+        ))}
+      </div>
+      <div className="text-xs text-subheading pt-4">
+        * All values are ETH-denominated
+      </div>
+    </>
   );
 };
 

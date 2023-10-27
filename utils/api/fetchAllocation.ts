@@ -70,15 +70,20 @@ async function fetchAllocation() {
       s.id.endsWith(symbol),
     );
 
+    function getSymbol(holding) {
+      if (holding.symbol === "SFRXETH") return 'FRXETH'
+      return holding.symbol
+    }
+
     return {
       total: Number(formatEther(strategy.total)),
       tvl: Number(formatEther(strategy.tvl)),
       holdings: strategy.holdings.reduce((m, o) => {
-        m[o.symbol] = Number(formatEther(o.amount));
+        m[getSymbol(o)] = Number(formatEther(o.amount));
         return m;
       }, {}),
       holdings_value: strategy.holdings.reduce((m, o) => {
-        m[o.symbol] = Number(formatEther(o.value));
+        m[getSymbol(o)] = Number(formatEther(o.value));
         return m;
       }, {}),
     };

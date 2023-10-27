@@ -178,7 +178,7 @@ export const aggregateCollateral = ({ collateral, allocation }) => {
     if (!Object.keys(backingTokens).includes(normalizedTokenName)) {
       return acc;
     }
-    return Number(acc || 0) + Number(token?.total || 0);
+    return Number(acc || 0) + Number(token?.value || 0);
   }, 0);
 
   return collateral.reduce((acc, token) => {
@@ -189,7 +189,7 @@ export const aggregateCollateral = ({ collateral, allocation }) => {
       return acc;
     }
 
-    const localTotal = Number(token?.total || 0);
+    const localTotal = Number(token?.value || 0);
 
     acc[normalizedTokenName] = {
       total: localTotal,

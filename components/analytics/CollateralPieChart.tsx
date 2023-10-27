@@ -38,7 +38,7 @@ const CollateralPieChart = () => {
             </Typography.Caption>
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-4 w-full pb-4 px-6 lg:px-10">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-4 w-full pb-4 px-6 lg:px-10 relative">
           {/* @ts-ignore */}
           <div
             className="flex flex-col flex-shrink-0 max-w-[350px] px-6 pb-[26px]"
@@ -94,6 +94,9 @@ const CollateralPieChart = () => {
               </div>
             ))}
           </div>
+        </div>
+        <div className="flex justify-end text-sm text-subheading pb-4 pr-6 lg:pr-10">
+          * All values are ETH-denominated
         </div>
       </ErrorBoundary>
     </LayoutBox>

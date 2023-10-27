@@ -7,11 +7,16 @@ import { useCollateralChart } from "../../hooks/analytics/useCollateralChart";
 import ErrorBoundary from "../ErrorBoundary";
 import LayoutBox from "../LayoutBox";
 
-const makeTooltipContent = ({ tooltip, value }) => {
+const makeTooltipContent = (props) => {
+  const { token, value, unitValue } = props;
   return (
     <div className="flex flex-col items-center justify-center bg-origin-bg-black">
-      <Typography.Caption>{tooltip}</Typography.Caption>
-      <Typography.Caption>{formatCurrency(value, 2)}</Typography.Caption>
+      <Typography.Caption>
+        {`${formatCurrency(unitValue, 2)} ${token}`}
+      </Typography.Caption>
+      <Typography.Caption className="text-subheading">
+        {`(Ξ${formatCurrency(value, 2)})`}
+      </Typography.Caption>
     </div>
   );
 };
@@ -45,12 +50,8 @@ const CollateralPieChart = () => {
               lineWidth={15}
               startAngle={270}
               paddingAngle={1}
-              onMouseOver={(_, index) => {
-                setHovered(index);
-              }}
-              onMouseOut={() => {
-                setHovered(null);
-              }}
+              onMouseOver={(_, index) => setHovered(index)}
+              onMouseOut={() => setHovered(null)}
             />
             <Tooltip
               id="chart"
@@ -86,7 +87,7 @@ const CollateralPieChart = () => {
                       {formatPercentage(total / totalSum)}
                     </Typography.Caption>
                     <Typography.Caption className="text-subheading">
-                      {formatCurrency(total, 2)}
+                      {`Ξ${formatCurrency(total, 2)}`}
                     </Typography.Caption>
                   </div>
                 </div>

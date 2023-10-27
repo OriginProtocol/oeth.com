@@ -47,11 +47,13 @@ export const getCollateral = async () => {
       tvlUsd: Number(totalSupplyUSD),
       collateral: orderBy(
         today.collateral.map((c) => {
-          const total = Number(formatEther(c.amount));
-          const totalValue = Number(formatEther(c.value));
+          const unitTotal = Number(formatEther(c.amount));
+          const total = Number(formatEther(c.value));
           return {
+            unitTotal: unitTotal,
             total,
-            percentage: totalValue / circulatingSupply,
+            percentage: total / circulatingSupply,
+            symbol: c.symbol,
             ...backingTokens[c.symbol],
           };
         }),

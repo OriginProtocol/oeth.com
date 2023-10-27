@@ -38,6 +38,13 @@ export const getProtocolRevenue = async () => {
           backgroundColor: "#FFFFFF",
         },
         {
+          id: "_30_day",
+          label: "30-day trailing avg",
+          data: dailyStats.map((d) => formatEther(d.revenue7DayAvg)),
+          type: "line",
+          backgroundColor: "#FFFFFF",
+        },
+        {
           id: "yield_daily",
           label: "Yield Distributed",
           data: dailyStats.map((d) => formatEther(d.yield)),

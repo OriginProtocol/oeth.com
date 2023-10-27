@@ -11,26 +11,31 @@ export const backingTokens = {
   // },
   ETH: {
     label: "ETH",
+    token: 'ETH',
     logoSrc: "/images/eth-icon.svg",
     color: "#5b7fff",
   },
   WETH: {
     label: "Wrapped Ether (WETH)",
+    token: 'WETH',
     logoSrc: "/images/weth-icon.svg",
     color: "#d0246a",
   },
   FRXETH: {
     label: "Frax ETH (frxETH)",
+    token: 'frxETH',
     logoSrc: "/images/frax-icon.svg",
     color: "#e85bff",
   },
   RETH: {
     label: "Rocket Pool ETH (rETH)",
+    token: 'rETH',
     logoSrc: "/images/reth-icon.png",
     color: "#ffc298",
   },
   STETH: {
     label: "Lido Staked ETH (stETH)",
+    token: 'stETH',
     logoSrc: "/images/steth-icon.svg",
     color: "#66c8ff",
   },

@@ -1,6 +1,9 @@
 import qs from "qs";
-import { getStrapiURL } from "../../lib/api";
 import { transformLinks } from "../../utils";
+
+function getStrapiURL(path = "") {
+  return `${process.env.STRAPI_API_URL}${path}`;
+}
 
 const navigationLinks = async (req, res) => {
   try {
@@ -10,7 +13,7 @@ const navigationLinks = async (req, res) => {
     const queryString = qs.stringify(params);
 
     const requestUrl = `${getStrapiURL(
-      `/api${path}${queryString ? `?${queryString}` : ""}`
+      `/api${path}${queryString ? `?${queryString}` : ""}`,
     )}`;
 
     // Trigger API call

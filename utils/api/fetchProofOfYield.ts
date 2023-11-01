@@ -25,7 +25,7 @@ async function fetchProofOfYield(offset: number = 0): Promise<DailyStat[]> {
     return json.data.oethDailyStats.map((item) => {
       return {
         date: item.timestamp,
-        yield: formatEther(BigInt(item.yield) - BigInt(item.fees)),
+        yield: formatEther(item.yield),
         apy: (item.apy * 100).toString(),
         rebasing_supply: formatEther(item.rebasingSupply),
       };

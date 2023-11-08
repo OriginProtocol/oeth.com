@@ -1,16 +1,19 @@
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 
-import { endOfToday, intlFormat, startOfDay, subDays } from "date-fns";
-import { formatEther } from "viem";
+import { intlFormat } from "date-fns";
+import { formatEther, formatUnits } from "viem";
 
 import * as colors from "./colors";
-import { useFinancialStatementQuery } from "./FinancialStatement.generated";
-import { useChainlinkEthUsd } from "../../utils/useChainlinkEthUsd";
 import { useElementSize } from "usehooks-ts";
 import cn from "classnames";
 import Image from "next/image";
 import { TailSpin } from "react-loader-spinner";
-import { useRatesOETH } from "../../utils/useRatesOETH";
 
 const links = {
   Assets: {
@@ -44,6 +47,30 @@ const links = {
   },
 };
 
+interface DailyStat {
+  id: string;
+  blockNumber: number;
+  timestamp: string;
+  totalSupply: string;
+  dripperWETH: string;
+  strategies: {
+    name: string;
+    holdings: {
+      symbol: string;
+      value: string;
+    }[];
+  }[];
+}
+
+interface StatementResponse {
+  today: DailyStat;
+  lastWeek: DailyStat;
+  exchangeRates: {
+    rate: string;
+    timestamp: string;
+  };
+}
+
 const calculateChange = (from: number, to: number) => {
   if (from === 0 && to === 0) return 0;
   const change = -(1 - to / from);
@@ -66,16 +93,53 @@ const getTotals = (data: Record<string, Record<string, number[]>>) => {
 };
 
 export const LiveFinancialStatement = () => {
-  const todayEnd = endOfToday();
-  const sevenDaysAgo = startOfDay(subDays(todayEnd, 6));
-
-  const { isLoading: fsIsLoading, data: fs } = useFinancialStatementQuery({
-    compareDate: todayEnd.toISOString(),
-  });
-  const { isLoading: fsCIsLoading, data: fsC } = useFinancialStatementQuery({
-    compareDate: sevenDaysAgo.toISOString(),
-  });
-  const { isLoading: ethPriceIsLoading, data: ethPrice } = useChainlinkEthUsd();
+  const [gqlData, setGqlData] = useState<StatementResponse>();
+  useEffect(() => {
+    fetch(process.env.NEXT_PUBLIC_SUBSQUID_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query: `query BalanceSheet {
+          today: oethDailyStats(orderBy: timestamp_DESC, limit: 1) {
+            id
+            blockNumber
+            timestamp
+            totalSupply
+            dripperWETH
+            strategies {
+              name
+              holdings {
+                symbol
+                value
+              }
+            }
+          }
+          lastWeek: oethDailyStats(orderBy: timestamp_DESC, limit: 1, offset: 7) {
+            id
+            blockNumber
+            timestamp
+            totalSupply
+            dripperWETH
+            strategies {
+              name
+              holdings {
+                symbol
+                value
+              }
+            }
+          }
+          exchangeRates(orderBy: timestamp_DESC, limit: 1, where: {pair_eq: "ETH_USD"}) {
+            rate
+            timestamp
+          }
+        }`,
+        variables: null,
+        operationName: "BalanceSheet",
+      }),
+    })
+      .then((res) => res.json())
+      .then((json) => setGqlData(json.data));
+  }, []);
 
   const loading = (
     <div className="flex items-center justify-center h-48">
@@ -89,151 +153,84 @@ export const LiveFinancialStatement = () => {
     </div>
   );
 
-  const blockNumber = Math.max(
-    fs?.vaults[0]?.blockNumber ?? 0,
-    fs?.curveLps[0]?.blockNumber ?? 0,
-    fs?.morphoAaves[0]?.blockNumber ?? 0,
-    fs?.balancerMetaPoolStrategies[0]?.blockNumber ?? 0,
-    fs?.drippers[0]?.blockNumber ?? 0,
-    fs?.oeths[0]?.blockNumber ?? 0,
-    fs?.fraxStakings[0]?.blockNumber ?? 0,
-  );
-
-  const blockNumberC = Math.max(
-    fsC?.vaults[0]?.blockNumber ?? 0,
-    fsC?.curveLps[0]?.blockNumber ?? 0,
-    fsC?.morphoAaves[0]?.blockNumber ?? 0,
-    fsC?.balancerMetaPoolStrategies[0]?.blockNumber ?? 0,
-    fsC?.drippers[0]?.blockNumber ?? 0,
-    fsC?.oeths[0]?.blockNumber ?? 0,
-    fsC?.fraxStakings[0]?.blockNumber ?? 0,
-  );
-
-  const rates = useRatesOETH(blockNumber, !!blockNumber);
-  const ratesC = useRatesOETH(blockNumberC, !!blockNumber);
-
-  if (fsIsLoading || !fs) {
-    console.log("fsIsLoading || !fs");
-    return loading;
-  }
-  if (fsCIsLoading || !fsC) {
-    console.log("fsCIsLoading || !fsC");
-    return loading;
-  }
-  if (ethPriceIsLoading || !ethPrice) {
-    console.log("ethPriceIsLoading || !ethPrice");
-    return loading;
-  }
-  if (rates.isLoading || !rates.data) {
-    console.log("rates.isLoading || !rates.data");
-    return loading;
-  }
-  if (ratesC.isLoading || !ratesC.data) {
-    console.log("ratesC.isLoading || !ratesC.data");
+  if (!gqlData) {
     return loading;
   }
 
-  const c =
-    (rate: keyof ReturnType<typeof useRatesOETH>["data"]) => (n?: string) =>
-      Number(formatEther(BigInt(Number(n ?? 0) * rates.data[rate].float)));
+  // const c =
+  //   (rate: keyof ReturnType<typeof useRatesOETH>["data"]) => (n?: string) =>
+  //     Number(formatEther(BigInt(Number(n ?? 0) * rates.data[rate].float)));
 
-  // If any date is missing, default to a date earlier than would show up.
-  const timestamp = Math.max(
-    ...[
-      fs.vaults[0],
-      fs.curveLps[0],
-      fs.morphoAaves[0],
-      fs.drippers[0],
-      fs.balancerMetaPoolStrategies[0],
-      fs.oeths[0],
-      fs.fraxStakings[0],
-    ]
-      .map((v) => Date.parse(v?.timestamp))
-      .filter((x) => x),
-  );
+  const today = gqlData.today[0];
+  const lastWeek = gqlData.lastWeek[0];
 
-  const timestampC = Math.max(
-    ...[
-      fsC.vaults[0],
-      fsC.curveLps[0],
-      fsC.morphoAaves[0],
-      fsC.drippers[0],
-      fsC.balancerMetaPoolStrategies[0],
-      fsC.oeths[0],
-      fsC.fraxStakings[0],
-    ]
-      .map((v) => Date.parse(v?.timestamp))
-      .filter((x) => x),
-  );
+  function holding(day: typeof today, strategy: string, symbol?: string) {
+    if (strategy === "TOTAL") {
+      return Number(formatEther(day.totalSupply));
+    }
+    if (strategy === "DRIPPER") {
+      return Number(formatEther(day.dripperWETH));
+    }
+    const strategyData = day.strategies?.find((s) => s.name === strategy);
+    if (!strategyData) return 0;
+    const holding = strategyData.holdings.find((h) => h.symbol === symbol);
+    if (!holding) return 0;
+    return Number(formatEther(holding.value));
+  }
+
+  function compareHolding(strategy: string, symbol?: string) {
+    const todayData = holding(today, strategy, symbol);
+    const lastWeekData = holding(lastWeek, strategy, symbol);
+    return [todayData, lastWeekData];
+  }
+
+  const data = {
+    assets: {
+      Vault: {
+        WETH: compareHolding("VAULT", "WETH"),
+        stETH: compareHolding("VAULT", "STETH"),
+        rETH: compareHolding("VAULT", "RETH"),
+        frxETH: compareHolding("VAULT", "FRXETH"),
+      },
+      Convex: {
+        ETH: compareHolding("CURVE", "ETH"),
+        OETH: compareHolding("CURVE", "OETH"),
+      },
+      "Frax Staking": { frxETH: compareHolding("FRAX", "SFRXETH") },
+      "Morpho Aave": { WETH: compareHolding("MORPHO", "WETH") },
+      Aura: {
+        rETH: compareHolding("BALANCER", "RETH"),
+        WETH: compareHolding("BALANCER", "WETH"),
+      },
+      Dripper: { WETH: compareHolding("DRIPPER", "WETH") },
+    },
+    liabilities: {
+      "Token Supply": { OETH: compareHolding("TOTAL") },
+    },
+  };
+
+  const timestamp = new Date(today.timestamp);
+  const timestampC = new Date(lastWeek.timestamp);
+  const ethPrice = Number(formatUnits(gqlData.exchangeRates[0].rate, 8));
 
   return (
     <FinancialStatement
-      ethPrice={ethPrice?.floatUsd}
+      ethPrice={ethPrice}
       lastUpdated={{
-        blockNumber,
-        timestamp,
+        blockNumber: today.blockNumber,
+        timestamp: timestamp.getTime(),
       }}
       columns={[
         <>
           <div>{intlFormat(timestamp)}</div>
-          <div className="text-[75%]">block {blockNumber}</div>
+          <div className="text-[75%]">block {today.blockNumber}</div>
         </>,
         <>
           <div>{intlFormat(timestampC)}</div>
-          <div className="text-[75%]">block {blockNumberC}</div>
+          <div className="text-[75%]">block {lastWeek.blockNumber}</div>
         </>,
       ]}
-      data={{
-        assets: {
-          Vault: {
-            WETH: [fs.vaults[0]?.weth, fsC.vaults[0]?.weth].map(c("WETH")),
-            stETH: [fs.vaults[0]?.stETH, fsC.vaults[0]?.stETH].map(c("stETH")),
-            rETH: [fs.vaults[0]?.rETH, fsC.vaults[0]?.rETH].map(c("rETH")),
-            frxETH: [fs.vaults[0]?.frxETH, fsC.vaults[0]?.frxETH].map(
-              c("frxETH"),
-            ),
-          },
-          Convex: {
-            ETH: [fs.curveLps[0]?.ethOwned, fsC.curveLps[0]?.ethOwned].map(
-              c("ETH"),
-            ),
-            OETH: [fs.curveLps[0]?.oethOwned, fsC.curveLps[0]?.oethOwned].map(
-              c("OETH"),
-            ),
-          },
-          "Frax Staking": {
-            frxETH: [
-              fs.fraxStakings[0]?.frxETH,
-              fsC.fraxStakings[0]?.frxETH,
-            ].map(c("sfrxETH")),
-          },
-          "Morpho Aave": {
-            WETH: [fs.morphoAaves[0]?.weth, fsC.morphoAaves[0]?.weth].map(
-              c("WETH"),
-            ),
-          },
-          Aura: {
-            rETH: [
-              fs.balancerMetaPoolStrategies[0]?.rETH,
-              fsC.balancerMetaPoolStrategies[0]?.rETH,
-            ].map(c("rETH")),
-            WETH: [
-              fs.balancerMetaPoolStrategies[0]?.weth,
-              fsC.balancerMetaPoolStrategies[0]?.weth,
-            ].map(c("WETH")),
-          },
-          Dripper: {
-            WETH: [fs.drippers[0]?.weth, fsC.drippers[0]?.weth].map(c("WETH")),
-          },
-        },
-        liabilities: {
-          "Token Supply": {
-            OETH: [fs.oeths[0]?.totalSupply, fsC.oeths[0]?.totalSupply].map(
-              c("OETH"),
-            ),
-          },
-        },
-      }}
+      data={data}
     />
   );
 };
@@ -274,16 +271,12 @@ export const FinancialStatement = (props: {
       }}
     >
       <div
-        className={"flex flex-col gap-4 text-[#B5BECA] text-xs sm:text-sm"}
+        className="flex flex-col gap-4 text-[#B5BECA] text-xs sm:text-sm"
         style={{ fontFamily: "Inter" }}
         ref={ref}
       >
-        <div className={"flex justify-end"}>
-          <div
-            className={
-              "flex gap-1 sm:gap-2 md:gap-2 h-6 sm:h-8 md:h-10 rounded-full overflow-hidden bg-[#1E1F25]"
-            }
-          >
+        <div className="flex justify-end">
+          <div className="flex gap-1 sm:gap-2 md:gap-2 h-6 sm:h-8 md:h-10 rounded-full overflow-hidden bg-[#1E1F25]">
             <button
               className={cn(
                 "rounded-full p-px",
@@ -322,22 +315,18 @@ export const FinancialStatement = (props: {
         </div>
         <Header columns={props.columns} />
         <Table
-          title={"Assets"}
+          title="Assets"
           data={props.data["assets"]}
           totals={assetTotals}
         />
         <Table
-          title={"Liabilities"}
+          title="Liabilities"
           data={props.data["liabilities"]}
           totals={liabilityTotals}
         />
 
         {netValueTotals.find((n) => n < 0) ? null : (
-          <div
-            className={
-              "sm:rounded-sm md:rounded-md overflow-hidden bg-[#1E1F25]"
-            }
-          >
+          <div className="sm:rounded-sm md:rounded-md overflow-hidden bg-[#1E1F25]">
             <Total
               title={"SURPLUS VALUE"}
               totals={assetTotals.map(
@@ -346,12 +335,12 @@ export const FinancialStatement = (props: {
             />
           </div>
         )}
-        <div className={"mt-2 sm:mt-4 md:mt-6 text-[#FAFBFB]"}>
-          <p className={"text-sm sm:text-base"}>
+        <div className="mt-2 sm:mt-4 md:mt-6 text-[#FAFBFB]">
+          <p className="text-sm sm:text-base">
             {`Last updated ${intlFormat(props.lastUpdated.timestamp)}, `}
             {`block #${props.lastUpdated.blockNumber}`}
           </p>
-          <p className={"text-sm sm:text-base"}>
+          <p className="text-sm sm:text-base">
             {props.ethPrice &&
               `Using ETH price of $${props.ethPrice.toLocaleString(undefined, {
                 maximumFractionDigits: 2,
@@ -367,7 +356,7 @@ const Header = (props: { columns: ReactNode[] }) => {
   const { isNarrow } = useContext(FinancialStatementContext);
   const columnWeight = props.columns.length + 2;
   return (
-    <div className={"sm:rounded-sm md:rounded overflow-hidden bg-[#1E1F25]"}>
+    <div className="sm:rounded-sm md:rounded overflow-hidden bg-[#1E1F25]">
       <div
         className={cn(
           "flex items-center justify-between text-[#B5BECA] bg-[#23242A] text-xs sm:text-sm md:text-base",
@@ -379,7 +368,7 @@ const Header = (props: { columns: ReactNode[] }) => {
         {props.columns.map((column, i) => (
           <div
             key={i}
-            className={"ml-4"}
+            className="ml-4"
             style={{
               width: `${100 / columnWeight}%`,
               maxWidth: 250,
@@ -411,9 +400,9 @@ const Table = (props: {
   return (
     <div
       key={props.title}
-      className={"sm:rounded-sm md:rounded-md overflow-hidden bg-[#1E1F25]"}
+      className="sm:rounded-sm md:rounded-md overflow-hidden bg-[#1E1F25]"
     >
-      <div className={"flex flex-col"}>
+      <div className="flex flex-col">
         {/* Header */}
         <div
           className={cn(
@@ -428,7 +417,7 @@ const Table = (props: {
         </div>
 
         {/* Body */}
-        <div className={"flex flex-col"}>
+        <div className="flex flex-col">
           {Object.entries(props.data).map(([title, data]) => (
             <Section
               key={title}
@@ -449,11 +438,7 @@ const Table = (props: {
 const Total = (props: { title: string; totals: number[] }) => {
   const columnWeight = props.totals.length + 2;
   return (
-    <div
-      className={
-        "flex justify-between items-center p-2 sm:p-4 md:p-8 text-[#FAFBFB] bg-[#23242A]"
-      }
-    >
+    <div className="flex justify-between items-center p-2 sm:p-4 md:p-8 text-[#FAFBFB] bg-[#23242A]">
       <div style={{ width: `${(100 / columnWeight) * 1.5}%` }}>
         {props.title.toUpperCase()}
       </div>
@@ -480,7 +465,7 @@ const Section = (props: {
         "pt-2 sm:pt-4 md:pt-8",
       )}
     >
-      <div className={"flex text-[#FAFBFB]"}>{props.title}</div>
+      <div className="flex text-[#FAFBFB]">{props.title}</div>
       <div
         className={cn(
           "flex flex-col",
@@ -510,10 +495,10 @@ const Asset = (props: {
 }) => {
   const columnWeight = props.data.length + 2;
   return (
-    <div className={"flex flex-col"} key={props.title}>
-      <div className={"flex justify-between"}>
+    <div className="flex flex-col" key={props.title}>
+      <div className="flex justify-between">
         <div
-          className={"text-[#B5BECA]"}
+          className="text-[#B5BECA]"
           style={{ width: `${(100 / columnWeight) * 1.5}%` }}
         >
           <span className="ml-4">{props.title}</span>
@@ -562,7 +547,7 @@ export const DataColumn = ({
   );
   return (
     <div
-      className={"ml-0.5"}
+      className="ml-0.5"
       style={{
         width: `${100 / columnWeight}%`,
         maxWidth: 250,

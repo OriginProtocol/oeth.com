@@ -22,6 +22,9 @@ export const useCollateralChart = () => {
         {
           label: "Current Collateral",
           data: collateral.map((item) => item.total),
+          unitData: collateral.map((item) => item.unitTotal),
+          symbol: collateral.map((item) => item.symbol),
+          token: collateral.map((item) => item.token),
           backgroundColor: collateral.map((item) => item.color),
           borderWidth: 0,
           hoverOffset: 50,
@@ -41,11 +44,14 @@ export const useCollateralChart = () => {
     return chartData?.datasets?.[0]?.data.map((value, index) => {
       const token = chartData?.labels?.[index];
       const color = chartData?.datasets?.[0]?.backgroundColor[index];
+      const symbol = chartData?.datasets?.[0]?.symbol[index];
       return {
         title: token,
         value,
+        unitValue: chartData?.datasets?.[0]?.unitData[index],
+        token: chartData?.datasets?.[0]?.token[index],
         color,
-        tooltip: token,
+        symbol,
       };
     });
   }, [JSON.stringify(chartData)]);

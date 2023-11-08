@@ -24,35 +24,58 @@ import { strategyMapping } from "../../constants";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement);
 
+const AnalyticsCollateral = ({ strategies, collateral }) => {
+  return (
+    <ErrorBoundary>
+      <Head>
+        <title>Analytics | Collateral</title>
+      </Head>
+
+      <div className="grid grid-cols-12 gap-6">
+        <div className="col-span-12">
+          <CollateralAggregate data={collateral} />
+        </div>
+        <div className="col-span-12">
+          <CollateralPoolDistributions data={strategies} />
+        </div>
+      </div>
+    </ErrorBoundary>
+  );
+};
+
 const CollateralAggregate = ({ data = [] }) => {
   return (
-    <div className="flex flex-col grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 items-center w-full">
-      {data.map(({ label, logoSrc, percentage, total }, index) => (
-        <LayoutBox key={label} className="flex flex-shrink-0 w-full">
-          <div className="flex flex-row w-full h-[150px] md:h-[150px] items-center px-6">
-            <Image
-              className="flex flex-shrink-0 mr-3"
-              src={logoSrc}
-              width={42}
-              height={42}
-              alt={label}
-            />
-            <div className="flex flex-col space-y-1">
-              <Typography.Caption2 className="text-subheading text-base">
-                {label}
-              </Typography.Caption2>
-              <Typography.Body2 className="flex flex-row text-2xl">{`${formatCurrency(
-                total,
-                2
-              )}`}</Typography.Body2>
-              <Typography.Caption className="text-xl text-subheading">
-                {formatCurrency(percentage * 100, 2)}%
-              </Typography.Caption>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-1 items-center w-full">
+        {data.map(({ label, logoSrc, percentage, total }) => (
+          <LayoutBox key={label} className="flex flex-shrink-0 w-full">
+            <div className="flex flex-row w-full h-[150px] md:h-[150px] items-center px-6">
+              <Image
+                className="flex flex-shrink-0 mr-3"
+                src={logoSrc}
+                width={42}
+                height={42}
+                alt={label}
+              />
+              <div className="flex flex-col space-y-1">
+                <Typography.Caption2 className="text-subheading text-base">
+                  {label}
+                </Typography.Caption2>
+                <Typography.Body2 className="flex flex-row text-2xl">
+                  {`Ξ${formatCurrency(total, 2)}`}
+                </Typography.Body2>
+                <Typography.Caption className="text-xl text-subheading">
+                  {formatCurrency(percentage * 100, 2)}%
+                </Typography.Caption>
+              </div>
             </div>
-          </div>
-        </LayoutBox>
-      ))}
-    </div>
+          </LayoutBox>
+        ))}
+      </div>
+      <div className="text-xs text-subheading pt-4">
+        * All values are ETH-denominated
+      </div>
+    </>
   );
 };
 
@@ -65,7 +88,7 @@ const CollateralPoolDistributions = ({ data = [] }) => {
           const strategyName =
             find(
               strategyMapping,
-              (item) => item.address?.toLowerCase() === address?.toLowerCase()
+              (item) => item.address?.toLowerCase() === address?.toLowerCase(),
             )?.short_name || name;
           return (
             <LayoutBox key={address}>
@@ -107,7 +130,7 @@ const CollateralPoolDistributions = ({ data = [] }) => {
                           </Link>
                         </div>
                       </div>
-                    ) : null
+                    ) : null,
                   )}
                 </div>
               </div>
@@ -116,25 +139,6 @@ const CollateralPoolDistributions = ({ data = [] }) => {
         })}
       </div>
     </div>
-  );
-};
-
-const AnalyticsCollateral = ({ strategies, collateral }) => {
-  return (
-    <ErrorBoundary>
-      <Head>
-        <title>Analytics | Collateral</title>
-      </Head>
-
-      <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-12">
-          <CollateralAggregate data={collateral} />
-        </div>
-        <div className="col-span-12">
-          <CollateralPoolDistributions data={strategies} />
-        </div>
-      </div>
-    </ErrorBoundary>
   );
 };
 
@@ -152,7 +156,7 @@ export const getServerSideProps: GetServerSideProps = async (): Promise<{
       collateral: orderBy(
         aggregateCollateral({ collateral, allocation }),
         "total",
-        "desc"
+        "desc",
       ),
     },
   };

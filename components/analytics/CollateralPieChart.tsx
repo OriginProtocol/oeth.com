@@ -7,11 +7,16 @@ import { useCollateralChart } from "../../hooks/analytics/useCollateralChart";
 import ErrorBoundary from "../ErrorBoundary";
 import LayoutBox from "../LayoutBox";
 
-const makeTooltipContent = ({ tooltip, value }) => {
+const makeTooltipContent = (props) => {
+  const { token, value, unitValue } = props;
   return (
     <div className="flex flex-col items-center justify-center bg-origin-bg-black">
-      <Typography.Caption>{tooltip}</Typography.Caption>
-      <Typography.Caption>{formatCurrency(value, 2)}</Typography.Caption>
+      <Typography.Caption>
+        {`${formatCurrency(unitValue, 2)} ${token}`}
+      </Typography.Caption>
+      <Typography.Caption className="text-subheading">
+        {`(Ξ${formatCurrency(value, 2)})`}
+      </Typography.Caption>
     </div>
   );
 };
@@ -33,7 +38,7 @@ const CollateralPieChart = () => {
             </Typography.Caption>
           </div>
         </div>
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-4 w-full pb-4 px-6 lg:px-10">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-4 w-full pb-4 px-6 lg:px-10 relative">
           {/* @ts-ignore */}
           <div
             className="flex flex-col flex-shrink-0 max-w-[350px] px-6 pb-[26px]"
@@ -45,12 +50,8 @@ const CollateralPieChart = () => {
               lineWidth={15}
               startAngle={270}
               paddingAngle={1}
-              onMouseOver={(_, index) => {
-                setHovered(index);
-              }}
-              onMouseOut={() => {
-                setHovered(null);
-              }}
+              onMouseOver={(_, index) => setHovered(index)}
+              onMouseOut={() => setHovered(null)}
             />
             <Tooltip
               id="chart"
@@ -86,13 +87,16 @@ const CollateralPieChart = () => {
                       {formatPercentage(total / totalSum)}
                     </Typography.Caption>
                     <Typography.Caption className="text-subheading">
-                      {formatCurrency(total, 2)}
+                      {`Ξ${formatCurrency(total, 2)}`}
                     </Typography.Caption>
                   </div>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+        <div className="flex justify-end text-sm text-subheading pb-4 pr-6 lg:pr-10">
+          * All values are ETH-denominated
         </div>
       </ErrorBoundary>
     </LayoutBox>

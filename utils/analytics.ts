@@ -11,26 +11,31 @@ export const backingTokens = {
   // },
   ETH: {
     label: "ETH",
+    token: 'ETH',
     logoSrc: "/images/eth-icon.svg",
     color: "#5b7fff",
   },
   WETH: {
     label: "Wrapped Ether (WETH)",
+    token: 'WETH',
     logoSrc: "/images/weth-icon.svg",
     color: "#d0246a",
   },
   FRXETH: {
     label: "Frax ETH (frxETH)",
+    token: 'frxETH',
     logoSrc: "/images/frax-icon.svg",
     color: "#e85bff",
   },
   RETH: {
     label: "Rocket Pool ETH (rETH)",
+    token: 'rETH',
     logoSrc: "/images/reth-icon.png",
     color: "#ffc298",
   },
   STETH: {
     label: "Lido Staked ETH (stETH)",
+    token: 'stETH',
     logoSrc: "/images/steth-icon.svg",
     color: "#66c8ff",
   },
@@ -173,7 +178,7 @@ export const aggregateCollateral = ({ collateral, allocation }) => {
     if (!Object.keys(backingTokens).includes(normalizedTokenName)) {
       return acc;
     }
-    return Number(acc || 0) + Number(token?.total || 0);
+    return Number(acc || 0) + Number(token?.value || 0);
   }, 0);
 
   return collateral.reduce((acc, token) => {
@@ -184,7 +189,7 @@ export const aggregateCollateral = ({ collateral, allocation }) => {
       return acc;
     }
 
-    const localTotal = Number(token?.total || 0);
+    const localTotal = Number(token?.value || 0);
 
     acc[normalizedTokenName] = {
       total: localTotal,

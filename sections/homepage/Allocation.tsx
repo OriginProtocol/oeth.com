@@ -145,17 +145,18 @@ const Allocation = ({ strategies }: AllocationProps) => {
                                 <Typography.H7
                                   className="inline items-center text-[12px] md:text-[24px] text-subheading"
                                   style={{ fontWeight: 400 }}
-                                >{`${formatCurrency(
-                                  protocol.total,
-                                  2,
-                                )}`}</Typography.H7>
+                                >
+                                  {`${formatCurrency(protocol.total, 2)}`}
+                                </Typography.H7>
                                 <Typography.H7
                                   className="inline pl-[8px] text-[12px] md:text-[24px]"
                                   style={{ fontWeight: 700 }}
-                                >{`(${formatCurrency(
-                                  (protocol.total / total) * 100,
-                                  2,
-                                )}%)`}</Typography.H7>
+                                >
+                                  {`(${formatCurrency(
+                                    (protocol.total / total) * 100,
+                                    2,
+                                  )}%)`}
+                                </Typography.H7>
                               </div>
                             </div>
                             <div className="mt-5 bg-origin-bg-black">
@@ -165,11 +166,12 @@ const Allocation = ({ strategies }: AllocationProps) => {
                               />
                             </div>
                             <Typography.Caption2
+                              as="div"
                               className={`flex flex-row mt-4 md:hidden text-left space-x-1.5 text-subheading font-medium ${
                                 open[protocol.name] ? "hidden" : ""
                               }`}
                             >
-                              <div>More info</div>
+                              <p>More info</p>
                               <Image
                                 src={assetRootPath(`/images/arrow-down.svg`)}
                                 width="10"
@@ -231,7 +233,10 @@ const Allocation = ({ strategies }: AllocationProps) => {
                               <Typography.Body3 className="mt-4 text-subheading text-left text-[12px] md:text-[14px] leading-[23px]">
                                 {protocolMapping[protocol.name]?.description}
                               </Typography.Body3>
-                              <Typography.Body3 className="flex flex-row mt-4 md:hidden text-left space-x-1.5 text-subheading text-[12px] font-medium">
+                              <Typography.Body3
+                                as="div"
+                                className="flex flex-row mt-4 md:hidden text-left space-x-1.5 text-subheading text-[12px] font-medium"
+                              >
                                 <div>Less info</div>
                                 <Image
                                   src={assetRootPath(`/images/arrow-up.svg`)}

@@ -1,6 +1,6 @@
 import Redis from "ioredis";
 import { getUnixTime, startOfDay } from "date-fns";
-import { toChartData } from "../../../../lib/dune";
+import { toChartData } from "../../../../utils/toChartData";
 
 const oethPegUrl = (unixFrom, unixTo) =>
   `${process.env.NEXT_PUBLIC_COINGECKO_API}/coins/origin-ether/market_chart/range?vs_currency=eth&precision=6&from=${unixFrom}&to=${unixTo}`;

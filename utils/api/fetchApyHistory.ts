@@ -5,7 +5,7 @@ async function fetchApy(days: number = 14) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         query: `query APY {
-          apies(orderBy: blockNumber_DESC, limit: ${days}, where: {timestamp_gte: "2023-06-01T00:00:00.000000Z"}) {
+          oethDailyStats(orderBy: blockNumber_DESC, limit: ${days}, where: {timestamp_gte: "2023-06-01T00:00:00.000000Z"}) {
             apy7DayAvg
             apy30DayAvg
             id
@@ -18,13 +18,13 @@ async function fetchApy(days: number = 14) {
     const json = await res.json();
 
     return {
-      apy7: json.data.apies
+      apy7: json.data.oethDailyStats
         .map((item) => ({
           day: item.id,
           trailing_apy: item.apy7DayAvg * 100,
         }))
         .reverse(),
-      apy30: json.data.apies
+      apy30: json.data.oethDailyStats
         .map((item) => ({
           day: item.id,
           trailing_apy: item.apy30DayAvg * 100,

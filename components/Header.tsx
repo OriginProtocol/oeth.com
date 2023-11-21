@@ -249,8 +249,8 @@ const NavLinks = ({
   background,
 }: NavLinksProps) => (
   <div
-    className={`flex flex-col md:!flex-row space-y-4 md:!space-y-0 ${
-      isMobile ? "px-8" : "justify-center items-center"
+    className={`flex flex-col md:!flex-row space-y-4 md:!space-y-0 overflow-hidden ${
+      isMobile ? "px-8" : "justify-end items-center"
     }`}
   >
     {mappedLinks.map((mappedLink) => {
@@ -393,7 +393,7 @@ const Header = ({
             />
           </a>
         </div>
-        <div className="hidden md:!block">
+        <div className="flex-1 hidden md:!block min-w-0">
           <NavLinks mappedLinks={mappedLinks} active={active} />
         </div>
         <div className="block md:!hidden">

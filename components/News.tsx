@@ -158,13 +158,13 @@ const News = ({
               options={categories}
               option={category}
               setOption={setCategory}
-              category
+              category="category"
             />
             <Dropdown
               option={order}
               setOption={setOrder}
               options={undefined}
-              category={undefined}
+              category="publishedAt"
             />
             <Dropdown
               options={locales}

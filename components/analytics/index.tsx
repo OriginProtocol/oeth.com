@@ -6,3 +6,4 @@ export { default as OETHPriceChart } from "./OETHPriceChart";
 export { default as ProtocolChart } from "./ProtocolChart";
 export { default as TotalSupplyChart } from "./TotalSupplyChart";
 export { default as CollateralPieChart } from "./CollateralPieChart";
+export { default as WOETHChart } from "./WOETHChart";

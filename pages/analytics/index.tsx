@@ -6,6 +6,7 @@ import {
   APYChart,
   OETHPriceChart,
   ProtocolChart,
+  WOETHChart,
 } from "../../components/analytics";
 
 const Analytics = () => {
@@ -26,6 +27,9 @@ const Analytics = () => {
         </div>
         <div className="col-span-12">
           <CollateralPieChart />
+        </div>
+        <div className="col-span-12">
+          <WOETHChart />
         </div>
         <div className="col-span-12">
           <OETHPriceChart />

@@ -37,7 +37,7 @@ async function fetchApy(days: number = 14) {
   }
 }
 
-function asNum(value: string) {
+function asNum(value: bigint) {
   return Number(formatEther(value));
 }
 

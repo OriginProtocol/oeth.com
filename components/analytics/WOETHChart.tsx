@@ -18,7 +18,6 @@ import { chartOptions } from "../../utils/analytics";
 import LayoutBox from "../LayoutBox";
 import DefaultChartHeader from "./DefaultChartHeader";
 import DurationFilter from "./DurationFilter";
-import MovingAverageFilter from "./MovingAverageFilter";
 
 ChartJS.register(
   CategoryScale,
@@ -56,16 +55,6 @@ const WOETHChart = () => {
               });
             }}
           />
-          {/* <div className="flex justify-end">
-            <MovingAverageFilter
-              value={filter?.typeOf}
-              onChange={(typeOf) => {
-                onChangeFilter({
-                  typeOf: typeOf,
-                });
-              }}
-            />
-          </div> */}
         </div>
       </div>
       <div className="-ml-4 mr-4">

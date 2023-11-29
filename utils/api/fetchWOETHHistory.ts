@@ -11,6 +11,7 @@ async function fetchApy(days: number = 14) {
             id
             totalSupply
             wrappedSupply
+            amoSupply
           }
         }`,
         variables: null,
@@ -21,18 +22,23 @@ async function fetchApy(days: number = 14) {
 
     return {
       pctWOETH: json.data.oethDailyStats
-        .map((item) => ({
-          day: item.id,
-          pct:
-            (Number(formatEther(item.wrappedSupply)) /
-              Number(formatEther(item.totalSupply))) *
-            100,
-        }))
+        .map((item) => {
+          const circSupply = asNum(item.totalSupply) - asNum(item.amoSupply);
+          const wrappedSupply = asNum(item.wrappedSupply);
+          return {
+            day: item.id,
+            pct: (wrappedSupply / circSupply) * 100,
+          };
+        })
         .reverse(),
     };
   } catch (err) {
     console.log(`Failed to fetch daily stats: ${err}`);
   }
+}
+
+function asNum(value: string) {
+  return Number(formatEther(value));
 }
 
 export default fetchApy;

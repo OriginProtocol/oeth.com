@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { useState, MouseEvent, useEffect } from "react";
 import { Typography } from "@originprotocol/origin-storybook";
+import Link from "next/link";
 import { GradientButton, HeroInfo, Section, HeroData } from "../../components";
 import {
   assetRootPath,
@@ -18,6 +19,7 @@ interface HeroProps {
   tvl: string;
   tvlUsd: string;
   sectionOverrideCss?: string;
+  revenueAllTime: number;
 }
 
 enum NotifStatuses {
@@ -27,7 +29,8 @@ enum NotifStatuses {
   SERVER_ERROR = "Something went wrong. Please try again",
 }
 
-const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
+const Hero = (props: HeroProps) => {
+  const { apy, tvl, tvlUsd, sectionOverrideCss, revenueAllTime } = props;
   const width = useViewWidth();
   const [emailInput, setEmailInput] = useState<string>("");
   const [notifText, setNotifText] = useState<string>(NotifStatuses.DEFAULT);
@@ -90,7 +93,7 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
                 window.open(
                   process.env.NEXT_PUBLIC_DAPP_URL,
                   "_blank",
-                  "noopener,noreferrer"
+                  "noopener,noreferrer",
                 )
               }
               outerDivClassName="mt-10 md:mt-20 w-full md:w-fit md:mx-auto  hover:bg-transparent hover:opacity-90"
@@ -99,21 +102,42 @@ const Hero = ({ apy, tvl, tvlUsd, sectionOverrideCss }: HeroProps) => {
             >
               Get OETH
             </GradientButton>
-            <div className="flex mt-10 md:mt-20 max-w-[calc(100vw-32px)] w-[638px]">
+            <div className="flex flex-wrap mt-10 md:mt-20 max-w-[calc(100vw-32px)] w-[638px] border border-[#ffffff1a] bg-origin-bg-blackt rounded-lg">
               <HeroData
                 href="/proof-of-yield"
-                className="border-r-0 rounded-l-lg"
+                className="border-r border-[#ffffff1a] w-1/2"
                 title="APY"
                 value={`${formatCurrency(apy * 100, 2)}%`}
                 subtext="Trailing 30-day"
               />
               <HeroData
                 href="/analytics"
-                className="rounded-r-lg"
+                className="w-1/2"
                 title="TVL"
-                value={`${parseFloat(tvl).toFixed(2)}`}
-                subtext={`$${commifyToDecimalPlaces(parseFloat(tvlUsd), 2)}`}
+                value={`Ξ ${parseFloat(tvl).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}`}
+                subtext={`$${parseFloat(tvlUsd).toLocaleString(undefined, {
+                  maximumFractionDigits: 2,
+                })}`}
               />
+              <Link
+                href="/analytics"
+                target="_parent"
+                rel="noopener noreferrer"
+                prefetch={false}
+                className={twMerge(
+                  "py-4 md:py-8 text-center leading-[28px] md:leading-[32px]",
+                  "w-full border-t border-[#ffffff1a]",
+                )}
+              >
+                <Typography.Body2>Total yield generated:</Typography.Body2>
+                <Typography.H5 className="font-bold text-xl md:text-[24px]">
+                  {`Ξ ${revenueAllTime.toLocaleString(undefined, {
+                    maximumFractionDigits: 2,
+                  })}`}
+                </Typography.H5>
+              </Link>
             </div>
           </>
         ) : (

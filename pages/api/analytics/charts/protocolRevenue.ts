@@ -48,6 +48,14 @@ export const getProtocolRevenue = async () => {
       ],
       aggregations: {
         dailyRevenue: formatEther(today.fees),
+        weeklyRevenue: dailyStats
+          .slice(dailyStats.length - 7, dailyStats.length)
+          .reduce((m, o) => {
+            return m + Number(formatEther(o.fees));
+          }, 0),
+        allTimeRevenue: dailyStats.reduce((m, o) => {
+          return m + Number(formatEther(o.fees));
+        }, 0),
       },
     };
   } catch (e) {

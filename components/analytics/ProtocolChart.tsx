@@ -19,6 +19,7 @@ import { useProtocolRevenueChart } from "../../hooks/analytics/useProtocolRevenu
 import LayoutBox from "../LayoutBox";
 import DurationFilter from "./DurationFilter";
 import MovingAverageFilter from "./MovingAverageFilter";
+import Tooltip2 from "../proof-of-yield/Tooltip";
 
 ChartJS.register(
   CategoryScale,
@@ -29,7 +30,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Filler,
-  Legend
+  Legend,
 );
 
 const ProtocolChart = () => {
@@ -40,17 +41,21 @@ const ProtocolChart = () => {
       loadingClassName="flex items-center justify-center h-[350px] w-full"
       isLoading={isFetching}
     >
-      <div className="flex flex-row justify-between w-full h-[175px] p-4 md:p-6">
+      <div className="flex flex-col sm:flex-row items-start gap-2 justify-between w-full p-4 md:p-6">
         <div className="flex flex-col w-full h-full">
-          <Typography.Caption className="text-subheading text-base">
-            Daily Protocol Revenue
-          </Typography.Caption>
+          <div className="flex items-center gap-2">
+            <Typography.Caption className="text-subheading text-base">
+              Daily protocol revenue from OETH
+            </Typography.Caption>
+            <Tooltip2 info="Protocol revenue is derived from OETH performance fees." />
+          </div>
           <div className="flex flex-col space-y-2">
-            <Typography.H4 className="mt-3">{`Ξ ${formatCurrency(
-              Number(last(data?.datasets?.[1]?.data)) +
-                Number(last(data?.datasets?.[2]?.data)),
-              4
-            )}`}</Typography.H4>
+            <Typography.H4 className="mt-3">
+              {`Ξ ${formatCurrency(
+                Number(last(data?.datasets?.[1]?.data)),
+                4,
+              )}`}
+            </Typography.H4>
             <div className="flex flex-col">
               {data?.datasets?.map((dataset, index) => (
                 <div key={dataset.id} className="flex flex-col">
@@ -76,7 +81,7 @@ const ProtocolChart = () => {
             </Typography.Caption>
           </div>
         </div>
-        <div className="flex flex-col space-y-2">
+        <div className="flex sm:flex-col items-center sm:items-end gap-2">
           <DurationFilter
             value={filter?.duration}
             onChange={(duration) => {
@@ -97,7 +102,7 @@ const ProtocolChart = () => {
           </div>
         </div>
       </div>
-      <div className="mr-6">
+      <div className="sm:mr-6">
         {/* @ts-ignore */}
         <Bar options={chartOptions} data={data} />
       </div>

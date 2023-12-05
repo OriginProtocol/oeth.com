@@ -46,7 +46,7 @@ export const useProtocolRevenueChart = () => {
             ...(dataset.type === "line"
               ? {
                   type: "line",
-                  borderColor: "#ffffff",
+                  borderColor: "#D72FC6",
                   borderWidth: 2,
                   tension: 0,
                   borderJoinStyle: "round",

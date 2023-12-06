@@ -113,10 +113,10 @@ export const useProtocolRevenueChart = () => {
             },
             ticks: {
               color: "#828699",
-              autoSkip: false,
+              autoSkip: true,
               maxRotation: 90,
               minRotation: 0,
-              padding: 20,
+              padding: 10,
               callback: function (val, index) {
                 return (
                   isMobile ? (index + 22) % 6 === 0 : (index + 8) % 3 === 0

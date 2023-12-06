@@ -10,7 +10,7 @@ export const getProtocolRevenue = async () => {
           oethDailyStats(orderBy: blockNumber_DESC, limit: 360) {
             id
             timestamp
-            fees
+            feesETH
           }
         }`,
         variables: null,
@@ -42,19 +42,19 @@ export const getProtocolRevenue = async () => {
         {
           id: "revenue_daily",
           label: "Fees Collected",
-          data: dailyStats.map((d) => formatEther(d.fees)),
+          data: dailyStats.map((d) => formatEther(d.feesETH)),
           backgroundColor: "#4B3C6D",
         },
       ],
       aggregations: {
-        dailyRevenue: formatEther(today.fees),
+        dailyRevenue: formatEther(today.feesETH),
         weeklyRevenue: dailyStats
           .slice(dailyStats.length - 7, dailyStats.length)
           .reduce((m, o) => {
-            return m + Number(formatEther(o.fees));
+            return m + Number(formatEther(o.feesETH));
           }, 0),
         allTimeRevenue: dailyStats.reduce((m, o) => {
-          return m + Number(formatEther(o.fees));
+          return m + Number(formatEther(o.feesETH));
         }, 0),
       },
     };
@@ -89,7 +89,7 @@ const handler = async (req, res) => {
 export default handler;
 
 interface FeeRecord {
-  fees: bigint;
+  feesETH: bigint;
   fees7day?: number;
   fees30day?: number;
 }
@@ -104,7 +104,7 @@ function movingAverage(fees: FeeRecord[], days: number): number[] {
     // Calculate the average
     const average =
       lastSevenDays.reduce(
-        (sum, record) => sum + Number(formatEther(record.fees)),
+        (sum, record) => sum + Number(formatEther(record.feesETH)),
         0,
       ) / lastSevenDays.length;
     // Return a new object with the original fee and the calculated average

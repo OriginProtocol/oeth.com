@@ -45,9 +45,9 @@ const ProtocolChart = () => {
         <div className="flex flex-col w-full h-full">
           <div className="flex items-center gap-2">
             <Typography.Caption className="text-subheading text-base">
-              Daily protocol revenue from OETH
+              Daily Protocol Revenue From OETH
             </Typography.Caption>
-            <Tooltip2 info="Protocol revenue is derived from OETH performance fees." />
+            <Tooltip2 info="20% of OETH's yield is collected as a performance fee." />
           </div>
           <div className="flex flex-col space-y-2">
             <Typography.H4 className="mt-3">
@@ -57,24 +57,23 @@ const ProtocolChart = () => {
               )}`}
             </Typography.H4>
             <div className="flex flex-col">
-              {data?.datasets?.map((dataset, index) => (
-                <div key={dataset.id} className="flex flex-col">
-                  <div className="flex flex-row items-center space-x-2">
-                    <div
-                      className="w-[6px] h-[6px] rounded-full"
-                      style={{
-                        backgroundColor: dataset?.backgroundColor,
-                      }}
-                    />
-                    <Typography.Caption className="text-subheading text-xs">
-                      {dataset.label}
-                    </Typography.Caption>
-                    <Typography.Caption className="text-xs">
-                      {`Ξ ${formatCurrency(Number(last(dataset?.data)), 2)}`}
-                    </Typography.Caption>
-                  </div>
-                </div>
-              ))}
+              <div className="flex flex-row items-center space-x-2">
+                <div
+                  className="w-[6px] h-[6px] rounded-full"
+                  style={{
+                    backgroundColor: data?.datasets?.[0]?.backgroundColor,
+                  }}
+                />
+                <Typography.Caption className="text-subheading text-xs">
+                  Moving average
+                </Typography.Caption>
+                <Typography.Caption className="text-xs">
+                  {`Ξ ${formatCurrency(
+                    Number(last(data?.datasets?.[0]?.data)),
+                    2,
+                  )}`}
+                </Typography.Caption>
+              </div>
             </div>
             <Typography.Caption className="text-subheading">
               {last(data?.labels)}

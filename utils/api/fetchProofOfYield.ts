@@ -12,8 +12,8 @@ async function fetchProofOfYield(offset: number = 0): Promise<DailyStat[]> {
               id
               timestamp
               rebasingSupply
-              yield
-              fees
+              yieldETH
+              feesETH
               apy
             }
           }`,
@@ -25,7 +25,7 @@ async function fetchProofOfYield(offset: number = 0): Promise<DailyStat[]> {
     return json.data.oethDailyStats.map((item) => {
       return {
         date: item.timestamp,
-        yield: formatEther(item.yield),
+        yield: formatEther(item.yieldETH),
         apy: (item.apy * 100).toString(),
         rebasing_supply: formatEther(item.rebasingSupply),
       };

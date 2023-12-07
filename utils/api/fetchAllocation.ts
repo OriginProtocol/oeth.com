@@ -44,7 +44,7 @@ async function fetchAllocation() {
             timestamp
             totalSupply
             amoSupply
-            revenueAllTime
+            yieldETHAllTime
             strategies {
               id
               total
@@ -144,7 +144,7 @@ async function fetchAllocation() {
     total_supply: Number(formatEther(today.totalSupply)),
     circulating_supply: circulatingSupply,
     protocol_owned_supply: Number(formatEther(today.amoSupply)),
-    revenue_all_time: Number(formatEther(today.revenueAllTime)),
+    revenue_all_time: Number(formatEther(today.yieldETHAllTime)),
   } as Allocation;
 
   return allocation;

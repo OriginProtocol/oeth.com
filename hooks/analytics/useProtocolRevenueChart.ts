@@ -18,7 +18,7 @@ export const useProtocolRevenueChart = () => {
       },
       refetchOnWindowFocus: false,
       keepPreviousData: true,
-    }
+    },
   );
 
   const [chartState, setChartState] = useState({
@@ -46,7 +46,7 @@ export const useProtocolRevenueChart = () => {
             ...(dataset.type === "line"
               ? {
                   type: "line",
-                  borderColor: "#ffffff",
+                  borderColor: "#D72FC6",
                   borderWidth: 2,
                   tension: 0,
                   borderJoinStyle: "round",
@@ -94,6 +94,18 @@ export const useProtocolRevenueChart = () => {
           },
           tooltip: {
             enabled: true,
+            boxPadding: 5,
+            padding: 10,
+            cornerRadius: 10,
+            usePointStyle: true,
+            borderColor: "#ffffffcc",
+            borderWidth: 1,
+            callbacks: {
+              label: (context) =>
+                `${context.dataset.label}: Ξ${Number(
+                  context.raw,
+                ).toLocaleString(undefined, { maximumFractionDigits: 4 })}`,
+            },
           },
         },
         interaction: {
@@ -113,17 +125,10 @@ export const useProtocolRevenueChart = () => {
             },
             ticks: {
               color: "#828699",
-              autoSkip: false,
-              maxRotation: 90,
+              autoSkip: true,
+              maxRotation: 0,
               minRotation: 0,
-              padding: 20,
-              callback: function (val, index) {
-                return (
-                  isMobile ? (index + 22) % 6 === 0 : (index + 8) % 3 === 0
-                )
-                  ? this.getLabelForValue(val)
-                  : null;
-              },
+              padding: 10,
             },
           },
           y: {

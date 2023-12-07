@@ -6,20 +6,15 @@ export const getProtocolRevenue = async () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        query: `query TotalSupply {
+        query: `query DailyFees {
           oethDailyStats(orderBy: blockNumber_DESC, limit: 360) {
             id
             timestamp
-            yield
-            fees
-            revenue
-            revenueAllTime
-            revenue7DayTotal
-            revenue7DayAvg
+            feesETH
           }
         }`,
         variables: null,
-        operationName: "TotalSupply",
+        operationName: "DailyFees",
       }),
     });
 
@@ -33,35 +28,34 @@ export const getProtocolRevenue = async () => {
         {
           id: "_7_day",
           label: "7-day trailing avg",
-          data: dailyStats.map((d) => formatEther(d.revenue7DayAvg)),
+          data: movingAverage(dailyStats, 7),
           type: "line",
-          backgroundColor: "#FFFFFF",
+          backgroundColor: "#D72FC6",
         },
         {
           id: "_30_day",
           label: "30-day trailing avg",
-          data: dailyStats.map((d) => formatEther(d.revenue7DayAvg)),
+          data: movingAverage(dailyStats, 30),
           type: "line",
-          backgroundColor: "#FFFFFF",
-        },
-        {
-          id: "yield_daily",
-          label: "Yield Distributed",
-          data: dailyStats.map((d) => formatEther(d.yield)),
-          backgroundColor: "#426EF7",
+          backgroundColor: "#D72FC6",
         },
         {
           id: "revenue_daily",
           label: "Fees Collected",
-          data: dailyStats.map((d) => formatEther(d.fees)),
-          backgroundColor: "#E7A9BF",
+          data: dailyStats.map((d) => formatEther(d.feesETH)),
+          backgroundColor: "#4B3C6D",
         },
       ],
       aggregations: {
-        // Revenue agg
-        dailyRevenue: formatEther(today.revenue),
-        weeklyRevenue: formatEther(today.revenue7DayTotal),
-        allTimeRevenue: formatEther(today.revenueAllTime),
+        dailyRevenue: formatEther(today.feesETH),
+        weeklyRevenue: dailyStats
+          .slice(dailyStats.length - 7, dailyStats.length)
+          .reduce((m, o) => {
+            return m + Number(formatEther(o.feesETH));
+          }, 0),
+        allTimeRevenue: dailyStats.reduce((m, o) => {
+          return m + Number(formatEther(o.feesETH));
+        }, 0),
       },
     };
   } catch (e) {
@@ -93,3 +87,27 @@ const handler = async (req, res) => {
 };
 
 export default handler;
+
+interface FeeRecord {
+  feesETH: bigint;
+  fees7day?: number;
+  fees30day?: number;
+}
+
+function movingAverage(fees: FeeRecord[], days: number): number[] {
+  // Calculate the 7-day average for each element
+  return fees.map((_, index, array) => {
+    // Determine the start index for the 7-day range
+    const start = Math.max(0, index - days - 1);
+    // Slice the array to get the last 7 days (or fewer, if less than 7 days are available)
+    const lastSevenDays = array.slice(start, index + 1);
+    // Calculate the average
+    const average =
+      lastSevenDays.reduce(
+        (sum, record) => sum + Number(formatEther(record.feesETH)),
+        0,
+      ) / lastSevenDays.length;
+    // Return a new object with the original fee and the calculated average
+    return average;
+  });
+}

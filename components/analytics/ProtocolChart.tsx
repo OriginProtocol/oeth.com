@@ -14,7 +14,6 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { Typography } from "@originprotocol/origin-storybook";
-import { formatCurrency } from "../../utils";
 import { useProtocolRevenueChart } from "../../hooks/analytics/useProtocolRevenueChart";
 import LayoutBox from "../LayoutBox";
 import DurationFilter from "./DurationFilter";
@@ -51,9 +50,9 @@ const ProtocolChart = () => {
           </div>
           <div className="flex flex-col space-y-2">
             <Typography.H4 className="mt-3">
-              {`Ξ ${formatCurrency(
-                Number(last(data?.datasets?.[1]?.data)),
-                4,
+              {`Ξ ${Number(last(data?.datasets?.[1]?.data)).toLocaleString(
+                undefined,
+                { maximumFractionDigits: 4 },
               )}`}
             </Typography.H4>
             <div className="flex flex-col">
@@ -68,9 +67,9 @@ const ProtocolChart = () => {
                   Moving average
                 </Typography.Caption>
                 <Typography.Caption className="text-xs">
-                  {`Ξ ${formatCurrency(
-                    Number(last(data?.datasets?.[0]?.data)),
-                    2,
+                  {`Ξ ${Number(last(data?.datasets?.[0]?.data)).toLocaleString(
+                    undefined,
+                    { maximumFractionDigits: 2 },
                   )}`}
                 </Typography.Caption>
               </div>

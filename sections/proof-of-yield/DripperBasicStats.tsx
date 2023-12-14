@@ -29,7 +29,7 @@ const DripperBasicStats = ({ className, data }: DripperBasicStats) => {
               className="rounded-0 lg:rounded-l-lg flex-1"
               title="Funds held by dripper"
             >
-              {commify(data?.fundsHeld)} OETH
+              {commify(data?.fundsHeld)} ETH
             </BasicData>
             <BasicData
               className="rounded-0 lg:rounded-r-lg flex-1"
@@ -46,16 +46,16 @@ const DripperBasicStats = ({ className, data }: DripperBasicStats) => {
               className="rounded-0 lg:rounded-l-lg flex-1"
               title="Per day"
             >
-              {commify(data?.ratePerDay)} OETH
+              {commify(data?.ratePerDay)} ETH
             </BasicData>
             <BasicData className="flex-1" title="Per hour">
-              {commify(data?.ratePerHour)} OETH
+              {commify(data?.ratePerHour)} ETH
             </BasicData>
             <BasicData
               className="rounded-0 lg:rounded-r-lg flex-1"
               title="Per minute"
             >
-              {commify(data?.ratePerMinute)} OETH
+              {commify(data?.ratePerMinute)} ETH
             </BasicData>
           </div>
         </div>

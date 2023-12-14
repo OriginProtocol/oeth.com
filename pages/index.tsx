@@ -38,6 +38,7 @@ interface IndexPageProps {
   apy: number[];
   tvl: string;
   tvlUsd: string;
+  revenueAllTime: number;
   apyHistory: ApyHistory;
   faq: FaqData[];
   stats: OgvStats;
@@ -59,6 +60,7 @@ const IndexPage = ({
   strategies,
   seo,
   navLinks,
+  revenueAllTime,
 }: IndexPageProps) => {
   const apyOptions = apy;
   const daysToApy = zipObject(apyDayOptions, apyOptions);
@@ -74,6 +76,7 @@ const IndexPage = ({
         apy={get(daysToApy, "30") ? get(daysToApy, "30") : 0}
         tvl={tvl}
         tvlUsd={tvlUsd}
+        revenueAllTime={revenueAllTime}
       />
       <Wallet />
       <Apy daysToApy={daysToApy} apyData={apyHistory} />
@@ -158,6 +161,7 @@ export async function getStaticProps({ locale }) {
       apy,
       tvl: allocation.total_supply,
       tvlUsd: allocation.total_value_usd,
+      revenueAllTime: allocation.revenue_all_time,
       apyHistory: {},
       faq: faqData,
       stats: ogvStats,

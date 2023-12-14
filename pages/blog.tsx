@@ -9,13 +9,13 @@ import { fetchAPI, transformLinks, formatSeo } from "../utils";
 import { capitalize } from "lodash";
 
 const Blog = ({
-  locale,
-  onLocale,
   articles,
   meta,
   categories,
   seo,
   navLinks,
+  locales,
+  currentLocale,
 }) => {
   const { pathname } = useRouter();
   const active = capitalize(pathname.slice(1));
@@ -51,6 +51,8 @@ const Blog = ({
               meta={meta}
               categories={categories}
               pageRef={pageRef}
+              locales={locales}
+              currentLocale={currentLocale}
             />
           )}
         </div>
@@ -60,9 +62,9 @@ const Blog = ({
   );
 };
 
-export async function getStaticProps() {
+export async function getStaticProps({ locale = "en" }) {
   // Run API calls in parallel
-  const articlesRes = await fetchAPI("/oeth/blog/en", {
+  const articlesRes = await fetchAPI(`/oeth/blog/${locale}`, {
     pagination: {
       pageSize: 1000,
     },
@@ -75,7 +77,7 @@ export async function getStaticProps() {
     }
   });
 
-  const seoRes = await fetchAPI("/oeth/page/en/%2Fblog");
+  const seoRes = await fetchAPI(`/oeth/page/${locale}/%2Fblog`);
   const navRes = await fetchAPI("/oeth-nav-links", {
     populate: {
       links: {
@@ -85,6 +87,10 @@ export async function getStaticProps() {
   });
 
   const navLinks = transformLinks(navRes.data);
+  const localeRes = await fetchAPI("/i18n/locales");
+  const locales = localeRes.map((locale) => {
+    return [locale.name, locale.code];
+  });
 
   return {
     props: {
@@ -92,6 +98,8 @@ export async function getStaticProps() {
       meta: articlesRes?.meta || null,
       categories: Object.values(categories),
       seo: formatSeo(seoRes?.data),
+      locales,
+      currentLocale: locale,
       navLinks,
     },
     revalidate: 5 * 60, // Cache response for 5m

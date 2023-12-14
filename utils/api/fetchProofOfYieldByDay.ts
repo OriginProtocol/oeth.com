@@ -18,19 +18,19 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
           oethDailyStatById(id: "${timestamp}") {
             rebasingSupply
             timestamp
-            yield
+            yieldETH
             apy
-            fees
+            feesETH
             amoSupply
             totalSupply
             nonRebasingSupply
           }
           oethRebases(orderBy: timestamp_DESC, where: {timestamp_gte: "${timestamp}T00:00:00.000Z", timestamp_lt: "${oneDayLater}T00:00:00.000Z"}) {
             blockNumber
-            fee
+            feeETH
             totalSupply
             txHash
-            yield
+            yieldETH
             timestamp
           }
         }`,
@@ -46,7 +46,8 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
     const rawApr =
       (Number(BigInt(item.totalSupply) - BigInt(item.nonRebasingSupply)) /
         Number(BigInt(item.totalSupply) - BigInt(item.amoSupply))) *
-      item.apy * 100;
+      item.apy *
+      100;
 
     const rawApy = ((1 + rawApr / 365.25 / 100) ** 365.25 - 1) * 100;
 
@@ -57,8 +58,8 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
     return [
       {
         date: item.timestamp,
-        yield: formatEther(item.yield),
-        fees: formatEther(item.fees),
+        yield: formatEther(item.yieldETH),
+        fees: formatEther(item.feesETH),
         backing_supply: formatEther(item.totalSupply),
         rebasing_supply: formatEther(item.rebasingSupply),
         non_rebasing_supply: formatEther(item.nonRebasingSupply),
@@ -66,10 +67,10 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
         raw_apy: rawApy.toFixed(3),
         apy_boost: apyBoost.toFixed(3),
         rebase_events: rebaseEvents.map((event) => {
-          const amount = BigInt(event.yield) - BigInt(event.fee);
+          const amount = BigInt(event.yieldETH) - BigInt(event.feeETH);
           return {
             amount: Number(formatEther(amount)),
-            fee: Number(formatEther(event.fee)),
+            fee: Number(formatEther(event.feeETH)),
             tx_hash: event.txHash,
             block_number: event.blockNumber,
             block_time: event.timestamp,

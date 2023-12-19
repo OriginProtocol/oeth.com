@@ -5,31 +5,41 @@ import withIsMobile from "../hoc/withIsMobile";
 import { Card } from "@originprotocol/origin-storybook";
 import { assetRootPath } from "../utils";
 import { capitalize } from "lodash";
+import { useRouter } from "next/router";
 
 const Dropdown = ({ options, option, setOption, category }) => {
   const [open, setOpen] = useState(false);
-  const optionsFormatted = category
-    ? [
-        {
-          name: "All news",
-          unavailable: false,
-        },
-      ].concat(
-        options.map((option) => {
+  const optionsFormatted =
+    category === "category"
+      ? [
+          {
+            name: "All news",
+            unavailable: false,
+          },
+        ].concat(
+          options.map((option) => {
+            return {
+              name: capitalize(option.name),
+              unavailable: false,
+            };
+          }),
+        )
+      : category === "locale"
+      ? options.map((locale) => {
           return {
-            name: capitalize(option.name),
+            name: locale[0],
+            value: locale[1],
             unavailable: false,
           };
         })
-      )
-    : [
-        {
-          name: "Most recent",
-        },
-        {
-          name: "Least recent",
-        },
-      ];
+      : [
+          {
+            name: "Most recent",
+          },
+          {
+            name: "Least recent",
+          },
+        ];
 
   return (
     <div
@@ -67,7 +77,9 @@ const Dropdown = ({ options, option, setOption, category }) => {
                 i === 0 ? "rounded-t-lg" : ""
               } ${i === optionsFormatted.length - 1 ? "rounded-b-lg" : ""}`}
               onClick={() => {
-                setOption(c.name === "All news" ? "" : c.name);
+                setOption(
+                  c.value ? c.value : c.name === "All news" ? "" : c.name,
+                );
                 setOpen(false);
               }}
               key={i}
@@ -81,7 +93,15 @@ const Dropdown = ({ options, option, setOption, category }) => {
   );
 };
 
-const News = ({ articles, meta, categories, isMobile, pageRef }) => {
+const News = ({
+  articles,
+  meta,
+  categories,
+  isMobile,
+  pageRef,
+  locales,
+  currentLocale,
+}) => {
   const [loaded, setLoaded] = useState(false);
   const perPage = isMobile ? 3 : 9;
 
@@ -93,11 +113,12 @@ const News = ({ articles, meta, categories, isMobile, pageRef }) => {
   const [page, setPage] = useState(1);
   const [pageNumbers, setPageNumbers] = useState([]);
   const [order, setOrder] = useState("Most recent");
+  const router = useRouter();
 
   const articlesSorted = articles.sort((a, b) =>
     (b.publishBackdate || b.publishedAt).localeCompare(
-      a.publishBackdate || a.publishedAt
-    )
+      a.publishBackdate || a.publishedAt,
+    ),
   );
   const articlesOrdered =
     order === "Most recent" ? articlesSorted : articlesSorted.reverse();
@@ -106,12 +127,12 @@ const News = ({ articles, meta, categories, isMobile, pageRef }) => {
     ? articlesOrdered.filter(
         (article) =>
           article.category?.slug.toLocaleLowerCase() ===
-          category.toLocaleLowerCase()
+          category.toLocaleLowerCase(),
       )
     : articlesOrdered;
 
   const articlePages = Math.ceil(
-    (category ? categoryArticles.length : meta.pagination.total) / perPage
+    (category ? categoryArticles.length : meta.pagination.total) / perPage,
   );
   const currentPageArticles = articlesOrdered
     ? categoryArticles.slice(perPage * (page - 1), perPage * page)
@@ -137,13 +158,24 @@ const News = ({ articles, meta, categories, isMobile, pageRef }) => {
               options={categories}
               option={category}
               setOption={setCategory}
-              category
+              category="category"
             />
             <Dropdown
               option={order}
               setOption={setOrder}
               options={undefined}
-              category={undefined}
+              category="publishedAt"
+            />
+            <Dropdown
+              options={locales}
+              option={
+                locales.find((locale) => locale[1] === currentLocale)?.[0] ??
+                "English (en)"
+              }
+              setOption={(locale) => {
+                router.push("/blog", "/blog", { locale });
+              }}
+              category="locale"
             />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 md:mt-20">
@@ -178,7 +210,11 @@ const News = ({ articles, meta, categories, isMobile, pageRef }) => {
                       </Moment>
                     }
                     linkText={"Read more"}
-                    linkHref={`/${a.slug}`}
+                    linkHref={
+                      currentLocale === "en"
+                        ? `/${a.slug}`
+                        : `/${currentLocale}/${a.slug}`
+                    }
                     target={"_self"}
                     key={i}
                   />

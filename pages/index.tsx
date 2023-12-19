@@ -38,6 +38,7 @@ interface IndexPageProps {
   apy: number[];
   tvl: string;
   tvlUsd: string;
+  revenueAllTime: number;
   apyHistory: ApyHistory;
   faq: FaqData[];
   stats: OgvStats;
@@ -59,9 +60,11 @@ const IndexPage = ({
   strategies,
   seo,
   navLinks,
+  revenueAllTime,
 }: IndexPageProps) => {
   const apyOptions = apy;
   const daysToApy = zipObject(apyDayOptions, apyOptions);
+  const targetApyDays = daysToApy[7] > daysToApy[30] ? 7 : 30;
 
   return (
     <>
@@ -71,12 +74,18 @@ const IndexPage = ({
       <Seo seo={seo} />
       <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
       <Hero
-        apy={get(daysToApy, "30") ? get(daysToApy, "30") : 0}
+        apy={get(daysToApy, targetApyDays) ? get(daysToApy, targetApyDays) : 0}
+        apyDays={targetApyDays}
         tvl={tvl}
         tvlUsd={tvlUsd}
+        revenueAllTime={revenueAllTime}
       />
       <Wallet />
-      <Apy daysToApy={daysToApy} apyData={apyHistory} />
+      <Apy
+        daysToApy={daysToApy}
+        targetApyDays={targetApyDays}
+        apyData={apyHistory}
+      />
       <Allocation strategies={strategies} />
       <Collateral />
       <Security audits={audits} />
@@ -158,6 +167,7 @@ export async function getStaticProps({ locale }) {
       apy,
       tvl: allocation.total_supply,
       tvlUsd: allocation.total_value_usd,
+      revenueAllTime: allocation.revenue_all_time,
       apyHistory: {},
       faq: faqData,
       stats: ogvStats,

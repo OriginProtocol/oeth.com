@@ -128,7 +128,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
         <GradientButton
           outerDivClassName="mx-auto mt-6 mb-10 md:mb-0"
           className="bg-transparent hover:bg-transparent text-base px-8 py-[6px] md:px-10 md:py-3"
-          onClick={() => moreDays(stats.length + viewMoreAmount)}
+          onClick={() => moreDays(stats.length)}
         >
           View more
         </GradientButton>

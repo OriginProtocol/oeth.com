@@ -11,7 +11,13 @@ interface HeroDataProps {
   className?: string;
 }
 
-const HeroData = ({ title, value, subtext, className, href }: HeroDataProps) => {
+const HeroData = ({
+  title,
+  value,
+  subtext,
+  className,
+  href,
+}: HeroDataProps) => {
   return (
     <Link
       href={href}
@@ -19,8 +25,8 @@ const HeroData = ({ title, value, subtext, className, href }: HeroDataProps) => 
       rel="noopener noreferrer"
       prefetch={false}
       className={twMerge(
-        "py-4 md:py-8 border border-[#ffffff1a] text-center leading-[28px] md:leading-[32px] w-1/2 bg-origin-bg-blackt",
-        className
+        "py-4 md:py-8 text-center leading-[28px] md:leading-[32px]",
+        className,
       )}
     >
       <Typography.Body>{title}</Typography.Body>

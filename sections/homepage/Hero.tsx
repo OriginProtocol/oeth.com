@@ -16,6 +16,7 @@ import { twMerge } from "tailwind-merge";
 
 interface HeroProps {
   apy: number;
+  apyDays: number;
   tvl: string;
   tvlUsd: string;
   sectionOverrideCss?: string;
@@ -108,7 +109,7 @@ const Hero = (props: HeroProps) => {
                 className="border-r border-[#ffffff1a] w-1/2"
                 title="APY"
                 value={`${formatCurrency(apy * 100, 2)}%`}
-                subtext="Trailing 30-day"
+                subtext={`Trailing ${props.apyDays}-day`}
               />
               <HeroData
                 href="/analytics"

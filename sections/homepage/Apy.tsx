@@ -17,18 +17,24 @@ ChartJS.register(CategoryScale);
 interface ApyProps {
   daysToApy: Dictionary<number>;
   apyData: ApyHistory;
+  targetApyDays: number;
   sectionOverrideCss?: string;
 }
 
-const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
+const Apy = ({
+  daysToApy,
+  targetApyDays,
+  apyData,
+  sectionOverrideCss,
+}: ApyProps) => {
   const [loaded, setLoaded] = useState(false);
-  const [apyDays, setApyDays] = useState(30);
+  const [apyDays, setApyDays] = useState(targetApyDays);
 
   const apyHistoryQuery = useApyHistoryQuery(apyData);
 
   const apyHistory = useMemo(
     () => apyHistoryQuery.data,
-    [apyHistoryQuery.isSuccess, apyHistoryQuery.data]
+    [apyHistoryQuery.isSuccess, apyHistoryQuery.data],
   );
 
   const viewWidth = useViewWidth();
@@ -61,7 +67,7 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
         0,
         chartArea.left,
         chartArea.right,
-        0
+        0,
       );
       gradient.addColorStop(0, "#b361e6");
       gradient.addColorStop(1, "#6a36fc");
@@ -122,7 +128,7 @@ const Apy = ({ daysToApy, apyData, sectionOverrideCss }: ApyProps) => {
                 {formatCurrency(
                   // @ts-ignore
                   last(data)?.trailing_apy,
-                  2
+                  2,
                 ) + "% "}
               </Typography.H2>
               <Typography.H7 className="text-sm font-normal md:text-2xl text-subheading mt-[4px] xl:mt-0 xl:inline lg:text-left opacity-70">{`Trailing ${apyDays}-day APY`}</Typography.H7>

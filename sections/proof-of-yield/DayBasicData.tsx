@@ -19,6 +19,8 @@ import { shortenAddress } from "../../utils";
 import { useViewWidth } from "../../hooks";
 import { twMerge } from "tailwind-merge";
 import { DailyStat, YieldBoostMultiplierProps } from "../../types";
+import DripperInfo from "./DripperInfo";
+import YieldSources from "./YieldSources";
 
 const eventChartColumnCssRight = "pr-6 xl:pr-8";
 const eventChartColumnCssLeft = "pl-6 xl:pr-8";
@@ -165,7 +167,7 @@ const DayBasicData = ({
                     <TableHead
                       className={twMerge(
                         eventChartColumnCssLeft,
-                        "whitespace-normal pr-4"
+                        "whitespace-normal pr-4",
                       )}
                     >
                       Amount
@@ -206,7 +208,7 @@ const DayBasicData = ({
                       <TableData
                         className={twMerge(
                           eventChartColumnCssLeft,
-                          "whitespace-normal pr-4"
+                          "whitespace-normal pr-4",
                         )}
                       >
                         <Typography.Body3 className="text-xs md:text-base text-table-data">
@@ -239,6 +241,14 @@ const DayBasicData = ({
                 ))}
               </tbody>
             </Table>
+          </div>
+
+          <div className="mt-8">
+            <DripperInfo />
+          </div>
+
+          <div className="mt-8">
+            <YieldSources date={timestamp.startOf("day").toDate()} />
           </div>
         </div>
         {/* Yield boost multiplier */}

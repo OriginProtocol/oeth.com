@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
-import { SectionHeader } from "../../components/SectionHeader";
-import { SectionBody } from "../../components/SectionBody";
+import { ContainerHeader } from "../../components/ContainerHeader";
 import { ReactNodeLike } from "prop-types";
 import { useQuery } from "react-query";
 import { graphqlClient } from "../../utils/graphql";
@@ -9,7 +8,12 @@ import { TailSpin } from "react-loader-spinner";
 import { formatEther } from "viem";
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
-import { shortenAddress } from "../../utils";
+import { assetRootPath, shortenAddress } from "../../utils";
+import Image from "next/image";
+import Link from "next/link";
+import { twMerge } from "tailwind-merge";
+import { Container } from "../../components/Container";
+import { strategies, strategyAddresses } from "./utils/strategies";
 
 interface DailyYield {
   timestamp: string;
@@ -20,27 +24,8 @@ interface DailyYield {
   apy: number;
 }
 
-const strategyMap: Record<string, string | undefined> = {
-  "0x3ff8654d633d4ea0fae24c52aec73b4a20d0d0e5": "Staked Frax Ether",
-  "0x1827f9ea98e0bf96550b2fc20f7233277fcd7e63": "Convex ETH+OETH Curve pool",
-  "0x49109629ac1deb03f2e9b2fe2ac4a623e0e7dfdc": "Aura WETH+rETH Balancer pool",
-  "0x39254033945aa2e4809cc2977e7087bee48bd7ab+0xae7ab96520de3a18e5e111b5eaab095312d7fe84":
-    "Lido Staked Ether",
-  "0x39254033945aa2e4809cc2977e7087bee48bd7ab+0xae78736cd615f374d3085123a210448e74fc6393":
-    "Rocket Pool ETH",
-  "TBD?": "Aave V2 Optimizer WETH",
-  "0xc1fc9e5ec3058921ea5025d703cbe31764756319": "Morpho Aave",
-};
-
-const strategyFilter = [
-  "0x3ff8654d633d4ea0fae24c52aec73b4a20d0d0e5",
-  "0x1827f9ea98e0bf96550b2fc20f7233277fcd7e63",
-  "0x49109629ac1deb03f2e9b2fe2ac4a623e0e7dfdc",
-  "0x39254033945aa2e4809cc2977e7087bee48bd7ab", // Vault
-  "0xc1fc9e5ec3058921ea5025d703cbe31764756319",
-];
-
 const YieldSources = ({ date }: { date: Date }) => {
+  // TODO: pull server-side?
   const gqlQuery = `
     query DailyYields($timestamp_gte: DateTime!, $timestamp_lte: DateTime!, $strategy_in: [String!]) {
       strategyDailyYields(where: {timestamp_gte: $timestamp_gte, timestamp_lte: $timestamp_lte, strategy_in: $strategy_in}, orderBy: timestamp_ASC) {
@@ -58,7 +43,7 @@ const YieldSources = ({ date }: { date: Date }) => {
     graphqlClient(gqlQuery, {
       timestamp_gte: startOfDay(subDays(date, 6)).toISOString(),
       timestamp_lte: endOfDay(date).toISOString(),
-      strategy_in: strategyFilter,
+      strategy_in: strategyAddresses,
     }),
     {
       refetchOnWindowFocus: false,
@@ -66,7 +51,7 @@ const YieldSources = ({ date }: { date: Date }) => {
     },
   );
 
-  const { strategies, strategyHistory } = useMemo(() => {
+  const { strategiesLatest, strategyHistory } = useMemo(() => {
     const strategies = new Map<string, DailyYield>();
     const strategyHistory = new Map<string, DailyYield[]>();
     const yields = (data?.strategyDailyYields ?? []).filter(
@@ -85,7 +70,7 @@ const YieldSources = ({ date }: { date: Date }) => {
       strategyHistory.get(key).push(d);
     }
     return {
-      strategies: Array.from(strategies.values()).sort((a, b) =>
+      strategiesLatest: Array.from(strategies.values()).sort((a, b) =>
         a.apy > b.apy ? -1 : 1,
       ),
       strategyHistory,
@@ -116,79 +101,100 @@ const YieldSources = ({ date }: { date: Date }) => {
   }
   return (
     <Container>
-      <SectionHeader>Yield Sources</SectionHeader>
-      <SectionBody>
-        <div className="grid grid-cols-[4fr_2fr_2fr_2fr]">
-          {/* Header */}
-          <Header>Strategy</Header>
-          <Header>APY</Header>
-          <Header>7-day trend</Header>
-          <Header>Earnings</Header>
-          {/* Content */}
-          {strategies.map((strategy) => (
-            <Row
-              key={strategy.strategy}
-              elements={[
-                strategyMap[strategy.strategy] ??
-                  strategyMap[`${strategy.strategy}+${strategy.asset}`] ??
-                  shortenAddress(strategy.strategy),
-                (strategy.apy * 100).toFixed(2) + "%",
-                <div className="h-10">
-                  <SparklineChart
-                    data={strategyHistory
-                      .get(`${strategy.strategy}+${strategy.asset}`)
-                      .map((d) => d.apy)}
-                  />
-                </div>,
-                <div className="flex justify-end">
-                  {Number(formatEther(BigInt(strategy.earningsChange))).toFixed(
-                    4,
-                  )}
-                </div>,
-              ]}
-            />
-          ))}
-        </div>
-      </SectionBody>
+      <ContainerHeader>Yield Sources</ContainerHeader>
+      <table className="w-full mb-2">
+        {/* Header */}
+        <thead>
+          <Header className="text-left">Strategy</Header>
+          <Header className="text-right">APY</Header>
+          <Header className="text-right">7-day trend</Header>
+          <Header className="text-right">Earnings</Header>
+          <Header />
+        </thead>
+        {/* Content */}
+        <tbody>
+          {strategiesLatest.map(
+            ({ strategy, asset, earningsChange, apy }, i) => {
+              const strategyInfo = strategies.find(
+                (s) => s.address === strategy && s.asset === asset,
+              );
+              const strategyName =
+                strategyInfo.name ?? shortenAddress(strategy);
+              const strategyPath = strategyInfo.path;
+              return (
+                <Row
+                  key={strategy}
+                  href={`/proof-of-yield/2023-12-25/${strategyPath}`}
+                  elements={[
+                    strategyName,
+                    <div className="flex justify-end">
+                      {(apy * 100).toFixed(2) + "%"}
+                    </div>,
+                    <div className="flex justify-end h-10">
+                      <SparklineChart
+                        data={strategyHistory
+                          .get(`${strategy}+${asset}`)
+                          .map((d) => d.apy)}
+                      />
+                    </div>,
+                    <div className="flex justify-end">
+                      {Number(formatEther(BigInt(earningsChange))).toFixed(4)}
+                    </div>,
+                    <Image
+                      src={assetRootPath("/images/ext-link-white.svg")}
+                      width="14"
+                      height="14"
+                      alt="ext-link"
+                      className="inline md:ml-2 w-[8px] h-[8px] md:w-[14px] md:h-[14px]"
+                    />,
+                  ]}
+                />
+              );
+            },
+          )}
+        </tbody>
+      </table>
     </Container>
   );
 };
 
 export default YieldSources;
 
-const Container = ({
+const Header = ({
   children,
   className,
 }: {
-  children: ReactNodeLike;
+  children?: ReactNodeLike;
   className?: string | undefined;
 }) => (
-  <div
-    className={
-      "flex flex-col gap-4 w-full bg-origin-bg-grey rounded md:rounded-lg border-spacing-0" +
-      (className ? ` ${className}` : "")
-    }
+  <th
+    className={twMerge(
+      "text-xs md:text-sm text-origin-white/60 px-2 first:pl-8 last:pr-2 py-2",
+      className,
+    )}
   >
     {children}
-  </div>
+  </th>
 );
 
-const Header = ({ children }: { children: ReactNodeLike }) => (
-  <div className={"text-origin-white/60"}>{children}</div>
-);
-
-const Row = ({ elements }: { elements: ReactNodeLike[] }) => (
-  <>
+const Row = ({
+  elements,
+  href,
+}: {
+  elements: ReactNodeLike[];
+  href: string;
+}) => (
+  <tr className="hover:bg-white/5">
     {elements.map((element, i) => (
-      <Cell>{element}</Cell>
+      <Link
+        key={i}
+        href={href}
+        className="table-cell align-middle text-sm md:text-base text-origin-white px-2 first:pl-8 last:pr-4 py-2 h-12"
+      >
+        {element}
+      </Link>
     ))}
-  </>
-);
-
-const Cell = ({ children }: { children: ReactNodeLike }) => (
-  <div className={"text-lg text-origin-white py-3 flex items-center"}>
-    {children}
-  </div>
+  </tr>
 );
 
 const SparklineChart = ({ data }) => {

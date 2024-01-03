@@ -9,10 +9,16 @@ import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
 import { fetchAPI, fetchProofOfYieldByDay, transformLinks } from "../../utils";
 import { Header, Footer } from "../../components";
 import Error from "../404";
+import { fetchDailyYields } from "../../queries/fetchDailyYields";
 
 const overrideCss = "px-8 md:px-10 lg:px-10 xl:px-[8.375rem]";
 
-const YieldOnDay = ({ navLinks, dailyStat }: YieldOnDayProps) => {
+const YieldOnDay = ({
+  navLinks,
+  dailyStat,
+  strategiesLatest,
+  strategyHistory,
+}: YieldOnDayProps) => {
   const router = useRouter();
   const { timestamp } = router.query;
 
@@ -36,6 +42,8 @@ const YieldOnDay = ({ navLinks, dailyStat }: YieldOnDayProps) => {
         timestamp={timestampMoment}
         dailyStat={dailyStat}
         sectionOverrideCss={overrideCss}
+        strategiesLatest={strategiesLatest}
+        strategyHistory={strategyHistory}
       />
 
       {/* <DayDripperBanner sectionOverrideCss={overrideCss} />
@@ -104,11 +112,16 @@ export const getStaticProps: GetStaticProps = async (
   });
 
   const navLinks = transformLinks(navRes.data);
+  const { strategiesLatest, strategyHistory } = await fetchDailyYields(
+    new Date(timestamp),
+  );
 
   return {
     props: {
       navLinks,
       dailyStat,
+      strategiesLatest,
+      strategyHistory,
     },
     revalidate: 60 * 60 * 12, // revalidate every 12 hours
   };

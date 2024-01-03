@@ -21,6 +21,7 @@ import { twMerge } from "tailwind-merge";
 import { DailyStat, YieldBoostMultiplierProps } from "../../types";
 import DripperInfo from "./DripperInfo";
 import YieldSources from "./YieldSources";
+import { DailyYield } from "../../queries/fetchDailyYields";
 
 const eventChartColumnCssRight = "pr-6 xl:pr-8";
 const eventChartColumnCssLeft = "pl-6 xl:pr-8";
@@ -28,12 +29,16 @@ const eventChartColumnCssLeft = "pl-6 xl:pr-8";
 interface DayBasicDataProps {
   timestamp: Moment;
   dailyStat: DailyStat;
+  strategiesLatest: DailyYield[];
+  strategyHistory: Record<string, DailyYield[]>;
   sectionOverrideCss?: string;
 }
 
 const DayBasicData = ({
   timestamp,
   dailyStat,
+  strategiesLatest,
+  strategyHistory,
   sectionOverrideCss,
 }: DayBasicDataProps) => {
   const router = useRouter();
@@ -248,7 +253,10 @@ const DayBasicData = ({
           </div>
 
           <div className="mt-8">
-            <YieldSources date={timestamp.startOf("day").toDate()} />
+            <YieldSources
+              strategiesLatest={strategiesLatest}
+              strategyHistory={strategyHistory}
+            />
           </div>
         </div>
         {/* Yield boost multiplier */}

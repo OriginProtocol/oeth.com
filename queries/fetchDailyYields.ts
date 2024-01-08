@@ -6,6 +6,7 @@ export interface DailyYield {
   timestamp: string;
   strategy: string;
   asset: string;
+  balance: string;
   earnings: string;
   earningsChange: string;
   apy: number;
@@ -17,6 +18,7 @@ const gqlQuery = `
       timestamp
       strategy
       asset
+      balance
       earnings
       earningsChange
       apy
@@ -36,26 +38,29 @@ export const fetchDailyYields = async (
   })();
 
   const strategies = new Map<string, DailyYield>();
-  const strategyHistory: Record<string, DailyYield[]> = {};
+  const history: Record<string, DailyYield[]> = {};
   const yields = (data?.strategyDailyYields ?? []).filter(
     (d) =>
       !(
-        d.strategy === "0x39254033945aa2e4809cc2977e7087bee48bd7ab" &&
-        d.asset === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        // Ignore ETH/WETH in Vault
+        (
+          d.strategy === "0x39254033945aa2e4809cc2977e7087bee48bd7ab" &&
+          d.asset === "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+        )
       ),
   );
   for (const d of yields) {
     const key = `${d.strategy}+${d.asset}`;
     strategies.set(key, d);
-    if (!strategyHistory[key]) {
-      strategyHistory[key] = [];
+    if (!history[key]) {
+      history[key] = [];
     }
-    strategyHistory[key].push(d);
+    history[key].push(d);
   }
   return {
-    strategiesLatest: Array.from(strategies.values()).sort((a, b) =>
+    latest: Array.from(strategies.values()).sort((a, b) =>
       a.apy > b.apy ? -1 : 1,
     ),
-    strategyHistory,
+    history,
   };
 };

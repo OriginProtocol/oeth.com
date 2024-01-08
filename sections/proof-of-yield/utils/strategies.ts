@@ -1,6 +1,7 @@
 import { uniq } from "lodash";
 
 export interface StrategyInfo {
+  key: string;
   path: string;
   address: string;
   protocol: string;
@@ -15,6 +16,7 @@ export interface StrategyInfo {
 // Field `asset` only relevant for Vault strategies.
 export const strategies: StrategyInfo[] = [
   {
+    key: "0x3ff8654d633d4ea0fae24c52aec73b4a20d0d0e5+0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     path: "0x3ff8654d633d4ea0fae24c52aec73b4a20d0d0e5",
     address: "0x3ff8654d633d4ea0fae24c52aec73b4a20d0d0e5",
     protocol: "Frax",
@@ -27,6 +29,7 @@ export const strategies: StrategyInfo[] = [
       "https://etherscan.io/token/0x5e8422345238f34275888049021821e8e08caa1f",
   },
   {
+    key: "0x1827f9ea98e0bf96550b2fc20f7233277fcd7e63+0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     path: "0x1827f9ea98e0bf96550b2fc20f7233277fcd7e63",
     address: "0x1827f9ea98e0bf96550b2fc20f7233277fcd7e63",
     protocol: "Convex",
@@ -38,6 +41,7 @@ export const strategies: StrategyInfo[] = [
     assetHref: "https://curve.fi/#/ethereum/pools/factory-v2-298/deposit",
   },
   {
+    key: "0x49109629ac1deb03f2e9b2fe2ac4a623e0e7dfdc+0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     path: "0x49109629ac1deb03f2e9b2fe2ac4a623e0e7dfdc",
     address: "0x49109629ac1deb03f2e9b2fe2ac4a623e0e7dfdc",
     protocol: "Aura",
@@ -50,6 +54,7 @@ export const strategies: StrategyInfo[] = [
       "https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112",
   },
   {
+    key: "0x39254033945aa2e4809cc2977e7087bee48bd7ab+0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
     path: "0x39254033945aa2e4809cc2977e7087bee48bd7ab+0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
     address: "0x39254033945aa2e4809cc2977e7087bee48bd7ab",
     protocol: "Lido",
@@ -62,6 +67,7 @@ export const strategies: StrategyInfo[] = [
       "https://etherscan.io/token/0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
   },
   {
+    key: "0x39254033945aa2e4809cc2977e7087bee48bd7ab+0xae78736cd615f374d3085123a210448e74fc6393",
     path: "0x39254033945aa2e4809cc2977e7087bee48bd7ab+0xae78736cd615f374d3085123a210448e74fc6393",
     address: "0x39254033945aa2e4809cc2977e7087bee48bd7ab",
     protocol: "Rocket Pool",
@@ -74,6 +80,7 @@ export const strategies: StrategyInfo[] = [
       "https://etherscan.io/token/0xae78736cd615f374d3085123a210448e74fc6393",
   },
   {
+    key: "0xc1fc9e5ec3058921ea5025d703cbe31764756319+0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     path: "0xc1fc9e5ec3058921ea5025d703cbe31764756319",
     address: "0xc1fc9e5ec3058921ea5025d703cbe31764756319",
     protocol: "Aave",

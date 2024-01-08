@@ -12,7 +12,7 @@ import React from "react";
 import moment, { Moment } from "moment/moment";
 import Error from "../../404";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
-import { fetchAPI, formatCurrency, transformLinks } from "../../../utils";
+import { fetchAPI, transformLinks } from "../../../utils";
 import { Container } from "../../../components/Container";
 import {
   strategies,
@@ -22,18 +22,31 @@ import { ContainerHeader } from "../../../components/ContainerHeader";
 import { ContainerBody } from "../../../components/ContainerBody";
 import { ExternalLinkButton } from "../../../components/ExternalLinkButton";
 import LineBarChart from "../../../components/LineBarChart";
+import {
+  DailyYield,
+  fetchDailyYields,
+} from "../../../queries/fetchDailyYields";
+import { formatEther, parseEther } from "viem";
+import { BigNumber } from "ethers";
+import { startOfDay, subDays } from "date-fns";
 
 const YieldSourceStrategy = ({
   navLinks,
   strategy,
+  dailyYields,
+  latestDailyYield,
 }: {
   navLinks: Link[];
   strategy: StrategyInfo;
+  dailyYields: { latest: DailyYield[]; history: Record<string, DailyYield[]> };
+  latestDailyYield: DailyYield;
 }) => {
   const router = useRouter();
   const { timestamp } = router.query;
 
   let timestampMoment: Moment;
+
+  const history = dailyYields.history[strategy.key];
 
   try {
     timestampMoment = moment(timestamp);
@@ -76,20 +89,32 @@ const YieldSourceStrategy = ({
                 <div className="flex flex-col items-center justify-center h-32">
                   <div className="text-sm leading-8">Current allocation</div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {"15.285k "}
-                    <span className="text-origin-white/70">(7.62%)</span>
+                    {Number(
+                      formatEther(BigInt(latestDailyYield.balance)),
+                    ).toLocaleString("en-US", {
+                      notation: "compact",
+                      minimumFractionDigits: 3,
+                      maximumFractionDigits: 3,
+                    })}
+                    {/*<span className="text-origin-white/70">(7.62%)</span>*/}
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center h-32">
                   <div className="text-sm leading-8">Current APY</div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    31.8%
+                    {(latestDailyYield.apy * 100).toFixed(1)}%
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center h-32">
                   <div className="text-sm leading-8">Lifetime earnings</div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    178.27
+                    {Number(
+                      formatEther(BigInt(latestDailyYield.earnings)),
+                    ).toLocaleString("en-US", {
+                      notation: "compact",
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </div>
                 </div>
               </ContainerBody>
@@ -99,15 +124,11 @@ const YieldSourceStrategy = ({
               <ContainerBody padding={false}>
                 <LineBarChart
                   data={{
-                    dates: [
-                      "2023-01-01",
-                      "2023-01-02",
-                      "2023-01-03",
-                      "2023-01-04",
-                      "2023-01-05",
-                    ],
-                    earnings: [1, 2, 4, 3, 5],
-                    apy: [0.11, 0.12, 0.09, 0.08, 0.05],
+                    dates: history.map((dy) => dy.timestamp.slice(0, 10)),
+                    earnings: history.map((dy) =>
+                      Number(formatEther(BigInt(dy.earningsChange))),
+                    ),
+                    apy: history.map((dy) => dy.apy),
                   }}
                 />
               </ContainerBody>
@@ -180,6 +201,13 @@ export const getStaticProps: GetStaticProps = async (
   const { timestamp, strategy } = context.params;
   const strategyInfo = strategies.find((s) => s.path === strategy);
 
+  const dailyYields = await fetchDailyYields(new Date(timestamp), 30 * 6);
+  const latestDailyYields = await fetchDailyYields(
+    startOfDay(subDays(new Date(), 1)),
+    1,
+    [strategy],
+  );
+
   const navRes = await fetchAPI("/oeth-nav-links", {
     populate: {
       links: {
@@ -193,6 +221,8 @@ export const getStaticProps: GetStaticProps = async (
     props: {
       navLinks,
       strategy: strategyInfo,
+      dailyYields,
+      latestDailyYield: latestDailyYields.latest[0],
     },
     revalidate: 300, // 5 minutes
   };

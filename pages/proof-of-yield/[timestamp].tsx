@@ -112,16 +112,14 @@ export const getStaticProps: GetStaticProps = async (
   });
 
   const navLinks = transformLinks(navRes.data);
-  const { strategiesLatest, strategyHistory } = await fetchDailyYields(
-    new Date(timestamp),
-  );
+  const dailyYields = await fetchDailyYields(new Date(timestamp));
 
   return {
     props: {
       navLinks,
       dailyStat,
-      strategiesLatest,
-      strategyHistory,
+      strategiesLatest: dailyYields.latest,
+      strategyHistory: dailyYields.history,
     },
     revalidate: 60 * 60 * 12, // revalidate every 12 hours
   };

@@ -36,17 +36,18 @@ const YieldSources = ({
         {/* Content */}
         <tbody>
           {strategiesLatest.map(
-            ({ strategy, asset, earningsChange, apy }, i) => {
+            ({ strategy, asset, earningsChange, apy, timestamp }, i) => {
               const strategyInfo = strategies.find(
                 (s) => s.address === strategy && s.asset === asset,
               );
               const strategyName =
                 strategyInfo.name ?? shortenAddress(strategy);
               const strategyPath = strategyInfo.path;
+              const day = timestamp.slice(0, 10);
               return (
                 <Row
                   key={strategyPath}
-                  href={`/proof-of-yield/2023-12-25/${strategyPath}`}
+                  href={`/proof-of-yield/${day}/${strategyPath}`}
                   elements={[
                     strategyName,
                     <div className="flex justify-end">

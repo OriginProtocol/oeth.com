@@ -9,7 +9,10 @@ import {
   Tooltip,
   Filler,
   Legend,
+  TimeSeriesScale,
+  TimeScale,
 } from "chart.js";
+import "chartjs-adapter-moment";
 import { Chart } from "react-chartjs-2";
 
 ChartJS.register(
@@ -21,6 +24,8 @@ ChartJS.register(
   Tooltip,
   Filler,
   Legend,
+  TimeScale,
+  TimeSeriesScale,
 );
 
 interface ChartData {
@@ -34,20 +39,51 @@ interface MixedChartProps {
 }
 
 const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
-  const options = {
+  const options: React.ComponentProps<typeof Chart>["options"] = {
     responsive: true,
+    layout: {
+      autoPadding: false,
+      padding: {
+        left: 0,
+        right: 4,
+        top: 0,
+        bottom: 5,
+      },
+    },
     scales: {
+      x: {
+        type: "time",
+        grid: {
+          display: false,
+        },
+        time: {
+          unit: "month",
+          displayFormats: {
+            month: "MMM YY",
+          },
+        },
+        ticks: {
+          autoSkip: true,
+          autoSkipPadding: 50,
+          source: "labels",
+          maxTicksLimit: 6,
+          align: "start",
+          labelOffset: 5,
+          color: "#B5BECA",
+        },
+      },
       y: {
         type: "linear",
-        display: true,
+        display: false,
         position: "left",
       },
       y1: {
         type: "linear",
         display: true,
         position: "right",
-        grid: {
-          drawOnChartArea: false,
+        ticks: {
+          callback: (percentage: number) => `${(percentage * 100).toFixed(1)}%`,
+          color: "#B5BECA",
         },
       },
     },
@@ -56,7 +92,16 @@ const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
         callbacks: {
           label: (context) => {
             const { dataset, raw } = context;
-            return `${dataset.label}: ${raw}`;
+            const value = Number(raw);
+            if (dataset.label === "APY") {
+              return `${dataset.label}: ${(value * 100).toFixed(1)}%`;
+            } else {
+              return `${dataset.label}: ${value.toLocaleString("en-US", {
+                notation: "compact",
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`;
+            }
           },
         },
       },
@@ -82,19 +127,21 @@ const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
     labels: data.dates,
     datasets: [
       {
-        type: "bar",
-        label: "Earnings",
-        yAxisID: "y",
-        data: data.earnings,
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
-      },
-      {
         type: "line",
         label: "APY",
         yAxisID: "y1",
         data: data.apy,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "#48E4DB",
+        backgroundColor: "#48E4DB",
+        borderWidth: 2,
+      },
+      {
+        type: "bar",
+        label: "Earnings",
+        yAxisID: "y",
+        data: data.earnings,
+        backgroundColor: "#586CF833",
+        hoverBackgroundColor: "#586CF8",
       },
     ],
   };

@@ -12,6 +12,11 @@ export interface DailyYield {
   apy: number;
 }
 
+export interface DailyYieldsResponse {
+  history: Record<string, DailyYield[]>;
+  latest: DailyYield[];
+}
+
 const gqlQuery = `
   query DailyYields($timestamp_gte: DateTime!, $timestamp_lte: DateTime!, $strategy_in: [String!]) {
     strategyDailyYields(where: {timestamp_gte: $timestamp_gte, timestamp_lte: $timestamp_lte, strategy_in: $strategy_in}, orderBy: timestamp_ASC) {
@@ -26,13 +31,20 @@ const gqlQuery = `
   }
 `;
 
-export const fetchDailyYields = async (
+export const fetchDailyYields: (
+  date: Date,
+  days?: number,
+  strategyFilter?: string[],
+) => Promise<DailyYieldsResponse> = async (
   date: Date,
   days = 7,
   strategyFilter = strategyAddresses,
 ) => {
   const data = await graphqlClient(gqlQuery, {
-    timestamp_gte: startOfDay(subDays(date, days - 1)).toISOString(),
+    timestamp_gte:
+      days === Infinity
+        ? new Date("2023-01-01").toISOString()
+        : startOfDay(subDays(date, days - 1)).toISOString(),
     timestamp_lte: endOfDay(date).toISOString(),
     strategy_in: strategyFilter,
   })();

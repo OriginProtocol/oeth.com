@@ -30,8 +30,15 @@ ChartJS.register(
 
 interface ChartData {
   dates: string[]; // Array of date strings
-  earnings: number[]; // Array of earnings (ETH)
-  apy: number[]; // Array of APY (%)
+  bars: number[];
+  barLabel: string;
+  barFormat?: (value: number) => string;
+  barColor?: string;
+  lines: number[];
+  lineLabel: string;
+  lineFormat?: (value: number) => string;
+  lineColor?: string;
+  tooltip?: React.ComponentProps<typeof Chart>["options"]["plugins"]["tooltip"];
 }
 
 interface MixedChartProps {
@@ -76,34 +83,30 @@ const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
         type: "linear",
         display: false,
         position: "left",
+        ticks: {
+          callback: data.barFormat,
+        },
       },
       y1: {
         type: "linear",
         display: true,
         position: "right",
         ticks: {
-          callback: (percentage: number) => `${(percentage * 100).toFixed(1)}%`,
+          callback: data.lineFormat,
           color: "#B5BECA",
+        },
+        grid: {
+          color: "#69696921",
+          tickBorderDash: () => [2],
+          tickBorderDashOffset: 4,
         },
       },
     },
     plugins: {
       tooltip: {
-        callbacks: {
-          label: (context) => {
-            const { dataset, raw } = context;
-            const value = Number(raw);
-            if (dataset.label === "APY") {
-              return `${dataset.label}: ${(value * 100).toFixed(1)}%`;
-            } else {
-              return `${dataset.label}: ${value.toLocaleString("en-US", {
-                notation: "compact",
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}`;
-            }
-          },
-        },
+        titleColor: "#B5BECA",
+        bodyColor: "#B5BECA",
+        ...data.tooltip,
       },
       legend: {
         display: false,
@@ -128,20 +131,20 @@ const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
     datasets: [
       {
         type: "line",
-        label: "APY",
+        label: data.lineLabel,
         yAxisID: "y1",
-        data: data.apy,
-        borderColor: "#48E4DB",
-        backgroundColor: "#48E4DB",
+        data: data.lines,
+        borderColor: data.lineColor ?? "#48E4DB",
+        backgroundColor: data.lineColor ?? "#48E4DB",
         borderWidth: 2,
       },
       {
         type: "bar",
-        label: "Earnings",
+        label: data.barLabel,
         yAxisID: "y",
-        data: data.earnings,
-        backgroundColor: "#586CF833",
-        hoverBackgroundColor: "#586CF8",
+        data: data.bars,
+        backgroundColor: data.barColor ? `${data.barColor}33` : "#586CF833",
+        hoverBackgroundColor: data.barColor ?? "#586CF8",
       },
     ],
   };

@@ -8,11 +8,11 @@ import {
   Header,
   Section,
 } from "../../../components";
-import React from "react";
+import React, { useState } from "react";
 import moment, { Moment } from "moment/moment";
 import Error from "../../404";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
-import { fetchAPI, transformLinks } from "../../../utils";
+import { assetRootPath, fetchAPI, transformLinks } from "../../../utils";
 import { Container } from "../../../components/Container";
 import {
   strategies,
@@ -22,37 +22,72 @@ import { ContainerHeader } from "../../../components/ContainerHeader";
 import { ContainerBody } from "../../../components/ContainerBody";
 import { ExternalLinkButton } from "../../../components/ExternalLinkButton";
 import LineBarChart from "../../../components/LineBarChart";
-import {
-  DailyYield,
-  fetchDailyYields,
-} from "../../../queries/fetchDailyYields";
-import { formatEther, parseEther } from "viem";
-import { BigNumber } from "ethers";
+import { fetchDailyYields } from "../../../queries/fetchDailyYields";
+import { formatEther } from "viem";
 import { startOfDay, subDays } from "date-fns";
+import Image from "next/image";
+import { useQuery } from "react-query";
+import { twMerge } from "tailwind-merge";
+
+const sma = (days: number) => {
+  const periods = [];
+  return (val: number) => {
+    periods.push(val);
+    if (periods.length > days) periods.shift();
+    return periods.reduce((sum, val) => sum + val, 0) / periods.length;
+  };
+};
 
 const YieldSourceStrategy = ({
   navLinks,
-  strategy,
-  dailyYields,
-  latestDailyYield,
+  strategyPath,
 }: {
   navLinks: Link[];
-  strategy: StrategyInfo;
-  dailyYields: { latest: DailyYield[]; history: Record<string, DailyYield[]> };
-  latestDailyYield: DailyYield;
+  strategyPath: string;
 }) => {
   const router = useRouter();
   const { timestamp } = router.query;
-
   let timestampMoment: Moment;
 
-  const history = dailyYields.history[strategy.key];
+  const strategy = strategies.find((s) => s.path === strategyPath);
+  const [{ days, smoothingDays }, setState] = useState({
+    days: 180,
+    smoothingDays: 30,
+  });
 
+  // We do not pull the current day.
+  const dailyYields = useQuery(
+    `fetchDailyYields-${days}-${smoothingDays}`,
+    () =>
+      fetchDailyYields(
+        startOfDay(subDays(new Date(), 1)),
+        days + smoothingDays,
+      ),
+    {
+      keepPreviousData: true,
+      refetchOnWindowFocus: false,
+    },
+  );
   try {
     timestampMoment = moment(timestamp);
   } catch (err) {
     return <Error navLinks={navLinks} />;
   }
+
+  if (!dailyYields.data && !dailyYields.isFetching) {
+    return <Error navLinks={navLinks} />;
+  }
+
+  const calcSma = sma(smoothingDays);
+  const data = dailyYields.data;
+  const historyBase = data?.history[strategy.key] ?? [];
+  const history = historyBase
+    ?.map((data) => ({
+      ...data,
+      apySMA: calcSma(data.apy),
+    }))
+    .slice(historyBase.length - days, historyBase.length - 1);
+  const latestDailyYield = history?.[history.length - 1];
 
   return (
     <>
@@ -89,32 +124,38 @@ const YieldSourceStrategy = ({
                 <div className="flex flex-col items-center justify-center h-32">
                   <div className="text-sm leading-8">Current allocation</div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {Number(
-                      formatEther(BigInt(latestDailyYield.balance)),
-                    ).toLocaleString("en-US", {
-                      notation: "compact",
-                      minimumFractionDigits: 3,
-                      maximumFractionDigits: 3,
-                    })}
+                    {latestDailyYield === undefined
+                      ? "..."
+                      : Number(
+                          formatEther(BigInt(latestDailyYield.balance)),
+                        ).toLocaleString("en-US", {
+                          notation: "compact",
+                          minimumFractionDigits: 3,
+                          maximumFractionDigits: 3,
+                        })}
                     {/*<span className="text-origin-white/70">(7.62%)</span>*/}
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center h-32">
                   <div className="text-sm leading-8">Current APY</div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {(latestDailyYield.apy * 100).toFixed(1)}%
+                    {latestDailyYield === undefined
+                      ? "..."
+                      : `${(latestDailyYield.apy * 100).toFixed(1)}%`}
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center h-32">
                   <div className="text-sm leading-8">Lifetime earnings</div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {Number(
-                      formatEther(BigInt(latestDailyYield.earnings)),
-                    ).toLocaleString("en-US", {
-                      notation: "compact",
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}
+                    {latestDailyYield === undefined
+                      ? "..."
+                      : Number(
+                          formatEther(BigInt(latestDailyYield.earnings)),
+                        ).toLocaleString("en-US", {
+                          notation: "compact",
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
                   </div>
                 </div>
               </ContainerBody>
@@ -122,13 +163,139 @@ const YieldSourceStrategy = ({
             <Container>
               <ContainerHeader small>Earnings</ContainerHeader>
               <ContainerBody padding={false}>
+                <div className="flex items-center justify-between px-4 md:px-6 mb-4">
+                  <div className="flex items-center gap-4">
+                    <span>
+                      <div
+                        className="inline-block rounded-full w-3 h-3 mr-2"
+                        style={{ backgroundColor: "#48E4DB" }}
+                      />
+                      APY
+                    </span>
+                    <span>
+                      <div
+                        className="inline-block rounded-full w-3 h-3 mr-2"
+                        style={{ backgroundColor: "#586CF8" }}
+                      />
+                      Earnings
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-2 items-end">
+                    <div className="flex border border-origin-white/10 rounded-full">
+                      {[
+                        { label: "1w", value: 7 },
+                        { label: "1m", value: 30 },
+                        { label: "6m", value: 180 },
+                        { label: "1yr", value: 365 },
+                        { label: "All", value: Infinity },
+                      ].map((option) => (
+                        <div
+                          className={twMerge(
+                            "cursor-pointer hover:bg-origin-white/10 rounded-full h-9 text-sm flex items-center justify-center w-16",
+                            option.value === days ? "bg-origin-white/10" : "",
+                          )}
+                          onClick={() =>
+                            setState({
+                              days: option.value,
+                              smoothingDays,
+                            })
+                          }
+                        >
+                          {option.label}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="relative flex items-center">
+                      <Image
+                        src={assetRootPath(`/images/caret.svg`)}
+                        width="12"
+                        height="8"
+                        className={`absolute right-4`}
+                        alt="caret"
+                      />
+                      <select
+                        onChange={(e) =>
+                          setState({
+                            days,
+                            smoothingDays: Number(e.currentTarget.value),
+                          })
+                        }
+                        className="cursor-pointer hover:bg-origin-white/10 h-9 pl-4 pr-10 bg-origin-bg-grey border border-origin-white/10 rounded-full appearance-none outline-origin-blue"
+                      >
+                        <option selected={smoothingDays === 1} value={1}>
+                          No trailing average
+                        </option>
+                        <option selected={smoothingDays === 7} value={7}>
+                          7-day trailing average
+                        </option>
+                        <option selected={smoothingDays === 14} value={14}>
+                          14-day trailing average
+                        </option>
+                        <option selected={smoothingDays === 30} value={30}>
+                          30-day trailing average
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
                 <LineBarChart
                   data={{
                     dates: history.map((dy) => dy.timestamp.slice(0, 10)),
-                    earnings: history.map((dy) =>
+                    bars: history.map((dy) =>
                       Number(formatEther(BigInt(dy.earningsChange))),
                     ),
-                    apy: history.map((dy) => dy.apy),
+                    barLabel: "Earnings",
+                    barColor: "#586CF8",
+                    lines: history.map((dy) => dy.apySMA),
+                    lineLabel: "APY",
+                    lineColor: "#48E4DB",
+                    lineFormat: (percentage: number) =>
+                      `${(percentage * 100).toFixed(1)}%`,
+                    tooltip: {
+                      usePointStyle: true,
+                      callbacks: {
+                        beforeBody: (context) => {
+                          const { dataIndex } = context[0];
+                          return `Allocation: Ξ${Number(
+                            formatEther(BigInt(history[dataIndex].balance)),
+                          ).toLocaleString("en-US", {
+                            minimumFractionDigits: 4,
+                            maximumFractionDigits: 4,
+                          })}`;
+                        },
+                        label: (context) => {
+                          const { dataset, raw } = context;
+                          const value = Number(raw);
+                          if (dataset.label === "APY") {
+                            return ` ${dataset.label}: ${(value * 100).toFixed(
+                              1,
+                            )}%`;
+                          } else {
+                            return ` ${dataset.label}: Ξ${value.toLocaleString(
+                              "en-US",
+                              {
+                                minimumFractionDigits: 4,
+                                maximumFractionDigits: 4,
+                              },
+                            )}`;
+                          }
+                        },
+                        labelColor: (context) => {
+                          const { dataset, raw } = context;
+                          if (dataset.label === "APY") {
+                            return {
+                              backgroundColor: "#48E4DB",
+                              borderColor: "#48E4DB",
+                            };
+                          } else {
+                            return {
+                              backgroundColor: "#586CF8",
+                              borderColor: "#586CF8",
+                            };
+                          }
+                        },
+                      },
+                    },
                   }}
                 />
               </ContainerBody>
@@ -199,14 +366,6 @@ export const getStaticProps: GetStaticProps = async (
   revalidate: number;
 }> => {
   const { timestamp, strategy } = context.params;
-  const strategyInfo = strategies.find((s) => s.path === strategy);
-
-  const dailyYields = await fetchDailyYields(new Date(timestamp), 30 * 6);
-  const latestDailyYields = await fetchDailyYields(
-    startOfDay(subDays(new Date(), 1)),
-    1,
-    [strategy],
-  );
 
   const navRes = await fetchAPI("/oeth-nav-links", {
     populate: {
@@ -220,9 +379,7 @@ export const getStaticProps: GetStaticProps = async (
   return {
     props: {
       navLinks,
-      strategy: strategyInfo,
-      dailyYields,
-      latestDailyYield: latestDailyYields.latest[0],
+      strategyPath: strategy,
     },
     revalidate: 300, // 5 minutes
   };

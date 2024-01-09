@@ -23,7 +23,7 @@ export const ExternalLinkButton = ({
         width="14"
         height="14"
         alt="ext-link"
-        className="inline ml-2 mb-1 w-2 h-2"
+        className="inline ml-2 mb-0.5 w-2 h-2"
       />
     </a>
   );

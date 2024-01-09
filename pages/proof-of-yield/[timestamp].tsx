@@ -99,7 +99,7 @@ export const getStaticProps: GetStaticProps = async (
   if (timestamp && typeof timestamp === "string") {
     const dailyStats = await fetchProofOfYieldByDay(timestamp);
     if (Array.isArray(dailyStats) && dailyStats.length > 0) {
-      dailyStat = get(dailyStats, `[${dailyStats?.length - 1}]`);
+      dailyStat = get(dailyStats, `[${dailyStats?.length - 1}]`) || null;
     }
   }
 

@@ -8,7 +8,7 @@ import {
   Header,
   Section,
 } from "../../../components";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import moment, { Moment } from "moment/moment";
 import Error from "../../404";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
@@ -81,12 +81,14 @@ const YieldSourceStrategy = ({
   const calcSma = sma(smoothingDays);
   const data = dailyYields.data;
   const historyBase = data?.history[strategy.key] ?? [];
-  const history = historyBase
-    ?.map((data) => ({
-      ...data,
-      apySMA: calcSma(data.apy),
-    }))
-    .slice(historyBase.length - days, historyBase.length - 1);
+  const history = useMemo(() => {
+    return historyBase
+      ?.map((data) => ({
+        ...data,
+        apySMA: calcSma(data.apy),
+      }))
+      .slice(historyBase.length - days, historyBase.length - 1);
+  }, [historyBase]);
   const latestDailyYield = history?.[history.length - 1];
 
   return (

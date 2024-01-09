@@ -32,6 +32,7 @@ async function fetchProofOfYield(offset: number = 0): Promise<DailyStat[]> {
     });
   } catch (err) {
     console.log(`Failed to fetch daily stats: ${err}`);
+    return null;
   }
 }
 

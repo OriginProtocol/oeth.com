@@ -32,6 +32,7 @@ async function fetchProofOfYield(offset: number = 0): Promise<DailyStat[]> {
     });
   } catch (err) {
     console.log(`Failed to fetch daily stats: ${err}`);
+    console.log(`URL: ${process.env.NEXT_PUBLIC_SUBSQUID_URL}`);
     return null;
   }
 }

@@ -74,7 +74,6 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
         {/* Table Body */}
         <tbody className="relative px-6">
           {stats
-            .filter((x) => x)
             .filter((s) => validDate(s.date))
             .map((item, i) => {
               // Skip estimation for current day

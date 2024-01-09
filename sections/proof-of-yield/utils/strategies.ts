@@ -5,12 +5,12 @@ export interface StrategyInfo {
   path: string;
   address: string;
   protocol: string;
-  protocolHref: string;
+  protocolHref: string; // Link to protocol website
   name: string;
   asset: string;
   assetName: string;
   assetSymbol: string;
-  assetHref: string;
+  assetHref: string; // Link to asset contract
 }
 
 // Field `asset` only relevant for Vault strategies.
@@ -38,7 +38,8 @@ export const strategies: StrategyInfo[] = [
     asset: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     assetName: "Curve Pool",
     assetSymbol: "ETH+OETH",
-    assetHref: "https://curve.fi/#/ethereum/pools/factory-v2-298/deposit",
+    assetHref:
+      "https://etherscan.io/address/0x94b17476a93b3262d87b9a326965d1e91f9c13e7",
   },
   {
     key: "0x49109629ac1deb03f2e9b2fe2ac4a623e0e7dfdc+0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
@@ -51,7 +52,7 @@ export const strategies: StrategyInfo[] = [
     assetName: "Balancer Pool",
     assetSymbol: "WETH+rETH",
     assetHref:
-      "https://app.balancer.fi/#/ethereum/pool/0x1e19cf2d73a72ef1332c882f20534b6519be0276000200000000000000000112",
+      "https://etherscan.io/address/0x1e19cf2d73a72ef1332c882f20534b6519be0276",
   },
   {
     key: "0x39254033945aa2e4809cc2977e7087bee48bd7ab+0xae7ab96520de3a18e5e111b5eaab095312d7fe84",

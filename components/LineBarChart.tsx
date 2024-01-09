@@ -11,9 +11,13 @@ import {
   Legend,
   TimeSeriesScale,
   TimeScale,
+  TimeScaleTimeOptions,
+  ChartTypeRegistry,
+  TooltipOptions,
 } from "chart.js";
 import "chartjs-adapter-moment";
 import { Chart } from "react-chartjs-2";
+import { DeepPartial } from "ts-essentials";
 
 ChartJS.register(
   CategoryScale,
@@ -28,8 +32,9 @@ ChartJS.register(
   TimeSeriesScale,
 );
 
-interface ChartData {
+interface LineBarChartProps {
   dates: string[]; // Array of date strings
+  dateTimeScaleOptions: Partial<TimeScaleTimeOptions>;
   bars: number[];
   barLabel: string;
   barFormat?: (value: number) => string;
@@ -38,23 +43,19 @@ interface ChartData {
   lineLabel: string;
   lineFormat?: (value: number) => string;
   lineColor?: string;
-  tooltip?: React.ComponentProps<typeof Chart>["options"]["plugins"]["tooltip"];
+  tooltip?: DeepPartial<TooltipOptions<keyof ChartTypeRegistry>>;
 }
 
-interface MixedChartProps {
-  data: ChartData;
-}
-
-const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
+const LineBarChart: React.FC<LineBarChartProps> = (props) => {
   const options: React.ComponentProps<typeof Chart>["options"] = {
     responsive: true,
     layout: {
       autoPadding: false,
       padding: {
         left: 0,
-        right: 4,
+        right: 0,
         top: 0,
-        bottom: 5,
+        bottom: 0,
       },
     },
     scales: {
@@ -63,12 +64,7 @@ const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
         grid: {
           display: false,
         },
-        time: {
-          unit: "month",
-          displayFormats: {
-            month: "MMM YY",
-          },
-        },
+        time: props.dateTimeScaleOptions,
         ticks: {
           autoSkip: true,
           autoSkipPadding: 50,
@@ -84,7 +80,7 @@ const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
         display: false,
         position: "left",
         ticks: {
-          callback: data.barFormat,
+          callback: props.barFormat,
         },
       },
       y1: {
@@ -92,7 +88,7 @@ const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
         display: true,
         position: "right",
         ticks: {
-          callback: data.lineFormat,
+          callback: props.lineFormat,
           color: "#B5BECA",
         },
         grid: {
@@ -106,7 +102,7 @@ const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
       tooltip: {
         titleColor: "#B5BECA",
         bodyColor: "#B5BECA",
-        ...data.tooltip,
+        ...props.tooltip,
       },
       legend: {
         display: false,
@@ -127,24 +123,24 @@ const LineBarChart: React.FC<MixedChartProps> = ({ data }) => {
   } as const;
 
   const chartData: React.ComponentProps<typeof Chart>["data"] = {
-    labels: data.dates,
+    labels: props.dates,
     datasets: [
       {
         type: "line",
-        label: data.lineLabel,
+        label: props.lineLabel,
         yAxisID: "y1",
-        data: data.lines,
-        borderColor: data.lineColor ?? "#48E4DB",
-        backgroundColor: data.lineColor ?? "#48E4DB",
+        data: props.lines,
+        borderColor: props.lineColor ?? "#48E4DB",
+        backgroundColor: props.lineColor ?? "#48E4DB",
         borderWidth: 2,
       },
       {
         type: "bar",
-        label: data.barLabel,
+        label: props.barLabel,
         yAxisID: "y",
-        data: data.bars,
-        backgroundColor: data.barColor ? `${data.barColor}33` : "#586CF833",
-        hoverBackgroundColor: data.barColor ?? "#586CF8",
+        data: props.bars,
+        backgroundColor: props.barColor ? `${props.barColor}33` : "#586CF833",
+        hoverBackgroundColor: props.barColor ?? "#586CF8",
       },
     ],
   };

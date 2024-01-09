@@ -37,7 +37,7 @@ export const fetchDailyYields: (
   strategyFilter?: string[],
 ) => Promise<DailyYieldsResponse> = async (
   date: Date,
-  days = 7,
+  days = 30,
   strategyFilter = strategyAddresses,
 ) => {
   const data = await graphqlClient(gqlQuery, {

@@ -28,7 +28,7 @@ const YieldSources = ({
           <tr>
             <Header className="text-left">Strategy</Header>
             <Header className="text-right">APY</Header>
-            <Header className="text-right">7-day trend</Header>
+            <Header className="text-right">30-day trend</Header>
             <Header className="text-right">Earnings</Header>
             <Header />
           </tr>

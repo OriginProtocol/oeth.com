@@ -28,6 +28,7 @@ import { startOfDay, subDays } from "date-fns";
 import Image from "next/image";
 import { useQuery } from "react-query";
 import { twMerge } from "tailwind-merge";
+import { TimeUnit } from "chart.js";
 
 const sma = (days: number) => {
   const periods = [];
@@ -240,20 +241,31 @@ const YieldSourceStrategy = ({
                     </div>
                   </div>
                 </div>
-                <LineBarChart
-                  data={{
-                    dates: history.map((dy) => dy.timestamp.slice(0, 10)),
-                    bars: history.map((dy) =>
+                <div className="pb-3 pr-3">
+                  <LineBarChart
+                    dates={history.map((dy) => dy.timestamp.slice(0, 10))}
+                    dateTimeScaleOptions={{
+                      unit:
+                        ({
+                          7: "day",
+                          30: "day",
+                          180: "month",
+                          365: "month",
+                          Infinity: "month",
+                        }[days] as TimeUnit) ?? "day",
+                    }}
+                    bars={history.map((dy) =>
                       Number(formatEther(BigInt(dy.earningsChange))),
-                    ),
-                    barLabel: "Earnings",
-                    barColor: "#586CF8",
-                    lines: history.map((dy) => dy.apySMA),
-                    lineLabel: "APY",
-                    lineColor: "#48E4DB",
-                    lineFormat: (percentage: number) =>
-                      `${(percentage * 100).toFixed(1)}%`,
-                    tooltip: {
+                    )}
+                    barLabel={"Earnings"}
+                    barColor={"#586CF8"}
+                    lines={history.map((dy) => dy.apySMA)}
+                    lineLabel={"APY"}
+                    lineColor={"#48E4DB"}
+                    lineFormat={(percentage: number) =>
+                      `${(percentage * 100).toFixed(1)}%`
+                    }
+                    tooltip={{
                       usePointStyle: true,
                       callbacks: {
                         beforeBody: (context) => {
@@ -297,9 +309,9 @@ const YieldSourceStrategy = ({
                           }
                         },
                       },
-                    },
-                  }}
-                />
+                    }}
+                  />
+                </div>
               </ContainerBody>
             </Container>
           </div>

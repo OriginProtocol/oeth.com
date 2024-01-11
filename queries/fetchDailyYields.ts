@@ -1,5 +1,5 @@
 import { graphqlClient } from "../utils/graphql";
-import { endOfDay, startOfDay, subDays } from "date-fns";
+import { addDays, subDays } from "date-fns";
 import { strategyAddresses } from "../sections/proof-of-yield/utils/strategies";
 
 export interface DailyYield {
@@ -18,8 +18,8 @@ export interface DailyYieldsResponse {
 }
 
 const gqlQuery = `
-  query DailyYields($timestamp_gte: DateTime!, $timestamp_lte: DateTime!, $strategy_in: [String!]) {
-    strategyDailyYields(where: {timestamp_gte: $timestamp_gte, timestamp_lte: $timestamp_lte, strategy_in: $strategy_in}, orderBy: timestamp_ASC) {
+  query DailyYields($timestamp_gte: DateTime!, $timestamp_lt: DateTime!, $strategy_in: [String!]) {
+    strategyDailyYields(where: {timestamp_gte: $timestamp_gte, timestamp_lt: $timestamp_lt, strategy_in: $strategy_in}, orderBy: timestamp_ASC) {
       timestamp
       strategy
       asset
@@ -44,8 +44,8 @@ export const fetchDailyYields: (
     timestamp_gte:
       days === Infinity
         ? new Date("2023-01-01").toISOString()
-        : startOfDay(subDays(date, days - 1)).toISOString(),
-    timestamp_lte: endOfDay(date).toISOString(),
+        : subDays(date, days - 1).toISOString(),
+    timestamp_lt: addDays(date, 1).toISOString(),
     strategy_in: strategyFilter,
   })();
 

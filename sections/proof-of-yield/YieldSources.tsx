@@ -6,37 +6,59 @@ import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 import { assetRootPath, shortenAddress } from "../../utils";
 import Image from "next/image";
-import Link from "next/link";
+import * as dn from "dnum";
 import { twMerge } from "tailwind-merge";
 import { Container } from "../../components/Container";
 import { strategies } from "./utils/strategies";
 import { DailyYield } from "../../queries/fetchDailyYields";
+import Tooltip2 from "../../components/proof-of-yield/Tooltip";
 
 const YieldSources = ({
+  timestamp,
   strategiesLatest,
   strategyHistory,
 }: {
+  timestamp: Date;
   strategiesLatest: DailyYield[];
   strategyHistory: Record<string, DailyYield[]>;
 }) => {
+  const today = timestamp.toISOString().slice(0, 10);
+  const totalBalance = strategiesLatest.reduce(
+    (sum, next) => sum + BigInt(next.balance),
+    BigInt(0),
+  );
+  const dateSpanSource = Object.values(strategyHistory)[0];
+  const from = new Date(dateSpanSource[0].timestamp).toISOString().slice(0, 10);
+  const to = new Date(dateSpanSource[dateSpanSource.length - 1].timestamp)
+    .toISOString()
+    .slice(0, 10);
+
   return (
     <Container>
-      <ContainerHeader>Yield Sources</ContainerHeader>
+      <ContainerHeader className="flex justify-between items-start">
+        <span>Yield Sources</span>
+        <span className="text-sm opacity-30">(as of {today})</span>
+      </ContainerHeader>
       <table className="w-full mb-2">
         {/* Header */}
         <thead>
           <tr>
-            <Header className="text-left">Strategy</Header>
-            <Header className="text-right">APY</Header>
-            <Header className="text-right">30-day trend</Header>
-            <Header className="text-right">Earnings</Header>
+            <Header className="justify-start">Strategy</Header>
+            <Header className="justify-end" tooltip={`1-day APY for ${today}`}>
+              APY
+            </Header>
+            <Header className="justify-end" tooltip={`${from} through ${to}`}>
+              30-day trend
+            </Header>
+            <Header className="justify-end">Earnings</Header>
+            <Header className="justify-end">Allocation</Header>
             <Header />
           </tr>
         </thead>
         {/* Content */}
         <tbody>
           {strategiesLatest.map(
-            ({ strategy, asset, earningsChange, apy, timestamp }, i) => {
+            ({ strategy, asset, balance, earningsChange, apy, timestamp }) => {
               const strategyInfo = strategies.find(
                 (s) => s.address === strategy && s.asset === asset,
               );
@@ -63,6 +85,15 @@ const YieldSources = ({
                     <div className="flex justify-end">
                       {Number(formatEther(BigInt(earningsChange))).toFixed(4)}
                     </div>,
+                    <div className="flex justify-end">
+                      {`${dn.format(
+                        dn.mul(dn.div(balance, totalBalance, 18), 100),
+                        {
+                          digits: 1,
+                          trailingZeros: true,
+                        },
+                      )}%`}
+                    </div>,
                     <Image
                       src={assetRootPath("/images/ext-link-white.svg")}
                       width="14"
@@ -86,17 +117,23 @@ export default YieldSources;
 const Header = ({
   children,
   className,
+  tooltip,
 }: {
   children?: ReactNodeLike;
   className?: string | undefined;
+  tooltip?: string;
 }) => (
   <th
-    className={twMerge(
-      "text-xs md:text-sm text-origin-white/60 px-2 first:pl-3 last:pr-3 md:first:pl-8 md:last:pr-4 py-2",
-      className,
-    )}
+    className={
+      "text-xs md:text-sm text-origin-white/60 px-2 first:pl-3 last:pr-3 md:first:pl-8 md:last:pr-4 py-2"
+    }
   >
-    {children}
+    <div className={twMerge("flex items-center gap-2", className)}>
+      {children}
+      {tooltip && (
+        <Tooltip2 tooltipClassName="whitespace-nowrap" info={tooltip} />
+      )}
+    </div>
   </th>
 );
 

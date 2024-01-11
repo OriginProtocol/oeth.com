@@ -49,6 +49,7 @@ interface LineBarChartProps {
 const LineBarChart: React.FC<LineBarChartProps> = (props) => {
   const options: React.ComponentProps<typeof Chart>["options"] = {
     responsive: true,
+    maintainAspectRatio: false,
     layout: {
       autoPadding: false,
       padding: {
@@ -73,6 +74,7 @@ const LineBarChart: React.FC<LineBarChartProps> = (props) => {
           align: "start",
           labelOffset: 5,
           color: "#B5BECA",
+          maxRotation: 0,
         },
       },
       y: {

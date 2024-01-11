@@ -4,9 +4,11 @@ import { twMerge } from "tailwind-merge";
 
 export const ContainerHeader = ({
   children,
+  className,
   small,
 }: {
   children: ReactNodeLike;
+  className?: string;
   small?: boolean;
 }) => {
   return (
@@ -16,6 +18,7 @@ export const ContainerHeader = ({
         small
           ? "text-origin-white/60 text-base"
           : "font-bold text-origin-white text-2xl",
+        className,
       )}
     >
       {children}

@@ -101,7 +101,7 @@ const YieldSourceStrategy = ({
       <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
 
       <div className="mx-4 md:mx-12 lg:mx-24">
-        <div className="grid xl:grid-cols-[2fr_1fr] gap-4 md:gap-8">
+        <div className="xl:grid xl:grid-cols-[2fr_1fr] gap-4 md:gap-8">
           <div className="flex flex-col gap-4 md:gap-8">
             <Container className="px-4 h-16 flex flex-row items-center">
               <GradientButton small href={`/proof-of-yield/${timestamp}`}>
@@ -113,8 +113,8 @@ const YieldSourceStrategy = ({
             </Container>
             <Container>
               <ContainerHeader small>Strategy</ContainerHeader>
-              <ContainerBody>
-                <div className="text-3xl mb-6">{strategy.name}</div>
+              <ContainerBody className="mb-6">
+                <div className="text-3xl mb-4">{strategy.name}</div>
                 <ExternalLinkButton
                   href={`https://etherscan.io/address/${strategy.address}`}
                   children={"Contract"}
@@ -163,10 +163,13 @@ const YieldSourceStrategy = ({
                 </div>
               </ContainerBody>
             </Container>
+            <div className="xl:hidden flex flex-col gap-4 md:gap-8">
+              <StrategyInfo strategy={strategy} />
+            </div>
             <Container>
               <ContainerHeader small>Earnings</ContainerHeader>
               <ContainerBody padding={false}>
-                <div className="flex items-center justify-between px-4 md:px-6 mb-4">
+                <div className="flex flex-col-reverse md:flex-row md:items-center justify-between px-4 md:px-6 mb-4 gap-4">
                   <div className="flex items-center gap-4">
                     <span>
                       <div
@@ -183,7 +186,7 @@ const YieldSourceStrategy = ({
                       Earnings
                     </span>
                   </div>
-                  <div className="flex flex-col gap-2 items-end">
+                  <div className="flex flex-row flex-wrap justify-between md:justify-start md:flex-col gap-2 items-end">
                     <div className="flex border border-origin-white/10 rounded-full">
                       {[
                         { label: "1w", value: 7 },
@@ -194,7 +197,7 @@ const YieldSourceStrategy = ({
                       ].map((option) => (
                         <div
                           className={twMerge(
-                            "cursor-pointer hover:bg-origin-white/10 rounded-full h-9 text-sm flex items-center justify-center w-16",
+                            "cursor-pointer hover:bg-origin-white/10 rounded-full h-9 text-sm flex items-center justify-center w-10 sm:w-16",
                             option.value === days ? "bg-origin-white/10" : "",
                           )}
                           onClick={() =>
@@ -223,7 +226,7 @@ const YieldSourceStrategy = ({
                             smoothingDays: Number(e.currentTarget.value),
                           })
                         }
-                        className="cursor-pointer hover:bg-origin-white/10 h-9 pl-4 pr-10 bg-origin-bg-grey border border-origin-white/10 rounded-full appearance-none outline-origin-blue"
+                        className="hidden md:block cursor-pointer hover:bg-origin-white/10 h-9 pl-4 pr-10 bg-origin-bg-grey border border-origin-white/10 rounded-full appearance-none outline-origin-blue"
                       >
                         <option selected={smoothingDays === 1} value={1}>
                           No trailing average
@@ -238,10 +241,32 @@ const YieldSourceStrategy = ({
                           30-day trailing average
                         </option>
                       </select>
+                      <select
+                        onChange={(e) =>
+                          setState({
+                            days,
+                            smoothingDays: Number(e.currentTarget.value),
+                          })
+                        }
+                        className="md:hidden cursor-pointer hover:bg-origin-white/10 h-9 pl-4 pr-10 bg-origin-bg-grey border border-origin-white/10 rounded-full appearance-none outline-origin-blue"
+                      >
+                        <option selected={smoothingDays === 1} value={1}>
+                          1-day
+                        </option>
+                        <option selected={smoothingDays === 7} value={7}>
+                          7-day
+                        </option>
+                        <option selected={smoothingDays === 14} value={14}>
+                          14-day
+                        </option>
+                        <option selected={smoothingDays === 30} value={30}>
+                          30-day
+                        </option>
+                      </select>
                     </div>
                   </div>
                 </div>
-                <div className="pb-3 pr-3">
+                <div className="md:pb-3 md:pr-3 h-96">
                   <LineBarChart
                     dates={history.map((dy) => dy.timestamp.slice(0, 10))}
                     dateTimeScaleOptions={{
@@ -315,39 +340,44 @@ const YieldSourceStrategy = ({
               </ContainerBody>
             </Container>
           </div>
-          <div className="flex flex-col gap-4 md:gap-8">
-            <Container>
-              <ContainerHeader small>Protocol</ContainerHeader>
-              <ContainerBody className="flex items-center justify-between">
-                {strategy.protocol}
-                <ExternalLinkButton
-                  href={strategy.protocolHref}
-                  children={"Website"}
-                />
-              </ContainerBody>
-            </Container>
-            <Container>
-              <ContainerHeader small>Collateral</ContainerHeader>
-              <ContainerBody className="flex items-center justify-between">
-                <div>
-                  {strategy.assetName}
-                  {strategy.assetSymbol && (
-                    <span className="text-origin-white/70">
-                      {` (${strategy.assetSymbol})`}
-                    </span>
-                  )}
-                </div>
-                <ExternalLinkButton
-                  href={strategy.assetHref}
-                  children={"Contract"}
-                />
-              </ContainerBody>
-            </Container>
+          <div className="hidden xl:flex flex-col gap-4 md:gap-8">
+            <StrategyInfo strategy={strategy} />
           </div>
         </div>
       </div>
 
       <Footer />
+    </>
+  );
+};
+
+const StrategyInfo = ({ strategy }: { strategy: StrategyInfo }) => {
+  return (
+    <>
+      <Container>
+        <ContainerHeader small>Protocol</ContainerHeader>
+        <ContainerBody className="flex items-center justify-between">
+          {strategy.protocol}
+          <ExternalLinkButton
+            href={strategy.protocolHref}
+            children={"Website"}
+          />
+        </ContainerBody>
+      </Container>
+      <Container>
+        <ContainerHeader small>Collateral</ContainerHeader>
+        <ContainerBody className="flex items-center justify-between">
+          <div>
+            {strategy.assetName}
+            {strategy.assetSymbol && (
+              <span className="text-origin-white/70">
+                {` (${strategy.assetSymbol})`}
+              </span>
+            )}
+          </div>
+          <ExternalLinkButton href={strategy.assetHref} children={"Contract"} />
+        </ContainerBody>
+      </Container>
     </>
   );
 };

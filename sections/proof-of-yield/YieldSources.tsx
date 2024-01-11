@@ -44,14 +44,18 @@ const YieldSources = ({
         <thead>
           <tr>
             <Header className="justify-start">Strategy</Header>
-            <Header className="justify-end" tooltip={`1-day APY for ${today}`}>
+            <Header className="justify-end" tooltip={`APY on ${today}`}>
               APY
             </Header>
             <Header className="justify-end" tooltip={`${from} through ${to}`}>
               30-day trend
             </Header>
-            <Header className="justify-end">Earnings</Header>
-            <Header className="justify-end">Allocation</Header>
+            <Header className="justify-end" tooltip={`Earnings on ${today}`}>
+              Earnings
+            </Header>
+            <Header className="justify-end" tooltip={`Allocation on ${today}`}>
+              Allocation
+            </Header>
             <Header />
           </tr>
         </thead>
@@ -75,12 +79,14 @@ const YieldSources = ({
                     <div className="flex justify-end">
                       {(apy * 100).toFixed(2) + "%"}
                     </div>,
-                    <div className="flex justify-end h-10">
-                      <SparklineChart
-                        data={strategyHistory[`${strategy}+${asset}`].map(
-                          (d) => d.apy,
-                        )}
-                      />
+                    <div className="flex justify-center h-10 w-full">
+                      <div className="w-24">
+                        <SparklineChart
+                          data={strategyHistory[`${strategy}+${asset}`].map(
+                            (d) => d.apy,
+                          )}
+                        />
+                      </div>
                     </div>,
                     <div className="flex justify-end">
                       {Number(formatEther(BigInt(earningsChange))).toFixed(4)}
@@ -172,7 +178,7 @@ const Row = ({
 const SparklineChart = ({ data }) => {
   const options: React.ComponentProps<typeof Line>["options"] = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     scales: {
       x: {
         display: false,

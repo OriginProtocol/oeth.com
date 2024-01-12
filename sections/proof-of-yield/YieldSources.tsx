@@ -52,7 +52,7 @@ const YieldSources = ({
             <Header className="justify-end" tooltip={`Allocation on ${to}`}>
               Allocation
             </Header>
-            <Header />
+            <Header className="w-2 md:w-8" />
           </tr>
         </thead>
         {/* Content */}

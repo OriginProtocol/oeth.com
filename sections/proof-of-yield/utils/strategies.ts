@@ -1,4 +1,5 @@
 import { uniq } from "lodash";
+import protocolMapping from "../../../constants/protocolMapping";
 
 export interface StrategyInfo {
   key: string;
@@ -7,6 +8,7 @@ export interface StrategyInfo {
   protocol: string;
   protocolHref: string; // Link to protocol website
   name: string;
+  yieldDescription?: string;
   asset: string;
   assetName: string;
   assetSymbol: string;
@@ -22,6 +24,7 @@ export const strategies: StrategyInfo[] = [
     protocol: "Frax",
     protocolHref: "https://frax.finance/",
     name: "Staked Frax Ether",
+    yieldDescription: protocolMapping.Frax.description,
     asset: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     assetName: "Frax ETH",
     assetSymbol: "frxETH",
@@ -35,6 +38,7 @@ export const strategies: StrategyInfo[] = [
     protocol: "Convex",
     protocolHref: "https://www.convexfinance.com/",
     name: "Convex ETH+OETH Curve pool",
+    yieldDescription: protocolMapping.Convex.description,
     asset: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     assetName: "Curve Pool",
     assetSymbol: "ETH+OETH",
@@ -48,6 +52,7 @@ export const strategies: StrategyInfo[] = [
     protocol: "Aura",
     protocolHref: "https://aura.finance/",
     name: "Aura WETH+rETH Balancer pool",
+    yieldDescription: protocolMapping.Aura.description,
     asset: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     assetName: "Balancer Pool",
     assetSymbol: "WETH+rETH",
@@ -61,6 +66,7 @@ export const strategies: StrategyInfo[] = [
     protocol: "Lido",
     protocolHref: "https://lido.fi/",
     name: "Lido Staked Ether",
+    yieldDescription: protocolMapping.Lido.description,
     asset: "0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
     assetName: "Lido Staked Ether",
     assetSymbol: "stETH",
@@ -74,6 +80,7 @@ export const strategies: StrategyInfo[] = [
     protocol: "Rocket Pool",
     protocolHref: "https://rocketpool.net/",
     name: "Rocket Pool ETH",
+    yieldDescription: protocolMapping.RocketPool.description,
     asset: "0xae78736cd615f374d3085123a210448e74fc6393",
     assetName: "Rocket Pool ETH",
     assetSymbol: "rETH",
@@ -87,6 +94,7 @@ export const strategies: StrategyInfo[] = [
     protocol: "Aave",
     protocolHref: "https://aave.com/",
     name: "Aave V2 Optimizer WETH",
+    yieldDescription: protocolMapping.Morpho.description,
     asset: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
     assetName: "Wrapped Ether",
     assetSymbol: "WETH",

@@ -67,7 +67,7 @@ const YieldSourceStrategy = ({
           .startOf("day")
           .subtract(days + smoothingDays, "days")
           .toDate(),
-        moment.utc().endOf("day").add(1, "day").toDate(),
+        moment.utc().endOf("day").add(999, "day").toDate(),
       ),
     {
       keepPreviousData: true,
@@ -97,11 +97,18 @@ const YieldSourceStrategy = ({
         ...data,
         apySMA: calcSma(data.apy),
       }))
-      .slice(historyBase.length - days, historyBase.length - 1);
+      .slice(historyBase.length - days, historyBase.length);
   }, [historyBase]);
 
   const latestDailyYield = history?.[history.length - 1];
   const latestDailyYieldDay = latestDailyYield?.timestamp.slice(0, 10);
+
+  const previousDailyYield = history?.[history.length - 2];
+  const previousDailyYieldDay = previousDailyYield?.timestamp.slice(0, 10);
+
+  const allocation = latestDailyYield?.balance;
+  const apy = previousDailyYield?.apy;
+  const earnings = latestDailyYield?.earnings;
 
   return (
     <>
@@ -118,12 +125,12 @@ const YieldSourceStrategy = ({
               <GradientButton
                 small
                 href={`/proof-of-yield/${timestamp}`}
-                className="h-8 flex items-center justify-center"
+                className="h-7 w-10 flex items-center justify-center"
               >
                 <Image
                   src={assetRootPath("/images/arrow-left.svg")}
-                  width="8"
-                  height="11"
+                  width="7"
+                  height="10"
                   alt="arrow-left"
                   style={{ marginLeft: -2 }}
                 />
@@ -135,12 +142,9 @@ const YieldSourceStrategy = ({
             <Container>
               <ContainerHeader small>Strategy</ContainerHeader>
               <ContainerBody className="pb-4">
-                <div className="mb-4 flex flex-wrap gap-x-4">
+                <div className="mb-4">
                   <div className="flex items-center text-3xl">
                     {strategy.name}
-                  </div>
-                  <div className="flex items-center text-2xl text-origin-white/70">
-                    {latestDailyYieldDay}
                   </div>
                 </div>
                 <ExternalLinkButton
@@ -162,23 +166,21 @@ const YieldSourceStrategy = ({
                     />
                   </div>
                   <div className="flex flex-wrap justify-center font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {latestDailyYield === undefined
+                    {allocation === undefined
                       ? "..."
-                      : Number(
-                          formatEther(BigInt(latestDailyYield.balance)),
-                        ).toLocaleString("en-US", {
-                          notation: "compact",
-                          minimumFractionDigits: 3,
-                          maximumFractionDigits: 3,
-                        })}
-                    {latestDailyYield?.balance && (
+                      : Number(formatEther(BigInt(allocation))).toLocaleString(
+                          "en-US",
+                          {
+                            notation: "compact",
+                            minimumFractionDigits: 3,
+                            maximumFractionDigits: 3,
+                          },
+                        )}
+                    {allocation && (
                       <span className="font-normal ml-2 text-origin-white/70">
                         (
                         {`${dn.format(
-                          dn.mul(
-                            dn.div(latestDailyYield.balance, totalBalance, 18),
-                            100,
-                          ),
+                          dn.mul(dn.div(allocation, totalBalance, 18), 100),
                           {
                             digits: 1,
                             trailingZeros: true,
@@ -193,15 +195,13 @@ const YieldSourceStrategy = ({
                   <div className="flex items-center text-sm leading-8">
                     APY
                     <Tooltip
-                      info={`APY on ${latestDailyYieldDay}`}
+                      info={`APY on ${previousDailyYieldDay}`}
                       className="mx-2"
                       tooltipClassName="whitespace-nowrap text-center"
                     />
                   </div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {latestDailyYield === undefined
-                      ? "..."
-                      : `${(latestDailyYield.apy * 100).toFixed(1)}%`}
+                    {apy === undefined ? "..." : `${(apy * 100).toFixed(1)}%`}
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center h-32">
@@ -214,15 +214,16 @@ const YieldSourceStrategy = ({
                     />
                   </div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {latestDailyYield === undefined
+                    {earnings === undefined
                       ? "..."
-                      : Number(
-                          formatEther(BigInt(latestDailyYield.earnings)),
-                        ).toLocaleString("en-US", {
-                          notation: "compact",
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
+                      : Number(formatEther(BigInt(earnings))).toLocaleString(
+                          "en-US",
+                          {
+                            notation: "compact",
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          },
+                        )}
                   </div>
                 </div>
               </ContainerBody>
@@ -401,6 +402,14 @@ const YieldSourceStrategy = ({
                     }}
                   />
                 </div>
+              </ContainerBody>
+            </Container>
+            <Container>
+              <ContainerHeader className="font-normal">
+                How yield is generated
+              </ContainerHeader>
+              <ContainerBody className="text-origin-white/70">
+                {strategy.yieldDescription}
               </ContainerBody>
             </Container>
           </div>

@@ -2,18 +2,24 @@ import React from "react";
 import { ReactNodeLike } from "prop-types";
 import Image from "next/image";
 import { assetRootPath } from "../utils";
+import { twMerge } from "tailwind-merge";
 
 export const ExternalLinkButton = ({
   href,
   children,
+  className,
 }: {
   href: string;
   children: ReactNodeLike;
+  className?: string | undefined;
 }) => {
   return (
     <a
       href={href}
-      className="border border-origin-blue px-4 py-1.5 rounded-full text-sm"
+      className={twMerge(
+        "border border-origin-blue px-4 py-1.5 rounded-full text-sm",
+        className,
+      )}
       target={"_blank"}
       rel="noopener noreferrer"
     >

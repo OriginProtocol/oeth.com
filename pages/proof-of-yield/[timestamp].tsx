@@ -112,7 +112,10 @@ export const getStaticProps: GetStaticProps = async (
   });
 
   const navLinks = transformLinks(navRes.data);
-  const dailyYields = await fetchDailyYields(new Date(timestamp));
+  const dailyYields = await fetchDailyYields(
+    moment.utc(timestamp).startOf("day").subtract(30, "days").toDate(),
+    moment.utc(timestamp).startOf("day").add(1, "day").toDate(),
+  );
 
   return {
     props: {

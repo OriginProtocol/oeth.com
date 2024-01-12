@@ -254,7 +254,6 @@ const DayBasicData = ({
 
           <div className="mt-8">
             <YieldSources
-              timestamp={timestamp.toDate()}
               strategiesLatest={strategiesLatest}
               strategyHistory={strategyHistory}
             />

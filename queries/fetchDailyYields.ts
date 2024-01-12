@@ -31,21 +31,14 @@ const gqlQuery = `
   }
 `;
 
-export const fetchDailyYields: (
-  date: Date,
-  days?: number,
-  strategyFilter?: string[],
-) => Promise<DailyYieldsResponse> = async (
-  date: Date,
-  days = 30,
+export const fetchDailyYields = async (
+  from: Date,
+  toExclusive: Date,
   strategyFilter = strategyAddresses,
 ) => {
   const data = await graphqlClient(gqlQuery, {
-    timestamp_gte:
-      days === Infinity
-        ? new Date("2023-01-01").toISOString()
-        : subDays(date, days - 1).toISOString(),
-    timestamp_lt: addDays(date, 1).toISOString(),
+    timestamp_gte: from.toISOString(),
+    timestamp_lt: toExclusive.toISOString(),
     strategy_in: strategyFilter,
   })();
 

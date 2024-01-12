@@ -15,7 +15,7 @@ export const ContainerBody = ({
     <div
       className={twMerge(
         "text-origin-white",
-        padding ? "px-4 md:px-8 pb-3 md:pb-6" : "",
+        padding ? "px-4 md:px-6 pb-3 md:pb-6" : "",
         className,
       )}
     >

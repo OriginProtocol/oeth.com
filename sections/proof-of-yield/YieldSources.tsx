@@ -11,18 +11,15 @@ import { twMerge } from "tailwind-merge";
 import { Container } from "../../components/Container";
 import { strategies } from "./utils/strategies";
 import { DailyYield } from "../../queries/fetchDailyYields";
-import Tooltip2 from "../../components/proof-of-yield/Tooltip";
+import Tooltip from "../../components/proof-of-yield/Tooltip";
 
 const YieldSources = ({
-  timestamp,
   strategiesLatest,
   strategyHistory,
 }: {
-  timestamp: Date;
   strategiesLatest: DailyYield[];
   strategyHistory: Record<string, DailyYield[]>;
 }) => {
-  const today = timestamp.toISOString().slice(0, 10);
   const totalBalance = strategiesLatest.reduce(
     (sum, next) => sum + BigInt(next.balance),
     BigInt(0),
@@ -37,23 +34,22 @@ const YieldSources = ({
     <Container>
       <ContainerHeader className="flex justify-between items-start">
         <span>Yield Sources</span>
-        <span className="text-sm opacity-30">(as of {today})</span>
       </ContainerHeader>
       <table className="w-full mb-2">
         {/* Header */}
         <thead>
           <tr>
             <Header className="justify-start">Strategy</Header>
-            <Header className="justify-end" tooltip={`APY on ${today}`}>
+            <Header className="justify-end" tooltip={`APY on ${to}`}>
               APY
             </Header>
             <Header className="justify-end" tooltip={`${from} through ${to}`}>
               30-day trend
             </Header>
-            <Header className="justify-end" tooltip={`Earnings on ${today}`}>
+            <Header className="justify-end" tooltip={`Earnings on ${to}`}>
               Earnings
             </Header>
-            <Header className="justify-end" tooltip={`Allocation on ${today}`}>
+            <Header className="justify-end" tooltip={`Allocation on ${to}`}>
               Allocation
             </Header>
             <Header />
@@ -137,7 +133,7 @@ const Header = ({
     <div className={twMerge("flex items-center gap-2", className)}>
       {children}
       {tooltip && (
-        <Tooltip2 tooltipClassName="whitespace-nowrap" info={tooltip} />
+        <Tooltip tooltipClassName="whitespace-nowrap" info={tooltip} />
       )}
     </div>
   </th>

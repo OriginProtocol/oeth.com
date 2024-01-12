@@ -24,11 +24,12 @@ import { ExternalLinkButton } from "../../../components/ExternalLinkButton";
 import LineBarChart from "../../../components/LineBarChart";
 import { fetchDailyYields } from "../../../queries/fetchDailyYields";
 import { formatEther } from "viem";
-import { startOfDay, subDays } from "date-fns";
 import Image from "next/image";
 import { useQuery } from "react-query";
 import { twMerge } from "tailwind-merge";
 import { TimeUnit } from "chart.js";
+import Tooltip from "../../../components/proof-of-yield/Tooltip";
+import * as dn from "dnum";
 
 const sma = (days: number) => {
   const periods = [];
@@ -61,8 +62,12 @@ const YieldSourceStrategy = ({
     `fetchDailyYields-${days}-${smoothingDays}`,
     () =>
       fetchDailyYields(
-        startOfDay(subDays(new Date(), 1)),
-        days + smoothingDays,
+        moment
+          .utc()
+          .startOf("day")
+          .subtract(days + smoothingDays, "days")
+          .toDate(),
+        moment.utc().endOf("day").add(1, "day").toDate(),
       ),
     {
       keepPreviousData: true,
@@ -81,6 +86,10 @@ const YieldSourceStrategy = ({
 
   const calcSma = sma(smoothingDays);
   const data = dailyYields.data;
+  const totalBalance = data?.latest.reduce(
+    (sum, next) => sum + BigInt(next.balance),
+    BigInt(0),
+  );
   const historyBase = data?.history[strategy.key] ?? [];
   const history = useMemo(() => {
     return historyBase
@@ -90,7 +99,9 @@ const YieldSourceStrategy = ({
       }))
       .slice(historyBase.length - days, historyBase.length - 1);
   }, [historyBase]);
+
   const latestDailyYield = history?.[history.length - 1];
+  const latestDailyYieldDay = latestDailyYield?.timestamp.slice(0, 10);
 
   return (
     <>
@@ -104,8 +115,18 @@ const YieldSourceStrategy = ({
         <div className="xl:grid xl:grid-cols-[2fr_1fr] gap-4 md:gap-8">
           <div className="flex flex-col gap-4 md:gap-8">
             <Container className="px-4 h-16 flex flex-row items-center">
-              <GradientButton small href={`/proof-of-yield/${timestamp}`}>
-                {"<"}
+              <GradientButton
+                small
+                href={`/proof-of-yield/${timestamp}`}
+                className="h-8 flex items-center justify-center"
+              >
+                <Image
+                  src={assetRootPath("/images/arrow-left.svg")}
+                  width="8"
+                  height="11"
+                  alt="arrow-left"
+                  style={{ marginLeft: -2 }}
+                />
               </GradientButton>
               <div className="ml-4">{`Back to ${timestampMoment.format(
                 "ll",
@@ -113,8 +134,15 @@ const YieldSourceStrategy = ({
             </Container>
             <Container>
               <ContainerHeader small>Strategy</ContainerHeader>
-              <ContainerBody className="mb-6">
-                <div className="text-3xl mb-4">{strategy.name}</div>
+              <ContainerBody className="pb-4">
+                <div className="mb-4 flex flex-wrap gap-x-4">
+                  <div className="flex items-center text-3xl">
+                    {strategy.name}
+                  </div>
+                  <div className="flex items-center text-2xl text-origin-white/70">
+                    {latestDailyYieldDay}
+                  </div>
+                </div>
                 <ExternalLinkButton
                   href={`https://etherscan.io/address/${strategy.address}`}
                   children={"Contract"}
@@ -125,8 +153,15 @@ const YieldSourceStrategy = ({
                 className="grid grid-cols-3 divide-x-2 divide-black border-t-2 border-t-black"
               >
                 <div className="flex flex-col items-center justify-center h-32">
-                  <div className="text-sm leading-8">Current allocation</div>
-                  <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
+                  <div className="flex items-center text-sm leading-8">
+                    Allocation
+                    <Tooltip
+                      info={`Allocation on ${latestDailyYieldDay}`}
+                      className="mx-2"
+                      tooltipClassName="whitespace-nowrap text-center"
+                    />
+                  </div>
+                  <div className="flex flex-wrap justify-center font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
                     {latestDailyYield === undefined
                       ? "..."
                       : Number(
@@ -136,11 +171,33 @@ const YieldSourceStrategy = ({
                           minimumFractionDigits: 3,
                           maximumFractionDigits: 3,
                         })}
-                    {/*<span className="text-origin-white/70">(7.62%)</span>*/}
+                    {latestDailyYield?.balance && (
+                      <span className="font-normal ml-2 text-origin-white/70">
+                        (
+                        {`${dn.format(
+                          dn.mul(
+                            dn.div(latestDailyYield.balance, totalBalance, 18),
+                            100,
+                          ),
+                          {
+                            digits: 1,
+                            trailingZeros: true,
+                          },
+                        )}%`}
+                        )
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center h-32">
-                  <div className="text-sm leading-8">Current APY</div>
+                  <div className="flex items-center text-sm leading-8">
+                    APY
+                    <Tooltip
+                      info={`APY on ${latestDailyYieldDay}`}
+                      className="mx-2"
+                      tooltipClassName="whitespace-nowrap text-center"
+                    />
+                  </div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
                     {latestDailyYield === undefined
                       ? "..."
@@ -148,7 +205,14 @@ const YieldSourceStrategy = ({
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center h-32">
-                  <div className="text-sm leading-8">Lifetime earnings</div>
+                  <div className="flex justify-center items-center text-center text-sm leading-8">
+                    Lifetime earnings
+                    <Tooltip
+                      info={`Lifetime earnings as of ${latestDailyYieldDay}`}
+                      className="mx-2"
+                      tooltipClassName="whitespace-nowrap text-center"
+                    />
+                  </div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
                     {latestDailyYield === undefined
                       ? "..."

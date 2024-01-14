@@ -12,6 +12,7 @@ import { Container } from "../../components/Container";
 import { strategies } from "./utils/strategies";
 import { DailyYield } from "../../queries/fetchDailyYields";
 import Tooltip from "../../components/proof-of-yield/Tooltip";
+import { useElementSize } from "usehooks-ts";
 
 const YieldSources = ({
   strategiesLatest,
@@ -20,6 +21,8 @@ const YieldSources = ({
   strategiesLatest: DailyYield[];
   strategyHistory: Record<string, DailyYield[]>;
 }) => {
+  const [ref, { width }] = useElementSize<HTMLDivElement>();
+  const isSmall = width < 700;
   const totalBalance = strategiesLatest.reduce(
     (sum, next) => sum + BigInt(next.balance),
     BigInt(0),
@@ -31,85 +34,90 @@ const YieldSources = ({
     .slice(0, 10);
 
   return (
-    <Container>
+    <Container ref={ref}>
       <ContainerHeader className="flex justify-between items-start">
         <span>Yield Sources</span>
       </ContainerHeader>
-      <table className="w-full mb-2">
-        {/* Header */}
-        <thead>
-          <tr>
-            <Header className="justify-start">Strategy</Header>
-            <Header className="justify-end" tooltip={`APY on ${to}`}>
-              APY
-            </Header>
-            <Header className="justify-end" tooltip={`${from} through ${to}`}>
-              30-day trend
-            </Header>
-            <Header className="justify-end" tooltip={`Earnings on ${to}`}>
-              Earnings
-            </Header>
-            <Header className="justify-end" tooltip={`Allocation on ${to}`}>
-              Allocation
-            </Header>
-            <Header className="w-2 md:w-8" />
-          </tr>
-        </thead>
-        {/* Content */}
-        <tbody>
-          {strategiesLatest.map(
-            ({ strategy, asset, balance, earningsChange, apy, timestamp }) => {
-              const strategyInfo = strategies.find(
-                (s) => s.address === strategy && s.asset === asset,
-              );
-              const strategyName =
-                strategyInfo.name ?? shortenAddress(strategy);
-              const strategyPath = strategyInfo.path;
-              const day = timestamp.slice(0, 10);
-              return (
-                <Row
-                  key={strategyPath}
-                  href={`/proof-of-yield/${day}/${strategyPath}`}
-                  elements={[
-                    strategyName,
-                    <div className="flex justify-end">
-                      {(apy * 100).toFixed(2) + "%"}
-                    </div>,
-                    <div className="flex justify-center h-10 w-full">
-                      <div className="w-24">
-                        <SparklineChart
-                          data={strategyHistory[`${strategy}+${asset}`].map(
-                            (d) => d.apy,
-                          )}
-                        />
-                      </div>
-                    </div>,
-                    <div className="flex justify-end">
-                      {Number(formatEther(BigInt(earningsChange))).toFixed(4)}
-                    </div>,
-                    <div className="flex justify-end">
-                      {`${dn.format(
-                        dn.mul(dn.div(balance, totalBalance, 18), 100),
-                        {
-                          digits: 1,
-                          trailingZeros: true,
-                        },
-                      )}%`}
-                    </div>,
-                    <Image
-                      src={assetRootPath("/images/ext-link-white.svg")}
-                      width="14"
-                      height="14"
-                      alt="ext-link"
-                      className="inline md:ml-2 min-w-[8px] min-h-[8px] w-[8px] h-[8px] md:w-[14px] md:h-[14px]"
-                    />,
-                  ]}
-                />
-              );
-            },
-          )}
-        </tbody>
-      </table>
+      {/* Header */}
+      <div
+        className={twMerge(
+          "grid",
+          isSmall
+            ? "grid-cols-[6fr_2fr_2fr_1fr]"
+            : "grid-cols-[6fr_2fr_2fr_2fr_2fr_1fr]",
+        )}
+      >
+        <Header className="justify-start">Strategy</Header>
+        <Header className="justify-end" tooltip={`APY on ${to}`}>
+          APY
+        </Header>
+        <Header
+          className={twMerge("justify-end", isSmall ? "hidden" : "flex")}
+          tooltip={`${from} through ${to}`}
+        >
+          30-day trend
+        </Header>
+        <Header className="justify-end" tooltip={`Earnings on ${to}`}>
+          Earnings
+        </Header>
+        <Header
+          className={twMerge("justify-end", isSmall ? "hidden" : "flex")}
+          tooltip={`Allocation on ${to}`}
+        >
+          Allocation
+        </Header>
+        <Header className={isSmall ? "pr-2" : "pr-4"} />
+      </div>
+      {/* Content */}
+      {strategiesLatest.map(
+        ({ strategy, asset, balance, earningsChange, apy, timestamp }) => {
+          const strategyInfo = strategies.find(
+            (s) => s.address === strategy && s.asset === asset,
+          );
+          const strategyName = strategyInfo.name ?? shortenAddress(strategy);
+          const strategyPath = strategyInfo.path;
+          const day = timestamp.slice(0, 10);
+          return (
+            <Row
+              key={strategyPath}
+              href={`/proof-of-yield/${day}/${strategyPath}`}
+              isSmall={isSmall}
+              classNames={[
+                "",
+                "justify-end",
+                isSmall ? "hidden" : "flex",
+                isSmall ? "hidden" : "justify-end flex",
+                "justify-end",
+                "justify-end",
+              ]}
+              elements={[
+                <div className="truncate">{strategyName}</div>,
+                (apy * 100).toFixed(2) + "%",
+                <SparklineChart
+                  data={strategyHistory[`${strategy}+${asset}`].map(
+                    (d) => d.apy,
+                  )}
+                />,
+                Number(formatEther(BigInt(earningsChange))).toFixed(4),
+                `${dn.format(dn.mul(dn.div(balance, totalBalance, 18), 100), {
+                  digits: 1,
+                  trailingZeros: true,
+                })}%`,
+                <Image
+                  src={assetRootPath("/images/ext-link-white.svg")}
+                  width="14"
+                  height="14"
+                  alt="ext-link"
+                  className={twMerge(
+                    "inline min-w-[8px] min-h-[8px] ",
+                    isSmall ? "w-[8px] h-[8px]" : "ml-2 w-[14px] h-[14px]",
+                  )}
+                />,
+              ]}
+            />
+          );
+        },
+      )}
     </Container>
   );
 };
@@ -125,50 +133,49 @@ const Header = ({
   className?: string | undefined;
   tooltip?: string;
 }) => (
-  <th
-    className={
-      "text-xs md:text-sm text-origin-white/60 px-2 first:pl-3 last:pr-3 md:first:pl-8 md:last:pr-4 py-2"
-    }
+  <div
+    className={twMerge(
+      "flex items-center gap-1.5 text-xs md:text-sm text-origin-white/60 px-2 first:pl-3 last:pr-3 md:first:pl-8 md:last:pr-4 py-2",
+      className,
+    )}
   >
-    <div className={twMerge("flex items-center gap-2", className)}>
-      {children}
-      {tooltip && (
-        <Tooltip tooltipClassName="whitespace-nowrap" info={tooltip} />
-      )}
-    </div>
-  </th>
+    {children}
+    {tooltip && <Tooltip tooltipClassName="whitespace-nowrap" info={tooltip} />}
+  </div>
 );
 
 const Row = ({
   elements,
+  classNames,
   href,
+  isSmall,
 }: {
   elements: ReactNodeLike[];
+  classNames: string[];
   href: string;
+  isSmall: boolean;
 }) => (
-  <tr
-    className="hover:bg-white/5 cursor-pointer"
-    onClick={(e) => {
-      let target = e.shiftKey ? "_blank" : e.metaKey ? undefined : "_self";
-      window.open(href, target);
-      e.preventDefault();
-      return false;
-    }}
-    onMouseDown={(e) => {
-      if (e.button === 1) {
-        window.open(href);
-      }
-    }}
+  <a
+    className={twMerge(
+      "grid hover:bg-white/5 cursor-pointer",
+      isSmall
+        ? "grid-cols-[6fr_2fr_2fr_1fr]"
+        : "grid-cols-[6fr_2fr_2fr_2fr_2fr_1fr]",
+    )}
+    href={href}
   >
     {elements.map((element, i) => (
-      <td
+      <div
         key={i}
-        className="table-cell align-middle text-sm md:text-base text-origin-white px-2 first:pl-3 last:pr-3 md:first:pl-8 md:last:pr-4 py-2 h-12"
+        className={twMerge(
+          "flex items-center truncate text-sm md:text-base text-origin-white px-2 first:pl-3 last:pr-3 md:first:pl-8 md:last:pr-4 py-2 h-12",
+          classNames[i],
+        )}
       >
         {element}
-      </td>
+      </div>
     ))}
-  </tr>
+  </a>
 );
 
 const SparklineChart = ({ data }) => {

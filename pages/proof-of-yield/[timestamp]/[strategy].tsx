@@ -166,16 +166,20 @@ const YieldSourceStrategy = ({
                     />
                   </div>
                   <div className="flex flex-wrap justify-center font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {allocation === undefined
-                      ? "..."
-                      : Number(formatEther(BigInt(allocation))).toLocaleString(
-                          "en-US",
-                          {
-                            notation: "compact",
-                            minimumFractionDigits: 3,
-                            maximumFractionDigits: 3,
-                          },
-                        )}
+                    {allocation === undefined ? (
+                      <div className="flex items-center h-[48px]">
+                        <div className="horizontal-loader" />
+                      </div>
+                    ) : (
+                      Number(formatEther(BigInt(allocation))).toLocaleString(
+                        "en-US",
+                        {
+                          notation: "compact",
+                          minimumFractionDigits: 3,
+                          maximumFractionDigits: 3,
+                        },
+                      )
+                    )}
                     {allocation && (
                       <span className="font-normal ml-2 text-origin-white/70">
                         (
@@ -200,8 +204,15 @@ const YieldSourceStrategy = ({
                       tooltipClassName="whitespace-nowrap text-center"
                     />
                   </div>
+
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {apy === undefined ? "..." : `${(apy * 100).toFixed(1)}%`}
+                    {apy === undefined ? (
+                      <div className="flex items-center h-[48px]">
+                        <div className="horizontal-loader" />
+                      </div>
+                    ) : (
+                      `${(apy * 100).toFixed(1)}%`
+                    )}
                   </div>
                 </div>
                 <div className="flex flex-col items-center justify-center h-32">
@@ -214,16 +225,20 @@ const YieldSourceStrategy = ({
                     />
                   </div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {earnings === undefined
-                      ? "..."
-                      : Number(formatEther(BigInt(earnings))).toLocaleString(
-                          "en-US",
-                          {
-                            notation: "compact",
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2,
-                          },
-                        )}
+                    {earnings === undefined ? (
+                      <div className="flex items-center h-[48px]">
+                        <div className="horizontal-loader" />
+                      </div>
+                    ) : (
+                      Number(formatEther(BigInt(earnings))).toLocaleString(
+                        "en-US",
+                        {
+                          notation: "compact",
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        },
+                      )
+                    )}
                   </div>
                 </div>
               </ContainerBody>

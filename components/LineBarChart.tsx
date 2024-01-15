@@ -147,7 +147,14 @@ const LineBarChart: React.FC<LineBarChartProps> = (props) => {
     ],
   };
 
-  return <Chart type="bar" options={options} data={chartData} />;
+  return (
+    <Chart
+      type="bar"
+      options={options}
+      data={chartData}
+      style={{ maxWidth: "100%" }} // Fixes rendering on grids after transitions.
+    />
+  );
 };
 
 export default LineBarChart;

@@ -420,7 +420,7 @@ const YieldSourceStrategy = ({
               </ContainerBody>
             </Container>
             <Container>
-              <ContainerHeader className="font-normal">
+              <ContainerHeader className="font-normal text-lg sm:text-xl">
                 How yield is generated
               </ContainerHeader>
               <ContainerBody className="text-origin-white/70">

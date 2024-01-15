@@ -17,7 +17,7 @@ export const ExternalLinkButton = ({
     <a
       href={href}
       className={twMerge(
-        "border border-origin-blue px-4 py-1.5 rounded-full text-sm",
+        "border border-origin-blue px-4 py-1.5 rounded-full text-sm whitespace-nowrap",
         className,
       )}
       target={"_blank"}

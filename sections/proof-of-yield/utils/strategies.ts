@@ -40,8 +40,8 @@ export const strategies: StrategyInfo[] = [
     name: "Convex ETH+OETH Curve pool",
     yieldDescription: protocolMapping.Convex.description,
     asset: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-    assetName: "Curve Pool",
-    assetSymbol: "ETH+OETH",
+    assetName: "Ether",
+    assetSymbol: "ETH",
     assetHref:
       "https://etherscan.io/address/0x94b17476a93b3262d87b9a326965d1e91f9c13e7",
   },
@@ -54,7 +54,7 @@ export const strategies: StrategyInfo[] = [
     name: "Aura WETH+rETH Balancer pool",
     yieldDescription: protocolMapping.Aura.description,
     asset: "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-    assetName: "Balancer Pool",
+    assetName: "Rocket Pool ETH",
     assetSymbol: "WETH+rETH",
     assetHref:
       "https://etherscan.io/address/0x1e19cf2d73a72ef1332c882f20534b6519be0276",

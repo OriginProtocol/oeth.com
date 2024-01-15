@@ -11,7 +11,7 @@ import { Header, Footer } from "../../components";
 import Error from "../404";
 import { fetchDailyYields } from "../../queries/fetchDailyYields";
 
-const overrideCss = "px-8 md:px-10 lg:px-10 xl:px-16";
+const overrideCss = "px-8 md:px-10 lg:px-10 xl:px-[8.375rem]";
 
 const YieldOnDay = ({
   navLinks,

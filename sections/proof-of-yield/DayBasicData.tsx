@@ -114,7 +114,7 @@ const DayBasicData = ({
             </BasicData>
             <BasicData
               className="flex-1 rounded-tr-lg xl:rounded-none justify-center lg:justify-start"
-              title="OETH vault value"
+              title="Vault value"
               info={`The sum of all assets currently held by OETH`}
             >
               {" "}

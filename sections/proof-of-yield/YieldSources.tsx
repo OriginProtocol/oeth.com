@@ -13,6 +13,7 @@ import { strategies } from "./utils/strategies";
 import { DailyYield } from "../../queries/fetchDailyYields";
 import Tooltip from "../../components/proof-of-yield/Tooltip";
 import { useElementSize } from "usehooks-ts";
+import { Typography } from "@originprotocol/origin-storybook";
 
 const YieldSources = ({
   strategiesLatest,
@@ -34,91 +35,91 @@ const YieldSources = ({
     .slice(0, 10);
 
   return (
-    <Container ref={ref}>
-      <ContainerHeader className="flex justify-between items-start">
-        <span>Yield Sources</span>
-      </ContainerHeader>
-      {/* Header */}
-      <div
-        className={twMerge(
-          "grid",
-          isSmall
-            ? "grid-cols-[6fr_2fr_2fr_1fr]"
-            : "grid-cols-[6fr_2fr_2fr_2fr_2fr_1fr]",
+    <>
+      <Typography.Body className="text-xl mt-14">Yield Sources</Typography.Body>
+      <Container className="mt-3" ref={ref}>
+        {/* Header */}
+        <div
+          className={twMerge(
+            "grid pt-3",
+            isSmall
+              ? "grid-cols-[6fr_2fr_2fr_1fr]"
+              : "grid-cols-[6fr_2fr_minmax(120px,_2fr)_2fr_2fr_1fr]",
+          )}
+        >
+          <Header className="justify-start">Strategy</Header>
+          <Header className="justify-end" tooltip={`APY on ${to}`}>
+            APY
+          </Header>
+          <Header
+            className={twMerge("justify-end", isSmall ? "hidden" : "flex")}
+            tooltip={`${from} through ${to}`}
+          >
+            30d trend
+          </Header>
+          <Header className="justify-end" tooltip={`Earnings on ${to}`}>
+            Earnings
+          </Header>
+          <Header
+            className={twMerge("justify-end", isSmall ? "hidden" : "flex")}
+            tooltip={`Allocation on ${to}`}
+          >
+            Allocation
+          </Header>
+          <Header className={isSmall ? "pr-2" : "pr-4"} />
+        </div>
+        {/* Content */}
+        {strategiesLatest.map(
+          ({ strategy, asset, balance, earningsChange, apy, timestamp }) => {
+            const strategyInfo = strategies.find(
+              (s) => s.address === strategy && s.asset === asset,
+            );
+            const strategyName = strategyInfo.name ?? shortenAddress(strategy);
+            const strategyPath = strategyInfo.path;
+            const day = timestamp.slice(0, 10);
+            return (
+              <Row
+                key={strategyPath}
+                href={`/proof-of-yield/${day}/${strategyPath}`}
+                isSmall={isSmall}
+                classNames={[
+                  "",
+                  "justify-end",
+                  isSmall ? "hidden" : "flex",
+                  isSmall ? "hidden" : "justify-end flex",
+                  "justify-end",
+                  "justify-end",
+                ]}
+                elements={[
+                  <div className="truncate">{strategyName}</div>,
+                  (apy * 100).toFixed(2) + "%",
+                  <SparklineChart
+                    data={strategyHistory[`${strategy}+${asset}`].map(
+                      (d) => d.apy,
+                    )}
+                  />,
+                  Number(formatEther(BigInt(earningsChange))).toFixed(4),
+                  `${dn.format(dn.mul(dn.div(balance, totalBalance, 18), 100), {
+                    digits: 1,
+                    trailingZeros: true,
+                  })}%`,
+                  <Image
+                    src={assetRootPath("/images/ext-link-white.svg")}
+                    width="14"
+                    height="14"
+                    alt="ext-link"
+                    className={twMerge(
+                      "inline min-w-[8px] min-h-[8px] ",
+                      isSmall ? "w-[8px] h-[8px]" : "ml-2 w-[14px] h-[14px]",
+                    )}
+                  />,
+                ]}
+              />
+            );
+          },
         )}
-      >
-        <Header className="justify-start">Strategy</Header>
-        <Header className="justify-end" tooltip={`APY on ${to}`}>
-          APY
-        </Header>
-        <Header
-          className={twMerge("justify-end", isSmall ? "hidden" : "flex")}
-          tooltip={`${from} through ${to}`}
-        >
-          30-day trend
-        </Header>
-        <Header className="justify-end" tooltip={`Earnings on ${to}`}>
-          Earnings
-        </Header>
-        <Header
-          className={twMerge("justify-end", isSmall ? "hidden" : "flex")}
-          tooltip={`Allocation on ${to}`}
-        >
-          Allocation
-        </Header>
-        <Header className={isSmall ? "pr-2" : "pr-4"} />
-      </div>
-      {/* Content */}
-      {strategiesLatest.map(
-        ({ strategy, asset, balance, earningsChange, apy, timestamp }) => {
-          const strategyInfo = strategies.find(
-            (s) => s.address === strategy && s.asset === asset,
-          );
-          const strategyName = strategyInfo.name ?? shortenAddress(strategy);
-          const strategyPath = strategyInfo.path;
-          const day = timestamp.slice(0, 10);
-          return (
-            <Row
-              key={strategyPath}
-              href={`/proof-of-yield/${day}/${strategyPath}`}
-              isSmall={isSmall}
-              classNames={[
-                "",
-                "justify-end",
-                isSmall ? "hidden" : "flex",
-                isSmall ? "hidden" : "justify-end flex",
-                "justify-end",
-                "justify-end",
-              ]}
-              elements={[
-                <div className="truncate">{strategyName}</div>,
-                (apy * 100).toFixed(2) + "%",
-                <SparklineChart
-                  data={strategyHistory[`${strategy}+${asset}`].map(
-                    (d) => d.apy,
-                  )}
-                />,
-                Number(formatEther(BigInt(earningsChange))).toFixed(4),
-                `${dn.format(dn.mul(dn.div(balance, totalBalance, 18), 100), {
-                  digits: 1,
-                  trailingZeros: true,
-                })}%`,
-                <Image
-                  src={assetRootPath("/images/ext-link-white.svg")}
-                  width="14"
-                  height="14"
-                  alt="ext-link"
-                  className={twMerge(
-                    "inline min-w-[8px] min-h-[8px] ",
-                    isSmall ? "w-[8px] h-[8px]" : "ml-2 w-[14px] h-[14px]",
-                  )}
-                />,
-              ]}
-            />
-          );
-        },
-      )}
-    </Container>
+      </Container>
+    </>
   );
 };
 
@@ -160,7 +161,7 @@ const Row = ({
       "grid hover:bg-white/5 cursor-pointer",
       isSmall
         ? "grid-cols-[6fr_2fr_2fr_1fr]"
-        : "grid-cols-[6fr_2fr_2fr_2fr_2fr_1fr]",
+        : "grid-cols-[6fr_2fr_minmax(120px,_2fr)_2fr_2fr_1fr]",
     )}
     href={href}
   >

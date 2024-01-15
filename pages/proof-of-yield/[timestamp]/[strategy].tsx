@@ -31,6 +31,8 @@ import { TimeUnit } from "chart.js";
 import Tooltip from "../../../components/proof-of-yield/Tooltip";
 import * as dn from "dnum";
 
+const overrideCss = "px-8 md:px-10 lg:px-10 xl:px-[8.375rem]";
+
 const sma = (days: number) => {
   const periods = [];
   return (val: number) => {
@@ -38,6 +40,22 @@ const sma = (days: number) => {
     if (periods.length > days) periods.shift();
     return periods.reduce((sum, val) => sum + val, 0) / periods.length;
   };
+};
+
+const formatN = (val: number) => {
+  return val >= 10000
+    ? val.toLocaleString("en-US", {
+        notation: "compact",
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      })
+    : val >= 1000
+    ? val.toLocaleString("en-US", {
+        maximumFractionDigits: 0,
+      })
+    : val.toLocaleString("en-US", {
+        maximumFractionDigits: 1,
+      });
 };
 
 const YieldSourceStrategy = ({
@@ -107,8 +125,10 @@ const YieldSourceStrategy = ({
   const previousDailyYieldDay = previousDailyYield?.timestamp.slice(0, 10);
 
   const allocation = latestDailyYield?.balance;
+  const allocationN = allocation && Number(formatEther(BigInt(allocation)));
   const apy = previousDailyYield?.apy;
   const earnings = latestDailyYield?.earnings;
+  const earningsN = earnings && Number(formatEther(BigInt(earnings)));
 
   return (
     <>
@@ -118,7 +138,7 @@ const YieldSourceStrategy = ({
 
       <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
 
-      <div className="mx-4 md:mx-12 lg:mx-24">
+      <Section className={twMerge("mb-10 md:mb-20", overrideCss)}>
         <div className="xl:grid xl:grid-cols-[2fr_1fr] gap-4 md:gap-8">
           <div className="flex flex-col gap-4 md:gap-8">
             <Container className="px-4 h-16 flex flex-row items-center">
@@ -156,29 +176,23 @@ const YieldSourceStrategy = ({
                 padding={false}
                 className="grid grid-cols-3 divide-x-2 divide-black border-t-2 border-t-black"
               >
-                <div className="flex flex-col items-center justify-center h-32">
-                  <div className="flex items-center text-sm leading-8">
-                    Allocation
+                <div className="flex flex-col items-center justify-center h-40 px-2">
+                  <div className="flex justify-center items-center text-center text-sm leading-8">
+                    Current Allocation
                     <Tooltip
                       info={`Allocation on ${latestDailyYieldDay}`}
+                      wrapClassName="hidden sm:flex"
                       className="mx-2"
                       tooltipClassName="whitespace-nowrap text-center"
                     />
                   </div>
                   <div className="flex flex-wrap justify-center font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {allocation === undefined ? (
+                    {allocationN === undefined ? (
                       <div className="flex items-center h-[48px]">
                         <div className="horizontal-loader" />
                       </div>
                     ) : (
-                      Number(formatEther(BigInt(allocation))).toLocaleString(
-                        "en-US",
-                        {
-                          notation: "compact",
-                          minimumFractionDigits: 3,
-                          maximumFractionDigits: 3,
-                        },
-                      )
+                      formatN(allocationN)
                     )}
                     {allocation && (
                       <span className="font-normal ml-2 text-origin-white/70">
@@ -195,11 +209,12 @@ const YieldSourceStrategy = ({
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col items-center justify-center h-32">
-                  <div className="flex items-center text-sm leading-8">
-                    APY
+                <div className="flex flex-col items-center justify-center h-40 px-2">
+                  <div className="flex justify-center items-center text-center text-sm leading-8">
+                    Yesterday's APY
                     <Tooltip
                       info={`APY on ${previousDailyYieldDay}`}
+                      wrapClassName="hidden sm:flex"
                       className="mx-2"
                       tooltipClassName="whitespace-nowrap text-center"
                     />
@@ -215,29 +230,23 @@ const YieldSourceStrategy = ({
                     )}
                   </div>
                 </div>
-                <div className="flex flex-col items-center justify-center h-32">
+                <div className="flex flex-col items-center justify-center h-40 px-2">
                   <div className="flex justify-center items-center text-center text-sm leading-8">
                     Lifetime earnings
                     <Tooltip
                       info={`Lifetime earnings as of ${latestDailyYieldDay}`}
+                      wrapClassName="hidden sm:flex"
                       className="mx-2"
                       tooltipClassName="whitespace-nowrap text-center"
                     />
                   </div>
                   <div className="font-bold text-lg md:text-2xl leading-[32px] md:leading-[48px]">
-                    {earnings === undefined ? (
+                    {earningsN === undefined ? (
                       <div className="flex items-center h-[48px]">
                         <div className="horizontal-loader" />
                       </div>
                     ) : (
-                      Number(formatEther(BigInt(earnings))).toLocaleString(
-                        "en-US",
-                        {
-                          notation: "compact",
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        },
-                      )
+                      formatN(earningsN)
                     )}
                   </div>
                 </div>
@@ -432,7 +441,7 @@ const YieldSourceStrategy = ({
             <StrategyInfo strategy={strategy} />
           </div>
         </div>
-      </div>
+      </Section>
 
       <Footer />
     </>

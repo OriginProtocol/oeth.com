@@ -15,6 +15,7 @@ import Tooltip from "../../components/proof-of-yield/Tooltip";
 import { useElementSize } from "usehooks-ts";
 import { Typography } from "@originprotocol/origin-storybook";
 import { ExternalLinkButton } from "../../components/ExternalLinkButton";
+import moment from "moment";
 
 const YieldSources = ({
   strategiesLatest,
@@ -30,10 +31,10 @@ const YieldSources = ({
     BigInt(0),
   );
   const dateSpanSource = Object.values(strategyHistory)[0];
-  const from = new Date(dateSpanSource[0].timestamp).toISOString().slice(0, 10);
-  const to = new Date(dateSpanSource[dateSpanSource.length - 1].timestamp)
-    .toISOString()
-    .slice(0, 10);
+  const from = moment(dateSpanSource[0].timestamp).format("MMM D, YYYY");
+  const to = moment(dateSpanSource[dateSpanSource.length - 1].timestamp).format(
+    "MMM D, YYYY",
+  );
 
   return (
     <>
@@ -186,7 +187,12 @@ const Header = ({
     )}
   >
     {children}
-    {tooltip && <Tooltip tooltipClassName="whitespace-nowrap" info={tooltip} />}
+    {tooltip && (
+      <Tooltip
+        tooltipClassName="whitespace-nowrap text-center"
+        info={tooltip}
+      />
+    )}
   </div>
 );
 

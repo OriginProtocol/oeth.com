@@ -119,10 +119,14 @@ const YieldSourceStrategy = ({
   }, [historyBase]);
 
   const latestDailyYield = history?.[history.length - 1];
-  const latestDailyYieldDay = latestDailyYield?.timestamp.slice(0, 10);
+  const latestDailyYieldDay =
+    latestDailyYield &&
+    moment(latestDailyYield?.timestamp).format("MMM D, YYYY");
 
   const previousDailyYield = history?.[history.length - 2];
-  const previousDailyYieldDay = previousDailyYield?.timestamp.slice(0, 10);
+  const previousDailyYieldDay =
+    previousDailyYield &&
+    moment(previousDailyYield?.timestamp).format("MMM D, YYYY");
 
   const allocation = latestDailyYield?.balance;
   const allocationN = allocation && Number(formatEther(BigInt(allocation)));

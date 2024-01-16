@@ -71,7 +71,7 @@ const DayBasicData = ({
       </button>
 
       {/* Date PT */}
-      <div className="flex mt-6 md:mt-20">
+      <div className="flex mt-6 md:mt-11">
         <Typography.Body className="">
           {timestamp.format("MMM D, YYYY")} PT
         </Typography.Body>

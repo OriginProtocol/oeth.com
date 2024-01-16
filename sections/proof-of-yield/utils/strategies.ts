@@ -13,6 +13,7 @@ export interface StrategyInfo {
   assetName: string;
   assetSymbol: string;
   assetHref: string; // Link to asset contract
+  icons: string[];
 }
 
 // Field `asset` only relevant for Vault strategies.
@@ -30,6 +31,7 @@ export const strategies: StrategyInfo[] = [
     assetSymbol: "frxETH",
     assetHref:
       "https://etherscan.io/token/0x5e8422345238f34275888049021821e8e08caa1f",
+    icons: ["/images/sfrax-icon.svg"],
   },
   {
     key: "0x1827f9ea98e0bf96550b2fc20f7233277fcd7e63+0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
@@ -44,6 +46,7 @@ export const strategies: StrategyInfo[] = [
     assetSymbol: "ETH",
     assetHref:
       "https://etherscan.io/address/0x94b17476a93b3262d87b9a326965d1e91f9c13e7",
+    icons: ["/images/eth-icon.svg", "/images/oeth-icon.svg"],
   },
   {
     key: "0x49109629ac1deb03f2e9b2fe2ac4a623e0e7dfdc+0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
@@ -58,6 +61,7 @@ export const strategies: StrategyInfo[] = [
     assetSymbol: "WETH+rETH",
     assetHref:
       "https://etherscan.io/address/0x1e19cf2d73a72ef1332c882f20534b6519be0276",
+    icons: ["/images/weth-icon.svg", "/images/reth-icon.png"],
   },
   {
     key: "0x39254033945aa2e4809cc2977e7087bee48bd7ab+0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
@@ -72,6 +76,7 @@ export const strategies: StrategyInfo[] = [
     assetSymbol: "stETH",
     assetHref:
       "https://etherscan.io/token/0xae7ab96520de3a18e5e111b5eaab095312d7fe84",
+    icons: ["/images/lido-icon.svg"],
   },
   {
     key: "0x39254033945aa2e4809cc2977e7087bee48bd7ab+0xae78736cd615f374d3085123a210448e74fc6393",
@@ -86,6 +91,7 @@ export const strategies: StrategyInfo[] = [
     assetSymbol: "rETH",
     assetHref:
       "https://etherscan.io/token/0xae78736cd615f374d3085123a210448e74fc6393",
+    icons: ["/images/reth-icon.svg"],
   },
   {
     key: "0xc1fc9e5ec3058921ea5025d703cbe31764756319+0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
@@ -100,6 +106,7 @@ export const strategies: StrategyInfo[] = [
     assetSymbol: "WETH",
     assetHref:
       "https://etherscan.io/token/0x030bA81f1c18d280636F32af80b9AAd02Cf0854e",
+    icons: ["/images/weth-icon.svg"],
   },
 ];
 

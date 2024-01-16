@@ -64,7 +64,7 @@ export const fetchDailyYields = async (
   }
   return {
     latest: Array.from(strategies.values()).sort((a, b) =>
-      a.apy > b.apy ? -1 : 1,
+      BigInt(a.balance) > BigInt(b.balance) ? -1 : 1,
     ),
     history,
   };

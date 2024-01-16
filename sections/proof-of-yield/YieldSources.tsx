@@ -14,6 +14,7 @@ import { DailyYield } from "../../queries/fetchDailyYields";
 import Tooltip from "../../components/proof-of-yield/Tooltip";
 import { useElementSize } from "usehooks-ts";
 import { Typography } from "@originprotocol/origin-storybook";
+import { ExternalLinkButton } from "../../components/ExternalLinkButton";
 
 const YieldSources = ({
   strategiesLatest,
@@ -23,7 +24,7 @@ const YieldSources = ({
   strategyHistory: Record<string, DailyYield[]>;
 }) => {
   const [ref, { width }] = useElementSize<HTMLDivElement>();
-  const isSmall = width < 700;
+  const isSmall = width < 600;
   const totalBalance = strategiesLatest.reduce(
     (sum, next) => sum + BigInt(next.balance),
     BigInt(0),
@@ -37,18 +38,22 @@ const YieldSources = ({
   return (
     <>
       <Typography.Body className="text-xl mt-14">Yield Sources</Typography.Body>
+      <Typography.Body3 className="mt-4 mb-6 text-xs text-table-title">
+        Yield is measured from a variety of sources prior to entering the
+        Dripper. These earnings will be distributed steadily in the future.
+      </Typography.Body3>
       <Container className="mt-3" ref={ref}>
         {/* Header */}
         <div
           className={twMerge(
-            "grid pt-3",
+            "grid py-4 border-b border-black",
             isSmall
-              ? "grid-cols-[6fr_2fr_2fr_1fr]"
-              : "grid-cols-[6fr_2fr_minmax(120px,_2fr)_2fr_2fr_1fr]",
+              ? "grid-cols-[6fr_2fr_2fr_28px]"
+              : "grid-cols-[6fr_2fr_minmax(120px,_2fr)_2fr_2fr_78px]",
           )}
         >
           <Header className="justify-start">Strategy</Header>
-          <Header className="justify-end" tooltip={`APY on ${to}`}>
+          <Header className="justify-end" tooltip={!isSmall && `APY on ${to}`}>
             APY
           </Header>
           <Header
@@ -57,7 +62,10 @@ const YieldSources = ({
           >
             30d trend
           </Header>
-          <Header className="justify-end" tooltip={`Earnings on ${to}`}>
+          <Header
+            className="justify-end"
+            tooltip={!isSmall && `Earnings on ${to}`}
+          >
             Earnings
           </Header>
           <Header
@@ -91,7 +99,29 @@ const YieldSources = ({
                   "justify-end",
                 ]}
                 elements={[
-                  <div className="truncate">{strategyName}</div>,
+                  <>
+                    {strategyInfo.icons.map((icon, i) => (
+                      <img
+                        src={icon}
+                        alt={`icon-${i}`}
+                        width={32}
+                        height={32}
+                        className={twMerge(
+                          isSmall ? "hidden" : "",
+                          i > 0 ? "-ml-4" : "",
+                          "min-w-[32px] min-h-[32px]",
+                        )}
+                      />
+                    ))}
+                    <div
+                      className={twMerge("truncate", !isSmall ? "ml-4" : "")}
+                    >
+                      <div className="truncate">{strategyName}</div>
+                      <div className="text-sm text-origin-white/50">
+                        {strategyInfo.protocol}
+                      </div>
+                    </div>
+                  </>,
                   (apy * 100).toFixed(2) + "%",
                   <SparklineChart
                     data={strategyHistory[`${strategy}+${asset}`].map(
@@ -103,16 +133,31 @@ const YieldSources = ({
                     digits: 1,
                     trailingZeros: true,
                   })}%`,
-                  <Image
-                    src={assetRootPath("/images/ext-link-white.svg")}
-                    width="14"
-                    height="14"
-                    alt="ext-link"
-                    className={twMerge(
-                      "inline min-w-[8px] min-h-[8px] ",
-                      isSmall ? "w-[8px] h-[8px]" : "ml-2 w-[14px] h-[14px]",
-                    )}
-                  />,
+                  isSmall ? (
+                    <Image
+                      src={assetRootPath("/images/ext-link-white.svg")}
+                      width="14"
+                      height="14"
+                      alt="ext-link"
+                      className={twMerge(
+                        "inline min-w-[8px] min-h-[8px] ",
+                        "w-[8px] h-[8px]",
+                      )}
+                    />
+                  ) : (
+                    <ExternalLinkButton
+                      className="h-8 w-full flex items-center justify-center"
+                      href={`/proof-of-yield/${day}/${strategyPath}`}
+                      icon={false}
+                    >
+                      <Image
+                        src={assetRootPath("/images/arrow-right.svg")}
+                        width="7"
+                        height="10"
+                        alt="arrow-right"
+                      />
+                    </ExternalLinkButton>
+                  ),
                 ]}
               />
             );
@@ -136,7 +181,7 @@ const Header = ({
 }) => (
   <div
     className={twMerge(
-      "flex items-center gap-1.5 text-xs md:text-sm text-origin-white/60 px-2 first:pl-3 last:pr-3 md:first:pl-8 md:last:pr-4 py-2",
+      "flex items-center gap-1.5 text-xs md:text-sm text-origin-white/60 px-2 first:pl-3 last:px-3 md:first:pl-6 md:last:px-4 py-2",
       className,
     )}
   >
@@ -158,10 +203,10 @@ const Row = ({
 }) => (
   <a
     className={twMerge(
-      "grid hover:bg-white/5 cursor-pointer",
+      "py-4 grid border-b border-black hover:bg-white/5 cursor-pointer",
       isSmall
-        ? "grid-cols-[6fr_2fr_2fr_1fr]"
-        : "grid-cols-[6fr_2fr_minmax(120px,_2fr)_2fr_2fr_1fr]",
+        ? "grid-cols-[6fr_2fr_2fr_28px]"
+        : "grid-cols-[6fr_2fr_minmax(120px,_2fr)_2fr_2fr_78px]",
     )}
     href={href}
   >
@@ -169,7 +214,7 @@ const Row = ({
       <div
         key={i}
         className={twMerge(
-          "flex items-center truncate text-sm md:text-base text-origin-white px-2 first:pl-3 last:pr-3 md:first:pl-8 md:last:pr-4 py-2 h-12",
+          "flex items-center truncate text-sm md:text-base text-origin-white px-2 first:pl-3 last:pr-3 md:first:pl-6 md:last:px-4 py-2 h-12",
           classNames[i],
         )}
       >

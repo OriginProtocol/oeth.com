@@ -248,9 +248,9 @@ const DayBasicData = ({
             </Table>
           </div>
 
-          <div className="mt-8">
-            <DripperInfo />
-          </div>
+          <div className="mt-24 mb-16 h-px bg-origin-white/10" />
+
+          <DripperInfo />
 
           <div className="mt-8">
             <YieldSources

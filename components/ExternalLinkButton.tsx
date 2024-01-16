@@ -8,10 +8,12 @@ export const ExternalLinkButton = ({
   href,
   children,
   className,
+  icon,
 }: {
   href: string;
   children: ReactNodeLike;
   className?: string | undefined;
+  icon?: boolean;
 }) => {
   return (
     <a
@@ -24,13 +26,15 @@ export const ExternalLinkButton = ({
       rel="noopener noreferrer"
     >
       {children}
-      <Image
-        src={assetRootPath("/images/ext-link-white.svg")}
-        width="14"
-        height="14"
-        alt="ext-link"
-        className="inline ml-2 mb-0.5 w-2 h-2"
-      />
+      {icon !== false && (
+        <Image
+          src={assetRootPath("/images/ext-link-white.svg")}
+          width="14"
+          height="14"
+          alt="ext-link"
+          className="inline ml-2 mb-0.5 w-2 h-2"
+        />
+      )}
     </a>
   );
 };

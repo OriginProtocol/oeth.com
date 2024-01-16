@@ -15,9 +15,7 @@ export const ContainerHeader = ({
     <div
       className={twMerge(
         "px-4 md:px-6 py-3 md:py-6",
-        small
-          ? "text-origin-white/60 text-base"
-          : "font-bold text-origin-white text-2xl",
+        small ? "text-origin-white/60 text-base" : "text-xl text-origin-white",
         className,
       )}
     >

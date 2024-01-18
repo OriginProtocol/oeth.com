@@ -222,7 +222,7 @@ const Ogv = ({ stats }: OgvProps) => {
                   elementId="btn-ogv-earn"
                   onClick={() =>
                     window.open(
-                      "https://governance.ousd.com/stake",
+                      "https://governance.ousd.com/#/staking",
                       "_blank",
                       "noopener,noreferrer"
                     )

@@ -49,7 +49,7 @@ const YieldSources = ({
           className={twMerge(
             "grid py-4 border-b border-black",
             isSmall
-              ? "grid-cols-[6fr_2fr_2fr_28px]"
+              ? "grid-cols-[6fr_2fr_2fr_50px]"
               : "grid-cols-[6fr_2fr_minmax(120px,_2fr)_2fr_2fr_78px]",
           )}
         >
@@ -95,8 +95,8 @@ const YieldSources = ({
                   "",
                   "justify-end",
                   isSmall ? "hidden" : "flex",
-                  isSmall ? "hidden" : "justify-end flex",
                   "justify-end",
+                  isSmall ? "hidden" : "justify-end flex",
                   "justify-end",
                 ]}
                 elements={[
@@ -123,42 +123,32 @@ const YieldSources = ({
                       </div>
                     </div>
                   </>,
-                  (apy * 100).toFixed(2) + "%",
+                  (apy * 100).toFixed(isSmall ? 1 : 2) + "%",
                   <SparklineChart
                     data={strategyHistory[`${strategy}+${asset}`].map(
                       (d) => d.apy,
                     )}
                   />,
-                  Number(formatEther(BigInt(earningsChange))).toFixed(4),
+                  Number(formatEther(BigInt(earningsChange))).toFixed(
+                    isSmall ? 2 : 4,
+                  ),
                   `${dn.format(dn.mul(dn.div(balance, totalBalance, 18), 100), {
                     digits: 1,
                     trailingZeros: true,
                   })}%`,
-                  isSmall ? (
+                  <ExternalLinkButton
+                    className="h-8 w-full flex items-center justify-center px-2 px-4 border-gray-600"
+                    href={`/proof-of-yield/${day}/${strategyPath}`}
+                    icon={false}
+                  >
                     <Image
-                      src={assetRootPath("/images/ext-link-white.svg")}
-                      width="14"
-                      height="14"
-                      alt="ext-link"
-                      className={twMerge(
-                        "inline min-w-[8px] min-h-[8px] ",
-                        "w-[8px] h-[8px]",
-                      )}
+                      src={assetRootPath("/images/arrow-right.svg")}
+                      width={isSmall ? "5" : "7"}
+                      height={isSmall ? "6" : "10"}
+                      alt="arrow-right"
+                      className="absolute"
                     />
-                  ) : (
-                    <ExternalLinkButton
-                      className="h-8 w-full flex items-center justify-center"
-                      href={`/proof-of-yield/${day}/${strategyPath}`}
-                      icon={false}
-                    >
-                      <Image
-                        src={assetRootPath("/images/arrow-right.svg")}
-                        width="7"
-                        height="10"
-                        alt="arrow-right"
-                      />
-                    </ExternalLinkButton>
-                  ),
+                  </ExternalLinkButton>,
                 ]}
               />
             );
@@ -211,7 +201,7 @@ const Row = ({
     className={twMerge(
       "py-4 grid border-b border-black hover:bg-white/5 cursor-pointer",
       isSmall
-        ? "grid-cols-[6fr_2fr_2fr_28px]"
+        ? "grid-cols-[6fr_2fr_2fr_50px]"
         : "grid-cols-[6fr_2fr_minmax(120px,_2fr)_2fr_2fr_78px]",
     )}
     href={href}

@@ -12,6 +12,7 @@ import {
   YieldBoostMultiplier,
   Section,
   Tooltip,
+  Link,
 } from "../../components";
 import { Typography } from "@originprotocol/origin-storybook";
 import { smSize, lgSize, xlSize } from "../../constants";
@@ -52,6 +53,54 @@ const DayBasicData = ({
     nonRebasingSupply: parseFloat(dailyStat?.non_rebasing_supply) || 0.0,
   };
 
+  const previousDay = moment(timestamp).subtract(1, "day").format("YYYY-MM-DD");
+  const nextDay = moment(timestamp).add(1, "day").format("YYYY-MM-DD");
+  const utcDayNow = moment.utc().format("YYYY-MM-DD");
+  const datePicker = (
+    <div className="flex gap-4 items-center mt-6 md:mt-11">
+      <Link
+        className="flex items-center justify-center w-8 h-8 rounded-md bg-origin-bg-grey"
+        href={`/proof-of-yield/${previousDay}`}
+      >
+        <Image
+          src={assetRootPath("/images/pointer-left.svg")}
+          width="15"
+          height="15"
+          alt="pointer-left"
+          className="absolute"
+        />
+      </Link>
+
+      {/* Date PT */}
+      <div className="flex">
+        <Typography.Body>{timestamp.format("MMM D, YYYY")} UTC</Typography.Body>
+        <Tooltip
+          info={
+            "Yield is distributed at least once per day using Chainlink Automation. It is scheduled to run at approximately midnight Pacific Time, which serves as the beginning of each calendar day."
+          }
+          whiteTooltip
+          className="ml-2 md:min-w-[12px] md:min-h-[12px] md:max-w-[12px] md:max-h-[12px]"
+          tooltipClassName="min-w-[180px]"
+        />
+      </div>
+
+      {moment(nextDay).isSameOrBefore(utcDayNow) && (
+        <Link
+          className="flex items-center justify-center w-8 h-8 rounded-md bg-origin-bg-grey"
+          href={`/proof-of-yield/${nextDay}`}
+        >
+          <Image
+            src={assetRootPath("/images/pointer-right.svg")}
+            width="15"
+            height="15"
+            alt="pointer-right"
+            className="absolute"
+          />
+        </Link>
+      )}
+    </div>
+  );
+
   return (
     <Section className={twMerge("mb-10 md:mb-20", sectionOverrideCss)}>
       <button
@@ -70,20 +119,7 @@ const DayBasicData = ({
         Back to list
       </button>
 
-      {/* Date PT */}
-      <div className="flex mt-6 md:mt-11">
-        <Typography.Body className="">
-          {timestamp.format("MMM D, YYYY")} PT
-        </Typography.Body>
-        <Tooltip
-          info={
-            "Yield is distributed at least once per day using Chainlink Automation. It is scheduled to run at approximately midnight Pacific Time, which serves as the beginning of each calendar day."
-          }
-          whiteTooltip
-          className="ml-2 md:min-w-[12px] md:min-h-[12px] md:max-w-[12px] md:max-h-[12px]"
-          tooltipClassName="min-w-[180px]"
-        />
-      </div>
+      {datePicker}
 
       <TitleWithInfo
         info="The actual amount of OETH added to users' wallet balances"
@@ -263,6 +299,7 @@ const DayBasicData = ({
 
         {width >= lgSize && <YieldBoostMultiplier {...yieldBonusProps} />}
       </div>
+      {datePicker}
     </Section>
   );
 };

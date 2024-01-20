@@ -30,6 +30,7 @@ import { twMerge } from "tailwind-merge";
 import { TimeUnit } from "chart.js";
 import Tooltip from "../../../components/proof-of-yield/Tooltip";
 import * as dn from "dnum";
+import { useElementSize } from "usehooks-ts";
 
 const overrideCss = "px-8 md:px-10 lg:px-10 xl:px-[8.375rem]";
 
@@ -42,19 +43,21 @@ const sma = (days: number) => {
   };
 };
 
-const formatN = (val: number) => {
+const formatN = (val: number, maxFractionDigits: number = 4) => {
   return val >= 10000
     ? val.toLocaleString("en-US", {
         notation: "compact",
-        minimumFractionDigits: 1,
-        maximumFractionDigits: 1,
+        minimumFractionDigits: Math.min(1, maxFractionDigits),
+        maximumFractionDigits: Math.min(1, maxFractionDigits),
       })
     : val >= 1000
     ? val.toLocaleString("en-US", {
-        maximumFractionDigits: 0,
+        minimumFractionDigits: Math.min(2, maxFractionDigits),
+        maximumFractionDigits: Math.min(2, maxFractionDigits),
       })
     : val.toLocaleString("en-US", {
-        maximumFractionDigits: 1,
+        minimumFractionDigits: maxFractionDigits,
+        maximumFractionDigits: maxFractionDigits,
       });
 };
 
@@ -68,6 +71,9 @@ const YieldSourceStrategy = ({
   const router = useRouter();
   const { timestamp } = router.query;
   let timestampMoment: Moment;
+
+  const [ref, { width }] = useElementSize<HTMLDivElement>();
+  const isSmall = width < 600;
 
   const strategy = strategies.find((s) => s.path === strategyPath);
   const [{ days, smoothingDays }, setState] = useState({
@@ -142,7 +148,7 @@ const YieldSourceStrategy = ({
 
       <Header mappedLinks={navLinks} background="bg-origin-bg-black" />
 
-      <Section className={twMerge("mb-10 md:mb-20", overrideCss)}>
+      <Section ref={ref} className={twMerge("mb-10 md:mb-20", overrideCss)}>
         <div className="xl:grid xl:grid-cols-[2fr_1fr] gap-4 md:gap-8">
           <div className="flex flex-col gap-4 md:gap-8">
             <Container className="px-4 h-16 flex flex-row items-center">
@@ -196,7 +202,7 @@ const YieldSourceStrategy = ({
                         <div className="horizontal-loader" />
                       </div>
                     ) : (
-                      formatN(allocationN)
+                      formatN(allocationN, isSmall ? 1 : 2)
                     )}
                     {allocation && (
                       <span className="font-normal ml-2 text-origin-white/70">
@@ -250,7 +256,7 @@ const YieldSourceStrategy = ({
                         <div className="horizontal-loader" />
                       </div>
                     ) : (
-                      formatN(earningsN)
+                      `Ξ${formatN(earningsN, isSmall ? 1 : 4)}`
                     )}
                   </div>
                 </div>

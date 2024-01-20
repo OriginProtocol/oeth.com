@@ -103,6 +103,7 @@ const YieldSources = ({
                   <>
                     {strategyInfo.icons.map((icon, i) => (
                       <img
+                        key={icon}
                         src={icon}
                         alt={`icon-${i}`}
                         width={32}
@@ -137,8 +138,10 @@ const YieldSources = ({
                     trailingZeros: true,
                   })}%`,
                   <ExternalLinkButton
-                    className="h-8 w-full flex items-center justify-center px-2 px-4 border-gray-600"
-                    href={`/proof-of-yield/${day}/${strategyPath}`}
+                    className={twMerge(
+                      "h-8 w-full flex items-center justify-center border-gray-600",
+                      isSmall && "px-2 px-4",
+                    )}
                     icon={false}
                   >
                     <Image

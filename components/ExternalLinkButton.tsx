@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { ReactNodeLike } from "prop-types";
 import Image from "next/image";
 import { assetRootPath } from "../utils";
@@ -10,21 +10,39 @@ export const ExternalLinkButton = ({
   className,
   icon,
 }: {
-  href: string;
+  href?: string;
   children: ReactNodeLike;
   className?: string | undefined;
   icon?: boolean;
 }) => {
-  return (
-    <a
-      href={href}
-      className={twMerge(
-        "border border-origin-blue px-4 py-1.5 rounded-full text-sm whitespace-nowrap",
-        className,
-      )}
-      target={"_blank"}
-      rel="noopener noreferrer"
-    >
+  const wrap = useMemo(
+    () => (children: ReactNodeLike) => {
+      return href ? (
+        <a
+          href={href}
+          className={twMerge(
+            "border border-origin-blue px-4 py-1.5 rounded-full text-sm whitespace-nowrap",
+            className,
+          )}
+          target={"_blank"}
+          rel="noopener noreferrer"
+          children={children}
+        />
+      ) : (
+        <div
+          className={twMerge(
+            "border border-origin-blue px-4 py-1.5 rounded-full text-sm whitespace-nowrap",
+            className,
+          )}
+          rel="noopener noreferrer"
+          children={children}
+        />
+      );
+    },
+    [href, className],
+  );
+  return wrap(
+    <>
       {children}
       {icon !== false && (
         <Image
@@ -35,6 +53,6 @@ export const ExternalLinkButton = ({
           className="inline ml-2 mb-0.5 w-2 h-2"
         />
       )}
-    </a>
+    </>,
   );
 };

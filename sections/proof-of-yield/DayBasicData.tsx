@@ -59,7 +59,7 @@ const DayBasicData = ({
   const datePicker = (
     <div className="flex gap-4 items-center mt-6 md:mt-11">
       <Link
-        className="flex items-center justify-center w-8 h-8 rounded-md bg-origin-bg-grey"
+        className="flex items-center justify-center w-8 h-8 rounded-md bg-origin-bg-grey hover:bg-origin-white/10"
         href={`/proof-of-yield/${previousDay}`}
       >
         <Image
@@ -86,7 +86,7 @@ const DayBasicData = ({
 
       {moment(nextDay).isSameOrBefore(utcDayNow) && (
         <Link
-          className="flex items-center justify-center w-8 h-8 rounded-md bg-origin-bg-grey"
+          className="flex items-center justify-center w-8 h-8 rounded-md bg-origin-bg-grey hover:bg-origin-white/10"
           href={`/proof-of-yield/${nextDay}`}
         >
           <Image

@@ -295,6 +295,7 @@ const YieldSourceStrategy = ({
                         { label: "All", value: Infinity },
                       ].map((option) => (
                         <div
+                          key={option.label}
                           className={twMerge(
                             "cursor-pointer hover:bg-origin-white/10 rounded-full h-9 text-sm flex items-center justify-center w-10 sm:w-16",
                             option.value === days ? "bg-origin-white/10" : "",
@@ -325,20 +326,13 @@ const YieldSourceStrategy = ({
                             smoothingDays: Number(e.currentTarget.value),
                           })
                         }
+                        value={smoothingDays}
                         className="hidden md:block cursor-pointer hover:bg-origin-white/10 h-9 pl-4 pr-10 bg-origin-bg-grey border border-origin-white/10 rounded-full appearance-none outline-origin-blue"
                       >
-                        <option selected={smoothingDays === 1} value={1}>
-                          No trailing average
-                        </option>
-                        <option selected={smoothingDays === 7} value={7}>
-                          7-day trailing average
-                        </option>
-                        <option selected={smoothingDays === 14} value={14}>
-                          14-day trailing average
-                        </option>
-                        <option selected={smoothingDays === 30} value={30}>
-                          30-day trailing average
-                        </option>
+                        <option value={1}>No trailing average</option>
+                        <option value={7}>7-day trailing average</option>
+                        <option value={14}>14-day trailing average</option>
+                        <option value={30}>30-day trailing average</option>
                       </select>
                       <select
                         onChange={(e) =>
@@ -347,20 +341,13 @@ const YieldSourceStrategy = ({
                             smoothingDays: Number(e.currentTarget.value),
                           })
                         }
+                        value={smoothingDays}
                         className="md:hidden cursor-pointer hover:bg-origin-white/10 h-9 pl-4 pr-10 bg-origin-bg-grey border border-origin-white/10 rounded-full appearance-none outline-origin-blue"
                       >
-                        <option selected={smoothingDays === 1} value={1}>
-                          1-day
-                        </option>
-                        <option selected={smoothingDays === 7} value={7}>
-                          7-day
-                        </option>
-                        <option selected={smoothingDays === 14} value={14}>
-                          14-day
-                        </option>
-                        <option selected={smoothingDays === 30} value={30}>
-                          30-day
-                        </option>
+                        <option value={1}>1-day</option>
+                        <option value={7}>7-day</option>
+                        <option value={14}>14-day</option>
+                        <option value={30}>30-day</option>
                       </select>
                     </div>
                   </div>

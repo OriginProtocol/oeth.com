@@ -12,6 +12,7 @@ import {
   YieldBoostMultiplier,
   Section,
   Tooltip,
+  Link,
 } from "../../components";
 import { Typography } from "@originprotocol/origin-storybook";
 import { smSize, lgSize, xlSize } from "../../constants";
@@ -19,6 +20,9 @@ import { shortenAddress } from "../../utils";
 import { useViewWidth } from "../../hooks";
 import { twMerge } from "tailwind-merge";
 import { DailyStat, YieldBoostMultiplierProps } from "../../types";
+import DripperInfo from "./DripperInfo";
+import YieldSources from "./YieldSources";
+import { DailyYield } from "../../queries/fetchDailyYields";
 
 const eventChartColumnCssRight = "pr-6 xl:pr-8";
 const eventChartColumnCssLeft = "pl-6 xl:pr-8";
@@ -26,12 +30,16 @@ const eventChartColumnCssLeft = "pl-6 xl:pr-8";
 interface DayBasicDataProps {
   timestamp: Moment;
   dailyStat: DailyStat;
+  strategiesLatest: DailyYield[];
+  strategyHistory: Record<string, DailyYield[]>;
   sectionOverrideCss?: string;
 }
 
 const DayBasicData = ({
   timestamp,
   dailyStat,
+  strategiesLatest,
+  strategyHistory,
   sectionOverrideCss,
 }: DayBasicDataProps) => {
   const router = useRouter();
@@ -44,6 +52,54 @@ const DayBasicData = ({
     rebasingSupply: parseFloat(dailyStat?.rebasing_supply) || 0.0,
     nonRebasingSupply: parseFloat(dailyStat?.non_rebasing_supply) || 0.0,
   };
+
+  const previousDay = moment(timestamp).subtract(1, "day").format("YYYY-MM-DD");
+  const nextDay = moment(timestamp).add(1, "day").format("YYYY-MM-DD");
+  const utcDayNow = moment.utc().format("YYYY-MM-DD");
+  const datePicker = (
+    <div className="flex gap-4 items-center mt-6 md:mt-11">
+      <Link
+        className="flex items-center justify-center w-8 h-8 rounded-md bg-origin-bg-grey hover:bg-origin-white/10"
+        href={`/proof-of-yield/${previousDay}`}
+      >
+        <Image
+          src={assetRootPath("/images/pointer-left.svg")}
+          width="15"
+          height="15"
+          alt="pointer-left"
+          className="absolute"
+        />
+      </Link>
+
+      {/* Date PT */}
+      <div className="flex">
+        <Typography.Body>{timestamp.format("MMM D, YYYY")} UTC</Typography.Body>
+        <Tooltip
+          info={
+            "Yield is distributed at least once per day using Chainlink Automation. It is scheduled to run at approximately midnight Pacific Time, which serves as the beginning of each calendar day."
+          }
+          whiteTooltip
+          className="ml-2 md:min-w-[12px] md:min-h-[12px] md:max-w-[12px] md:max-h-[12px]"
+          tooltipClassName="min-w-[180px]"
+        />
+      </div>
+
+      {moment(nextDay).isSameOrBefore(utcDayNow) && (
+        <Link
+          className="flex items-center justify-center w-8 h-8 rounded-md bg-origin-bg-grey hover:bg-origin-white/10"
+          href={`/proof-of-yield/${nextDay}`}
+        >
+          <Image
+            src={assetRootPath("/images/pointer-right.svg")}
+            width="15"
+            height="15"
+            alt="pointer-right"
+            className="absolute"
+          />
+        </Link>
+      )}
+    </div>
+  );
 
   return (
     <Section className={twMerge("mb-10 md:mb-20", sectionOverrideCss)}>
@@ -63,20 +119,7 @@ const DayBasicData = ({
         Back to list
       </button>
 
-      {/* Date PT */}
-      <div className="flex mt-6 md:mt-20">
-        <Typography.Body className="">
-          {timestamp.format("MMM D, YYYY")} PT
-        </Typography.Body>
-        <Tooltip
-          info={
-            "Yield is distributed at least once per day using Chainlink Automation. It is scheduled to run at approximately midnight Pacific Time, which serves as the beginning of each calendar day."
-          }
-          whiteTooltip
-          className="ml-2 md:min-w-[12px] md:min-h-[12px] md:max-w-[12px] md:max-h-[12px]"
-          tooltipClassName="min-w-[180px]"
-        />
-      </div>
+      {datePicker}
 
       <TitleWithInfo
         info="The actual amount of OETH added to users' wallet balances"
@@ -107,7 +150,7 @@ const DayBasicData = ({
             </BasicData>
             <BasicData
               className="flex-1 rounded-tr-lg xl:rounded-none justify-center lg:justify-start"
-              title="OETH vault value"
+              title="Vault value"
               info={`The sum of all assets currently held by OETH`}
             >
               {" "}
@@ -165,7 +208,7 @@ const DayBasicData = ({
                     <TableHead
                       className={twMerge(
                         eventChartColumnCssLeft,
-                        "whitespace-normal pr-4"
+                        "whitespace-normal pr-4",
                       )}
                     >
                       Amount
@@ -206,7 +249,7 @@ const DayBasicData = ({
                       <TableData
                         className={twMerge(
                           eventChartColumnCssLeft,
-                          "whitespace-normal pr-4"
+                          "whitespace-normal pr-4",
                         )}
                       >
                         <Typography.Body3 className="text-xs md:text-base text-table-data">
@@ -240,11 +283,23 @@ const DayBasicData = ({
               </tbody>
             </Table>
           </div>
+
+          <div className="mt-24 mb-16 h-px bg-origin-white/10" />
+
+          <DripperInfo />
+
+          <div className="mt-8">
+            <YieldSources
+              strategiesLatest={strategiesLatest}
+              strategyHistory={strategyHistory}
+            />
+          </div>
         </div>
         {/* Yield boost multiplier */}
 
         {width >= lgSize && <YieldBoostMultiplier {...yieldBonusProps} />}
       </div>
+      {datePicker}
     </Section>
   );
 };

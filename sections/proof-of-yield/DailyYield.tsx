@@ -52,7 +52,7 @@ const DailyYield = ({ dailyStats }: DailyYieldProps) => {
               info={`The actual amount of OETH added to users' wallet balances`}
               className="whitespace-normal sm:whitespace-nowrap pr-8 lg:pr-14 xl:pr-24"
             >
-              Yield distributed
+              Yield {width >= smSize ? "distributed" : "dist"}
             </TableHead>
             <TableHead
               info={`The annualized, compounded rate earned by OETH holders on this day`}

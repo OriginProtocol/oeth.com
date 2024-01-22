@@ -9,7 +9,7 @@ import { DailyStat, Link } from "../../types";
 
 interface ProofOfYieldProps {
   navLinks: Link[];
-  dailyStats: DailyStat[];
+  dailyStats: (DailyStat | null)[];
 }
 
 const ProofOfYield = ({ navLinks, dailyStats }: ProofOfYieldProps) => {

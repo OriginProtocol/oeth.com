@@ -39,7 +39,7 @@ const ChartDetailsButton = ({
           <Image
             width="7"
             height="7"
-            src={assetRootPath("/images/arrow.svg")}
+            src={assetRootPath("/images/arrow-right.svg")}
             alt="arrow"
           />
         </button>

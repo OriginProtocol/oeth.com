@@ -22,7 +22,7 @@ const Ecosystem = ({ seo, navLinks, partners }) => {
     ...new Set(
       partners?.map((partner) => {
         return partner.attributes.category;
-      })
+      }),
     ),
   ];
 
@@ -30,6 +30,11 @@ const Ecosystem = ({ seo, navLinks, partners }) => {
     <>
       <Head>
         <title>Ecosystem</title>
+        <meta
+          name="impact-site-verification"
+          // @ts-ignore
+          value="1053743c-0890-4fe3-9334-254d4a202637"
+        />
       </Head>
       <Seo seo={seo} />
       <section className="ecosystem black">
@@ -148,7 +153,7 @@ export async function getStaticProps() {
           populate: "*",
         },
       },
-    }
+    },
   );
   const seoRes = await fetchAPI("/oeth/page/en/%2Fecosystem");
   const navRes = await fetchAPI("/oeth-nav-links", {

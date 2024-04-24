@@ -44,7 +44,7 @@ const AnalyticsStrategies = ({ protocols, total }) => {
       <div className="grid grid-cols-12 gap-6">
         {protocols.map(({ name, strategies, total: strategyTotal }) => {
           const { image, description, color } = protocolMapping[name] || {};
-          if (!description) return null;
+          if (!description || !strategyTotal) return null;
           return (
             <LayoutBox key={name} className="col-span-12">
               <div className="flex flex-col items-start space-y-6 p-8 w-full">

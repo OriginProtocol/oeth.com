@@ -25,7 +25,12 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
             totalSupply
             nonRebasingSupply
           }
-          oethRebases(orderBy: timestamp_DESC, where: {timestamp_gte: "${timestamp}T00:00:00.000Z", timestamp_lt: "${oneDayLater}T00:00:00.000Z"}) {
+          oTokenRebases(orderBy: timestamp_DESC, where: {
+            chainId_eq: 1,
+            otoken_eq: "0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3",
+            timestamp_gte: "${timestamp}T00:00:00.000Z", 
+            timestamp_lt: "${oneDayLater}T00:00:00.000Z"
+          }) {
             blockNumber
             feeETH
             totalSupply
@@ -41,7 +46,7 @@ async function fetchProofOfYieldByDay(timestamp: string): Promise<DailyStat[]> {
     const json = await res.json();
 
     const item = json.data.oethDailyStatById;
-    const rebaseEvents = json.data.oethRebases;
+    const rebaseEvents = json.data.oTokenRebases;
 
     const rawApr =
       (Number(BigInt(item.totalSupply) - BigInt(item.nonRebasingSupply)) /

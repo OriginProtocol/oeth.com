@@ -100,7 +100,7 @@ const Allocation = ({ strategies }: AllocationProps) => {
                 <div className="flex flex-col justify-between">
                   {loaded &&
                     protocolsSorted?.map((protocol, i) => {
-                      if (protocol.name == "undefined") return;
+                      if (protocol.name == "undefined" || !protocol.total) return;
                       const pct = (protocol.total / total) * 100;
                       const width = `${pct.toFixed(2)}%`;
                       const backgroundColor =

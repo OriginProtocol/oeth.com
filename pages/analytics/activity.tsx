@@ -46,8 +46,11 @@ const Activity = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           query: `query OETHActivity {
-            oethActivities(limit: 50, offset: ${offset}, orderBy: timestamp_DESC${
-              l4b ? `, where: { callDataLast4Bytes_eq: "${l4b}" }` : ""
+            oTokenActivities(limit: 50, offset: ${offset}, orderBy: timestamp_DESC, 
+            where: { 
+              ${l4b ? `callDataLast4Bytes_eq: "${l4b}",` : ""}
+              chainId_eq: 1,
+              otoken_eq: "0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3"
             }) {
               txHash
               toSymbol
@@ -70,7 +73,7 @@ const Activity = () => {
       })
         .then((res) => res.json())
         .then((res) => {
-          setActivity([...activity, ...res.data.oethActivities]);
+          setActivity([...activity, ...res.data.oTokenActivities]);
         });
     } catch (err) {
       console.log(`Failed to fetch daily stats: ${err}`);
